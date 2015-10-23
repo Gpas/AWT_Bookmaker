@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:mylib="http://java.sun.com/jsf/composite/mylib">
+<f:view contentType="text/html"/>
+<h:head>
+    <title>#{sessionBean.title}</title>
+</h:head>
+<h:body bgcolor="white">
+    <h2>#{sessionBean.title}</h2>
+    <h3>#{sessionBean.message}</h3>
+
+    <mylib:traficlight value="-1"></mylib:traficlight>
+    <mylib:traficlight value="0"></mylib:traficlight>
+    <mylib:traficlight value="1"></mylib:traficlight>
+
+
+    <h:form id="loginForm" >
+        <h:inputText id="username" value="#{sessionBean.user.username}"/>
+        <h:inputText id="password" value="#{sessionBean.user.password}"/>
+        <h:commandButton id="login" action="#{sessionBean.login}" value="Login"/>
+    </h:form>
+
+    <h:form id="langForm" >
+        <h:commandButton id="de" actionListener="#{sessionBean.changeLanguage}" value="German"/>
+        <h:commandButton id="en" actionListener="#{sessionBean.changeLanguage}" value="English"/>
+    </h:form>
+</h:body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+<f:view contentType="text/html"/>
+<h:head>
+    <title>Guess Number Game</title>
+</h:head>
+<h:body bgcolor="white">
+    <h2>Guess Number Game</h2>
+    <h3>#{guessNumberBean.message}</h3>
+
+    <h:form id="numberForm" >
+        <h:inputText id="number" value="#{guessNumberBean.guess}"/>
+        <h:commandButton id="submit" action="#{guessNumberBean.response}" value="Submit"/>
+    </h:form>
+</h:body>
+</html>
