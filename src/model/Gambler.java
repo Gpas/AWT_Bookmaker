@@ -3,5 +3,5 @@ package model;
 /**
  * Created by stefan on 29.10.15.
  */
-public class Gambler {
+public class Gambler extends User {
 }
