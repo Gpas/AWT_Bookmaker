@@ -1,12 +1,12 @@
 package model;
 
 import java.util.Date;
+import java.util.Map;
 
-/**
- * Created by stefan on 29.10.15.
- */
+
 public class Game {
 
     private Date startOfGame;
     private String name;
+    private Map<Condition,Odd> conditions;
 }

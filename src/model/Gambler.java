@@ -1,7 +1,9 @@
 package model;
 
-/**
- * Created by stefan on 29.10.15.
- */
+import java.util.List;
+
 public class Gambler extends User {
+	
+	private List<Bet> bets;
+	
 }

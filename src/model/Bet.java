@@ -1,7 +1,12 @@
 package model;
 
-/**
- * Created by stefan on 29.10.15.
- */
+import java.util.Map;
+
+
 public class Bet {
+	
+	private Game game;
+	private Map<Integer,Double> placeOnOdds;
+	
+	
 }
