@@ -11,6 +11,12 @@ public class Bet {
 	private Game game;
 	private Map<Condition,Float> placeOnOdds;
 	
+	public void betOnCondition(Condition c,float f){
+		if(!game.started()){
+			placeOnOdds.put(c, f);
+		}
+			
+	}
 	
 	public float getWinnings(){
 		
