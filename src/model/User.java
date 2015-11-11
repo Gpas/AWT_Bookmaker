@@ -1,11 +1,21 @@
 package model;
 
-/**
- * Created by stefan on 29.10.15.
- */
 public abstract class User {
 
-    private float credit;
 
+    private float credit;
+    private String name;
+    private boolean isBookmaker;
+    
+    
+    public void login(){
+    	
+    }
+    
+    public void logout(){
+    	
+    }
+
+    
 
 }

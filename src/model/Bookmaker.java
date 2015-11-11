@@ -1,7 +1,14 @@
 package model;
 
-/**
- * Created by stefan on 29.10.15.
- */
-public class Bookmaker extends Gambler {
+import java.util.Collections;
+import java.util.List;
+
+
+public class Bookmaker extends User {
+	
+	private List<Game> games;
+	
+	public List<Game> getGames(){
+		return Collections.unmodifiableList(games);
+	}
 }
