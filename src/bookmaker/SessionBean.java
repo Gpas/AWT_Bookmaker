@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import model.User;
 
 @ManagedBean
 @SessionScoped
@@ -81,6 +82,6 @@ public class SessionBean implements Serializable {
     private void init(){
         title = bundle.getString("tHome");
         message = bundle.getString("mHome");
-        user = new User();
+        user = null;
     }
 }
