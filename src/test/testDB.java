@@ -3,14 +3,12 @@ package test;
 import java.util.Date;
 import java.util.List;
 
+import model.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
-import model.Bookmaker;
-import model.User;
 
 import junit.framework.TestCase;
 import org.hibernate.cfg.Configuration;
@@ -37,6 +35,7 @@ public class testDB extends TestCase {
         catch (Exception e) {
             // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
             // so destroy it manually.
+            System.out.println(e);
             StandardServiceRegistryBuilder.destroy( registry );
         }
     }
@@ -52,7 +51,8 @@ public class testDB extends TestCase {
     public void testBasicUsage() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save( new Bookmaker( "Testuser", "Pascal", "Grüter" ));
+
+        session.save( new User( "Testuser", "Pascal", "Grueter" , true));
         session.getTransaction().commit();
         session.close();
 
@@ -66,4 +66,26 @@ public class testDB extends TestCase {
         session.getTransaction().commit();
         session.close();
     }
+
+    @SuppressWarnings({ "unchecked" })
+    public void testUserGameConnection() {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.save(new User("Testuser", "Pascal", "Grueter", true));
+        User user1 = session.get(User.class, 1);
+        Team team1 = new Team("Team1");
+        Team team2 = new Team("Team2");
+        session.save(team1);
+        session.save(team2);
+        Game game1 = new Game(new Date(System.currentTimeMillis()), team1, team2);
+        session.save(game1);
+        User_Game rel = new User_Game();
+        rel.setUser(user1);
+        rel.setGame(game1);
+        session.save(rel);
+        session.getTransaction().commit();
+        session.close();
+
+    }
+
 }

@@ -1,32 +1,33 @@
 package model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table (name="user")
-public abstract class User {
+public class User {
 
     private int id;
     private float credit;
     private String username, firstname, lastname;
     private boolean isBookmaker;
 
+    private Set<User_Game> games = new HashSet<User_Game>();
+
     public User(){
 
     };
 
-    public User(String username, String firstname, String lastname){
+    public User(String username, String firstname, String lastname, boolean isBookmaker){
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
-        this.isBookmaker = false;
+        this.isBookmaker = isBookmaker;
     }
-
 
     @Id
     @GeneratedValue(generator="increment")
@@ -71,16 +72,20 @@ public abstract class User {
         this.isBookmaker = value;
     }
 
-    public void login(){
-    	
-    }
-    
-    public void logout(){
-    	
+    public float getCredit() {
+        return credit;
     }
 
+    public void setCredit(float credit) {
+        this.credit = credit;
+    }
 
+    @OneToMany(mappedBy = "user")
+    public Set<User_Game> getGames() {
+        return games;
+    }
 
-    
-
+    public void setGames(Set<User_Game> games) {
+        this.games = games;
+    }
 }

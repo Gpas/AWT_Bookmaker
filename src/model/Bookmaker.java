@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Entity
+
 public class Bookmaker extends User {
 
-	@OneToMany
-	private List<Game> games = new ArrayList<>();
+
+	/*private List<Game> games = new ArrayList<>();
 	
 	public List<Game> getGames(){
 		return Collections.unmodifiableList(games);
@@ -28,7 +28,7 @@ public class Bookmaker extends User {
 	public Bookmaker(String username, String firstname, String lastname){
 		super(username, firstname, lastname);
 		setIsBookmaker(true);
-	}
+	}*/
 
 
 
