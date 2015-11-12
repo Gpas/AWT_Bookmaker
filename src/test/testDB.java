@@ -52,7 +52,7 @@ public class testDB extends TestCase {
     public void testBasicUsage() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save( new Bookmaker( "Testuser", "Pascal", "Grüter" ));
+        session.save( new Bookmaker( "Testuser", "Pascal", "GrÃ¼ter" ));
         session.getTransaction().commit();
         session.close();
 

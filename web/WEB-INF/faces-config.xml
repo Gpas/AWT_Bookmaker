@@ -6,10 +6,11 @@
               version="2.0">
 
     <application>
-        <resource-bundle>
-            <base-name>lang</base-name>
-            <var>lang</var>
-        </resource-bundle>
+        <locale-config>
+        	<default-locale>en</default-locale>
+        	<supported-locale>de</supported-locale>
+        	<supported-locale>fr</supported-locale>
+        </locale-config>
     </application>
 
 </faces-config>
