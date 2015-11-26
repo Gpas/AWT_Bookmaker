@@ -15,6 +15,10 @@ public class User_Game {
     public User_Game (){
 
     }
+    
+    public User_Game (Game game){
+    	this.game=game;
+    }
 
     @Id
     @GeneratedValue(generator="increment")

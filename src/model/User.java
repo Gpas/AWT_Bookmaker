@@ -17,11 +17,19 @@ public class User {
     private boolean isBookmaker;
 
     private Set<User_Game> games = new HashSet<User_Game>();
-
+    
     public User(){
-
-    };
-
+    	
+    }
+    
+    public User(String firstname,String lastname){
+    	this.firstname=firstname;
+    	this.lastname=lastname;
+    }
+    
+    public String getName(){
+    	return firstname;
+    }
     public User(String username, String firstname, String lastname, boolean isBookmaker){
         this.username = username;
         this.firstname = firstname;
@@ -58,7 +66,7 @@ public class User {
 
     public String getLastname() {
         return lastname;
-    }
+     }
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
@@ -87,5 +95,9 @@ public class User {
 
     public void setGames(Set<User_Game> games) {
         this.games = games;
+    }
+    
+    public void addUserGame(User_Game g){
+    	games.add(g);
     }
 }

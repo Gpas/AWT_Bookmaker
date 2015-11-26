@@ -9,6 +9,5 @@ public class Gambler extends User {
 	
 	public void betOnGame(Game g){
 		
-	}
-	
+	}	
 }
