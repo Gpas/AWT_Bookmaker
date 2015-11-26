@@ -22,13 +22,15 @@
         </property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">create</property>
+        <property name="hbm2ddl.auto">update</property>
 
         <!-- Names the annotated entity class -->
         <mapping class="model.User"/>
         <mapping class="model.Game"/>
         <mapping class="model.User_Game"/>
-        <mapping class="model.Team"/>
+        <mapping class="model.Condition"/>
+        <mapping class="model.Bet"/>
+
 
 
     </session-factory>

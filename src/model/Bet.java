@@ -1,36 +1,71 @@
 package model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.lang.model.element.Element;
+import javax.persistence.*;
 
-
+@Entity
+@Table(name ="bet")
 public class Bet {
-	
-	private Game game;
-	private Map<Condition,Float> placeOnOdds;
-	
-	public void betOnCondition(Condition c,float f){
-		if(!game.started()){
-			placeOnOdds.put(c, f);
-		}
-			
+
+	@Id
+	@GeneratedValue(generator="increment")
+	@GenericGenerator(name="increment", strategy = "increment")
+	private int id;
+
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	private User user;
+
+	@ManyToOne
+	@JoinColumn(name="condition_id")
+	private Condition condition;
+
+	private float amount;
+
+	public Bet(){
+
 	}
-	
-	public float getWinnings(){
-		
-		float f=0;
-		for(Entry<Condition, Float> e : placeOnOdds.entrySet()){
-			
-			Condition c=e.getKey();
-			float val=e.getValue();
-			
-			if(c.getState()==Condition.State.YES){
-				f+=game.getOddByCondition(c)*val;
-			}
-		}
-		return f;
+
+	public Bet(User user, Condition condition, float amount){
+		this.user = user;
+		this.condition = condition;
+		this.amount = amount;
 	}
-	
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Condition getCondition() {
+		return condition;
+	}
+
+	public void setCondition(Condition condition) {
+		this.condition = condition;
+	}
+
+	public float getAmount() {
+		return amount;
+	}
+
+	public void setAmount(float amount) {
+		this.amount = amount;
+	}
 }

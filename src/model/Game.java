@@ -14,35 +14,25 @@ public class Game {
 
 	private int id;
     private Date startTime;
-    private Team homeTeam,guestTeam;
-    private Map<Condition,Float> conditions;
+    private int homeTeam,guestTeam;
 
 	private Set<User_Game> users = new HashSet<User_Game>();
-    
-    
+	private Set<Condition> conditions = new HashSet<Condition>();
+
+	public Game(){
+
+	}
+
+	public Game(Date start, int homeTeam, int guestTeam){
+		this.startTime=start;
+		this.homeTeam=homeTeam;
+		this.guestTeam=guestTeam;
+	}
+
     public boolean started(){
     	
     	Date d = new Date(System.currentTimeMillis());
     	return d.after(startTime);
-    }
-    
-    public Game(Date start, Team homeTeam, Team guestTeam){
-    	this.startTime=start;
-    	this.homeTeam=homeTeam;
-    	this.guestTeam=guestTeam;
-    }
-    
-    public float getOddByCondition(Condition c){
-    	float f = 0;
-    	if(conditions.containsKey(c))
-    	f=conditions.get(c);
-    	return f;
-    }
-    
-    public void placeOdds(Condition c,Float f){
-    	if(!started()){
-    		conditions.put(c, f);
-    	}
     }
 
 	@Id
@@ -56,6 +46,15 @@ public class Game {
 		this.id = id;
 	}
 
+	@OneToMany(mappedBy = "game")
+	public Set<Condition> getConditions() {
+		return conditions;
+	}
+
+	public void setConditions(Set<Condition> conditions) {
+		this.conditions = conditions;
+	}
+
 	@Temporal(TemporalType.DATE)
 	public Date getStartTime() {
 		return startTime;
@@ -65,21 +64,19 @@ public class Game {
 		this.startTime = startTime;
 	}
 
-	@OneToOne
-	public Team getHomeTeam() {
+	public int getHomeTeam() {
 		return homeTeam;
 	}
 
-	public void setHomeTeam(Team homeTeam) {
+	public void setHomeTeam(int homeTeam) {
 		this.homeTeam = homeTeam;
 	}
 
-	@OneToOne
-	public Team getGuestTeam() {
+	public int getGuestTeam() {
 		return guestTeam;
 	}
 
-	public void setGuestTeam(Team guestTeam) {
+	public void setGuestTeam(int guestTeam) {
 		this.guestTeam = guestTeam;
 	}
 

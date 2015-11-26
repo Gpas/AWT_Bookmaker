@@ -3,6 +3,8 @@ package model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="user_game")
@@ -11,6 +13,7 @@ public class User_Game {
     private int id;
     private User user;
     private Game game;
+    private Set<Bet> bets = new HashSet<Bet>();
 
     public User_Game (){
 
@@ -25,6 +28,15 @@ public class User_Game {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @OneToMany(mappedBy="game")
+    public Set<Bet> getBets() {
+        return bets;
+    }
+
+    public void setBets(Set<Bet> bets) {
+        this.bets = bets;
     }
 
     @ManyToOne(cascade = CascadeType.ALL)
