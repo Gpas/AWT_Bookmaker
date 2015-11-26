@@ -47,4 +47,8 @@ public class RegistrationBean implements Serializable {
     	
     }
     
+    public String list(){
+    	return "listGames";
+    }
+    
 }
