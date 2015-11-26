@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:h="http://java.sun.com/jsf/html">
+    <f:view contentType="text/html"/>
+    <h:head>
+        <title>Games</title>
+        <link rel="stylesheet" type="text/css" href="resources/bootstrap/bootstrap.min.css" />
+        <script src="resources/bootstrap/bootstrap.min.js"></script>
+		<f:loadBundle basename="lang" var="bundle"/>
+    </h:head>
+    <h:body bgcolor="white">
+    
+    <h2>#{bundle.yourgames}</h2>
+      
+        
+    <h:dataTable value="#{gameManagerBean.gamblerGames}" var="game" border="1">
+      <h:column>
+      <f:facet name="header">
+        <h:outputText value="#{bundle.home}"/>
+   	  </f:facet>
+      #{game.homeTeam.name}
+      </h:column>
+      <h:column>
+      <f:facet name="header">
+        <h:outputText value="#{bundle.guest}"/>
+      </f:facet>
+      #{game.guestTeam.name}
+      </h:column>
+      <h:column>
+      <f:facet name="header">
+        <h:outputText value="#{bundle.starttime}"/>
+      </f:facet>
+      #{game.startTime}
+      </h:column>
+      <h:column>
+      #{bundle.details} =>
+      </h:column>
+    </h:dataTable>
+    </h:body>
+</html>

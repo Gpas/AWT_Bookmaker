@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"      
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html">
     <f:view contentType="text/html"/>
     <h:head>
         <title>Registration</title>
         <link rel="stylesheet" type="text/css" href="resources/bootstrap/bootstrap.min.css" />
         <script src="resources/bootstrap/bootstrap.min.js"></script>
-        <f:loadBundle basename="lang.Resources" var="bundle"/>
+        <f:loadBundle basename="lang" var="bundle"/>
     </h:head>
     <h:body bgcolor="white">
         <h2>Registration</h2>
@@ -34,5 +34,7 @@
         </h:form>
         
         <h3>#{registrationBean.message}</h3>
+        
+		<h:link outcome="listGames">games</h:link>
     </h:body>
 </html>
