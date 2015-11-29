@@ -10,26 +10,21 @@ import java.util.Set;
 @Table(name="condition")
 public class Condition {
 
-	public enum State{
-	    PENDING,
-	    YES,
-	    NO
-	}
-
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
 	private int id;
 
-	@ManyToOne
-	@JoinColumn(name="game_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="game")
 	private Game game;
 
-	private int text_id;
-	private int odd1, odd2;
-
-	@Enumerated(EnumType.ORDINAL)
-	private State state = State.PENDING;
+	@Column(name = "textId")
+	private int textId;
+	@Column(name = "oddGain")
+	private int oddGain;
+	@Column(name = "oddBet")
+	private int oddBet;
 
 	@OneToMany(mappedBy="condition")
 	private Set<Bet> bets = new HashSet<Bet>();
@@ -38,14 +33,12 @@ public class Condition {
 
 	}
 
-	public Condition(Game game, int text_id, int odd1, int odd2){
+	public Condition(Game game, int textId, int oddGain, int oddBet){
 		this.game = game;
-		this.text_id = text_id;
-		this.odd1 = odd1;
-		this.odd2 = odd2;
-		this.state = State.PENDING;
+		this.textId = textId;
+		this.oddGain = oddGain;
+		this.oddBet = oddBet;
 	}
-
 
 	public int getId() {
 		return id;
@@ -53,14 +46,6 @@ public class Condition {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Set<Bet> getBets() {
-		return bets;
-	}
-
-	public void setBets(Set<Bet> bets) {
-		this.bets = bets;
 	}
 
 	public Game getGame() {
@@ -71,35 +56,35 @@ public class Condition {
 		this.game = game;
 	}
 
-	public int getText_id() {
-		return text_id;
+	public int getTextId() {
+		return textId;
 	}
 
-	public void setText_id(int text_id) {
-		this.text_id = text_id;
+	public void setTextId(int textId) {
+		this.textId = textId;
 	}
 
-	public int getOdd1() {
-		return odd1;
+	public int getOddGain() {
+		return oddGain;
 	}
 
-	public void setOdd1(int odd1) {
-		this.odd1 = odd1;
+	public void setOddGain(int oddGain) {
+		this.oddGain = oddGain;
 	}
 
-	public int getOdd2() {
-		return odd2;
+	public int getOddBet() {
+		return oddBet;
 	}
 
-	public void setOdd2(int odd2) {
-		this.odd2 = odd2;
+	public void setOddBet(int oddBet) {
+		this.oddBet = oddBet;
 	}
 
-	public State getState() {
-		return state;
+	public Set<Bet> getBets() {
+		return bets;
 	}
 
-	public void setState(State state) {
-		this.state = state;
+	public void setBets(Set<Bet> bets) {
+		this.bets = bets;
 	}
 }

@@ -11,12 +11,25 @@ import java.util.Set;
 @Table (name="user")
 public class User {
 
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
     private int id;
-    private float credit;
-    private String username, firstname, lastname;
+
+    @Column(name="balance")
+    private float balance;
+    @Column(name="username")
+    private String username;
+    @Column(name="firstname")
+    private String firstname;
+    @Column(name="lastname")
+    private String lastname;
+    @Column(name="isBookmaker")
     private boolean isBookmaker;
 
-    private Set<User_Game> games = new HashSet<User_Game>();
+    @OneToMany(mappedBy = "owner")
+    private Set<Game> games = new HashSet<Game>();
+
     
     public User(){
     	
@@ -26,10 +39,7 @@ public class User {
     	this.firstname=firstname;
     	this.lastname=lastname;
     }
-    
-    public String getName(){
-    	return firstname;
-    }
+
     public User(String username, String firstname, String lastname, boolean isBookmaker){
         this.username = username;
         this.firstname = firstname;
@@ -37,19 +47,24 @@ public class User {
         this.isBookmaker = isBookmaker;
     }
 
-    @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
     public int getId() {
         return id;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         this.id = id;
     }
 
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
@@ -66,7 +81,7 @@ public class User {
 
     public String getLastname() {
         return lastname;
-     }
+    }
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
@@ -76,28 +91,15 @@ public class User {
         return isBookmaker;
     }
 
-    public void setIsBookmaker(boolean value){
-        this.isBookmaker = value;
+    public void setIsBookmaker(boolean isBookmaker) {
+        this.isBookmaker = isBookmaker;
     }
 
-    public float getCredit() {
-        return credit;
-    }
-
-    public void setCredit(float credit) {
-        this.credit = credit;
-    }
-
-    @OneToMany(mappedBy = "user")
-    public Set<User_Game> getGames() {
+    public Set<Game> getGames() {
         return games;
     }
 
-    public void setGames(Set<User_Game> games) {
+    public void setGames(Set<Game> games) {
         this.games = games;
-    }
-    
-    public void addUserGame(User_Game g){
-    	games.add(g);
     }
 }

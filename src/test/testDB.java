@@ -73,12 +73,8 @@ public class testDB extends TestCase {
         session.beginTransaction();
         session.save(new User("Testuser", "Pascal", "Grueter", true));
         User user1 = session.get(User.class, 1);
-        Game game1 = new Game(new Date(System.currentTimeMillis()), 1, 2);
+        Game game1 = new Game(new Date(System.currentTimeMillis()), user1, 1, 2);
         session.save(game1);
-        User_Game rel = new User_Game();
-        rel.setUser(user1);
-        rel.setGame(game1);
-        session.save(rel);
         session.getTransaction().commit();
         session.close();
 

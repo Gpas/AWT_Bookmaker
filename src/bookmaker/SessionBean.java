@@ -7,13 +7,13 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import model.Game;
-import model.Team;
 import model.User;
 import model.User_Game;
 
@@ -35,15 +35,9 @@ public class SessionBean implements Serializable {
     public User getUser() {
     	User u = new User("foo","bar");
     	Date d = new Date(System.currentTimeMillis());
-    	Team home=new Team("Team1");
-    	Team guest=new Team("Team2");
-    	Game g =new Game(d,home,guest);
-    	home=new Team("Team3");
-    	guest=new Team("Team4");
-    	Game g0 =new Game(d,home,guest);
-    	
-    	u.addUserGame(new User_Game(g));
-    	u.addUserGame(new User_Game(g0));
+    	Game g =new Game(d,u,1,2);
+    	Game g0 =new Game(d,u,3,4);
+
     	
     	return u;
     	//return user;

@@ -26,8 +26,8 @@ public class GameManagerBean implements Serializable{
 	public List<Game> getGamblerGames(){
 		 
 		List<Game> l=new ArrayList<>(); 
-		for(User_Game g:user.getGames())
-			l.add(g.getGame());
+		//for(User_Game g : user.getGames())
+		//	l.add(g.getGame());
 		return l;
 	}
 	

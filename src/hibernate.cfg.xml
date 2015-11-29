@@ -12,7 +12,7 @@
         </property>
 
         <property name="hibernate.connection.url">
-            jdbc:mysql://localhost/test
+            jdbc:mysql://localhost/bookmaker
         </property>
         <property name="hibernate.connection.username">
             root
@@ -21,13 +21,16 @@
             PGfe=5870$
         </property>
 
+        <!-- Echo all executed SQL to stdout -->
+        <property name='hibernate.show_sql'>true</property>
+
+
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">validate</property>
 
         <!-- Names the annotated entity class -->
         <mapping class="model.User"/>
         <mapping class="model.Game"/>
-        <mapping class="model.User_Game"/>
         <mapping class="model.Condition"/>
         <mapping class="model.Bet"/>
 

@@ -17,14 +17,15 @@ public class Bet {
 	@GenericGenerator(name="increment", strategy = "increment")
 	private int id;
 
-	@ManyToOne
-	@JoinColumn(name="user_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="user")
 	private User user;
 
-	@ManyToOne
-	@JoinColumn(name="condition_id")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name="condition")
 	private Condition condition;
 
+	@Column(name = "amount")
 	private float amount;
 
 	public Bet(){
