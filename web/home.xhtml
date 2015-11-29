@@ -2,29 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:mylib="http://java.sun.com/jsf/composite/mylib">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 <f:view contentType="text/html"/>
 <h:head>
-    <title>#{sessionBean.title}</title>
 </h:head>
 <h:body bgcolor="white">
-    <h2>#{sessionBean.title}</h2>
-    <h3>#{sessionBean.message}</h3>
+    <ui:composition template="baseTemplate.xhtml">
+        <ui:define name="title">
+            Home
+        </ui:define>
+        <ui:define name="content">
+            <h:form id="loginForm" >
+                <h:inputText id="username" value="#{sessionBean.user.username}"/>
+                <h:inputText id="password" value="#{sessionBean.user.password}"/>
+                <h:commandButton id="login" action="#{sessionBean.login}" value="Login"/>
+            </h:form>
 
-    <mylib:traficlight value="-1"></mylib:traficlight>
-    <mylib:traficlight value="0"></mylib:traficlight>
-    <mylib:traficlight value="1"></mylib:traficlight>
-
-
-    <h:form id="loginForm" >
-        <h:inputText id="username" value="#{sessionBean.user.username}"/>
-        <h:inputText id="password" value="#{sessionBean.user.password}"/>
-        <h:commandButton id="login" action="#{sessionBean.login}" value="Login"/>
-    </h:form>
-
-    <h:form id="langForm" >
-        <h:commandButton id="de" actionListener="#{sessionBean.changeLanguage}" value="German"/>
-        <h:commandButton id="en" actionListener="#{sessionBean.changeLanguage}" value="English"/>
-    </h:form>
+            <h:form id="langForm" >
+                <h:commandButton id="de" actionListener="#{sessionBean.changeLanguage}" value="German"/>
+                <h:commandButton id="en" actionListener="#{sessionBean.changeLanguage}" value="English"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
 </h:body>
 </html>

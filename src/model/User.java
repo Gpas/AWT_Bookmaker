@@ -20,6 +20,8 @@ public class User {
     private float balance;
     @Column(name="username")
     private String username;
+    @Column(name="password")
+    private String password;
     @Column(name="firstname")
     private String firstname;
     @Column(name="lastname")
@@ -27,6 +29,8 @@ public class User {
     @Column(name="isBookmaker")
     private boolean isBookmaker;
 
+    @OneToMany(mappedBy = "user")
+    private Set<Bet> bets = new HashSet<Bet>();
     @OneToMany(mappedBy = "owner")
     private Set<Game> games = new HashSet<Game>();
 
@@ -71,6 +75,14 @@ public class User {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getFirstname() {
         return firstname;
     }
@@ -101,5 +113,13 @@ public class User {
 
     public void setGames(Set<Game> games) {
         this.games = games;
+    }
+
+    public Set<Bet> getBets() {
+        return bets;
+    }
+
+    public void setBets(Set<Bet> bets) {
+        this.bets = bets;
     }
 }

@@ -217,6 +217,10 @@
     <copy  todir="${build.home}/WEB-INF/classes">
     <fileset dir="src" includes="**/*.properties"/>
     </copy>
+      <!-- Copy hibernate cfg -->
+      <copy  todir="${build.home}/WEB-INF/classes">
+          <fileset dir="src" includes="**/hibernate.cfg.xml"/>
+      </copy>
 
   </target>
 

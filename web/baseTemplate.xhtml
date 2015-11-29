@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+<h:head>
+    <link rel="stylesheet" type="text/css" href="resources/bootstrap/bootstrap.min.css" />
+    <script src="resources/bootstrap/bootstrap.min.js"></script>
+    <f:loadBundle basename="lang" var="bundle"></f:loadBundle>
+    <title><ui:insert name="title">Title</ui:insert></title>
+</h:head>
+<h:body bgcolor="white">
+    <div id="navigation">
+        <h:form>
+            <h:commandLink action="#{navigationController.showPage}" value="Page1">
+                <f:param name="pageId" value="1" />
+            </h:commandLink>
+            <h:commandLink action="#{navigationController.showPage}" value="Page2">
+                <f:param name="pageId" value="2" />
+            </h:commandLink>
+            <h:commandLink action="#{navigationController.showPage}" value="Home">
+                <f:param name="pageId" value="3" />
+            </h:commandLink>
+        </h:form>
+    </div>
+    <div id="content">
+        <ui:insert name="content">Main content</ui:insert>
+    </div>
+</h:body>
+</html>
