@@ -1,9 +1,13 @@
 package bookmaker;
 
+import model.User;
+import org.hibernate.Session;
+
 import java.io.Serializable;
 import java.util.ResourceBundle;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -14,6 +18,13 @@ public class RegistrationBean implements Serializable {
 	
 	//FacesContext context = FacesContext.getCurrentInstance();
    // ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
+
+    @ManagedProperty(value = "#{sessionBean}")
+    private SessionBean session;
+
+    public void setSession(SessionBean session) {
+        this.session = session;
+    }
 
     private String firstname,lastname,email,pw0,pw1,message;
     
@@ -43,8 +54,24 @@ public class RegistrationBean implements Serializable {
     	
     }
     
-    public void register(){
-    	
+    public String register(){
+        try{
+            String hashedPW = PasswordManager.hashPassword(this.getPw0());
+            User user = new User(this.getEmail(), this.getFirstname(), this.getLastname(), hashedPW, false);
+            //TODO Username muss unique sein, Prüfung einbauen und in DB auf unique setzen
+            Session hibernateSession = session.getSessionFactory().openSession();
+            hibernateSession.beginTransaction();
+            hibernateSession.save(user);
+            hibernateSession.getTransaction().commit();
+            hibernateSession.close();
+            session.setUser(user);
+            return "home";
+        }
+        catch(Exception e){
+            return "registration";
+        }
+
+
     }
     
     public String list(){

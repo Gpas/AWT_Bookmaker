@@ -17,17 +17,17 @@ public class User {
     private int id;
 
     @Column(name="balance")
-    private float balance;
+    private float balance = 0;
     @Column(name="username")
     private String username;
-    @Column(name="password")
+    @Column(name="password",columnDefinition = "varchar(256)")
     private String password;
     @Column(name="firstname")
     private String firstname;
     @Column(name="lastname")
     private String lastname;
     @Column(name="isBookmaker")
-    private boolean isBookmaker;
+    private boolean isBookmaker = false;
 
     @OneToMany(mappedBy = "user")
     private Set<Bet> bets = new HashSet<Bet>();
@@ -44,10 +44,11 @@ public class User {
     	this.lastname=lastname;
     }
 
-    public User(String username, String firstname, String lastname, boolean isBookmaker){
+    public User(String username, String firstname, String lastname, String password, boolean isBookmaker){
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
+        this.password = password;
         this.isBookmaker = isBookmaker;
     }
 

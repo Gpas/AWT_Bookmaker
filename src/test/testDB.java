@@ -52,7 +52,7 @@ public class testDB extends TestCase {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        session.save( new User( "Testuser", "Pascal", "Grueter" , true));
+        session.save( new User( "Testuser", "Pascal", "Grueter" , "1234", true));
         session.getTransaction().commit();
         session.close();
 
@@ -71,7 +71,7 @@ public class testDB extends TestCase {
     public void testUserGameConnection() {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.save(new User("Testuser", "Pascal", "Grueter", true));
+        session.save(new User("Testuser", "Pascal", "Grueter", "1234", true));
         User user1 = session.get(User.class, 1);
         Game game1 = new Game(new Date(System.currentTimeMillis()), user1, 1, 2);
         session.save(game1);

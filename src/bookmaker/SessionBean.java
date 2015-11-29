@@ -55,15 +55,7 @@ public class SessionBean implements Serializable {
     }
 
     public User getUser() {
-    	User u = new User("foo","bar");
-    	Date d = new Date(System.currentTimeMillis());
-    	Game g =new Game(d,u,1,2);
-    	Game g0 =new Game(d,u,3,4);
-
-    	
-    	return u;
-    	//return user;
-        
+        return this.user;
     }
 
     public String login(){
@@ -71,10 +63,11 @@ public class SessionBean implements Serializable {
             //Get the password input
             String password = user.getPassword();
             try{
-                user = loadUser(user.getUsername());
+                User userTemp = loadUser(user.getUsername());
                 //Now the actual user password is in the user object
-                if(PasswordManager.checkPassword(password, user.getPassword())){
+                if(PasswordManager.checkPassword(password, userTemp.getPassword())){
                     //Successful login
+                    this.setUser(userTemp);
                     return "login";
                 }
                 else{

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core">
 <f:view contentType="text/html"/>
 <h:head>
 </h:head>
@@ -12,7 +12,12 @@
             Home
         </ui:define>
         <ui:define name="content">
-            <h:form id="loginForm" >
+
+            <c:if test="#{sessionBean.user.username != null}">
+                Hallo #{sessionBean.user.firstname} #{sessionBean.user.lastname}!
+            </c:if>
+
+            <h:form id="loginForm" rendered="#{sessionBean.user.username == null}" >
                 <h:inputText id="username" value="#{sessionBean.user.username}"/>
                 <h:inputText id="password" value="#{sessionBean.user.password}"/>
                 <h:commandButton id="login" action="#{sessionBean.login}" value="Login"/>

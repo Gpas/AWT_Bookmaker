@@ -20,7 +20,11 @@ public class GameManagerBean implements Serializable{
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean session;
-	
+
+	public void setSession(SessionBean session) {
+		this.session = session;
+	}
+
 	public GameManagerBean(){}
 	
 	public List<Game> getUserGames(){

@@ -13,15 +13,19 @@ public class NavigationController implements Serializable {
     @ManagedProperty(value="#{param.pageId}")
     private String pageId;
 
+    public void setPageId(String pageId) {
+        this.pageId = pageId;
+    }
+
     //condional navigation based on pageId
     public String showPage(){
         if(pageId == null){
             return "home";
         }
         if(pageId.equals("1")){
-            return "page1";
+            return "registration";
         }else if(pageId.equals("2")){
-            return "page2";
+            return "listGames";
         }else{
             return "home";
         }
