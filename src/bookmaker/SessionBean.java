@@ -8,13 +8,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import java.io.Serializable;
-import java.text.MessageFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import model.Game;
 import model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -27,12 +24,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 @SessionScoped
 public class SessionBean implements Serializable {
 
-//    FacesContext context = FacesContext.getCurrentInstance();
-//    ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
+    FacesContext context = FacesContext.getCurrentInstance();
+    ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
 
     private User user;
     private String language;
     private String message, title;
+    private String errorLogin;
 
     private SessionFactory sessionFactory;
 
@@ -67,29 +65,41 @@ public class SessionBean implements Serializable {
                 //Now the actual user password is in the user object
                 if(PasswordManager.checkPassword(password, userTemp.getPassword())){
                     //Successful login
-                    this.setUser(userTemp);
-                    return "login";
+                    user = userTemp;
+                    errorLogin = "";
+                    return "home";
                 }
                 else{
                     //Invalid password
+                    errorLogin ="Invalid combination";
+                    user = new User();
                     return "home";
                 }
             }
             catch(Exception e){
                 //Error
+                errorLogin = e.getMessage();
+                user = new User();
                 return "home";
             }
         }
         //Invalid Username
+        errorLogin ="Invalid combination";
+        user = new User();
         return "home";
 
+    }
+
+    public String logout(){
+        user = new User();
+        return "home";
     }
 
     public User loadUser(String username) throws Exception{
         Session hibernateSession = sessionFactory.openSession();
         String hql = "FROM User u WHERE u.username = :username";
         Query query = hibernateSession.createQuery(hql);
-        query.setParameter("username",username);
+        query.setParameter("username", username);
         List result = query.list();
         hibernateSession.close();
         if(result.size() > 0){
@@ -107,6 +117,12 @@ public class SessionBean implements Serializable {
         hibernateSession.save(user);
         hibernateSession.getTransaction().commit();
         hibernateSession.close();
+    }
+
+    public void changeLanguage(ActionEvent e){
+        language = e.getComponent().getId();
+        Locale lang = new Locale(language);
+        bundle = ResourceBundle.getBundle("lang", lang);
     }
 
     public SessionFactory getSessionFactory() {
@@ -145,11 +161,15 @@ public class SessionBean implements Serializable {
         this.title = title;
     }
 
-    public void registerUser(){
-    	
+    public String getErrorLogin() {
+        return errorLogin;
     }
 
-//    public String login() {
+    public void setErrorLogin(String errorLogin) {
+        this.errorLogin = errorLogin;
+    }
+
+    //    public String login() {
 //        title = bundle.getString("tLogin");
 //        message =  MessageFormat.format(bundle.getString("mLogin"), user.getUsername());
 //        return "login";
@@ -164,11 +184,7 @@ public class SessionBean implements Serializable {
 //        return "register";
 //    }
 //
-//    public void changeLanguage(ActionEvent e){
-//        language = e.getComponent().getId();
-//        Locale lang = new Locale(language);
-//        bundle = ResourceBundle.getBundle("lang", lang);
-//    }
+
 //
 //    private void init(){
 //        title = bundle.getString("tHome");

@@ -1,17 +1,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:c="http://java.sun.com/jsp/jstl/core">
 <f:view contentType="text/html"/>
 <h:head>
-    <title>#{sessionBean.title}</title>
 </h:head>
 <h:body bgcolor="white">
-    <h2>#{sessionBean.title}</h2>
-    <h3>#{sessionBean.message}</h3>
+    <ui:composition template="baseTemplate.xhtml">
+        <ui:define name="title">
+            Home
+        </ui:define>
+        <ui:define name="content">
 
-    <h:form id="logoutForm" >
-        <h:commandButton id="logout" action="#{sessionBean.logout}" value="Logout"/>
-    </h:form>
+            <c:if test="#{sessionBean.user.username != null}">
+                Eingeloggt als #{sessionBean.user.firstname} #{sessionBean.user.lastname}!
+            </c:if>
+
+            <h:form id="loginForm" rendered="#{sessionBean.user.username == null}" >
+                <h:inputText id="username" value="#{sessionBean.user.username}"/>
+                <h:inputText id="password" value="#{sessionBean.user.password}"/>
+                <h:commandButton id="login" action="#{sessionBean.login}" value="Login"/>
+            </h:form>
+            
+        </ui:define>
+    </ui:composition>
 </h:body>
 </html>

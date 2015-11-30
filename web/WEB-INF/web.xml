@@ -40,8 +40,8 @@
   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>   
-    <display-name>Simple registration w. DB</display-name>
-    <description>Simple registration with DB connection</description>
+    <display-name>Bookmaker Project</display-name>
+    <description>Bookmaker Project for AWT course at BFH</description>
     <!-- Change to "Production" when you are ready to deploy -->
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>

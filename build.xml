@@ -63,7 +63,7 @@
 
   <!-- <property file="${user.home}/.ant-global.properties"/> -->
   <property file="build.properties"/>
-  <property name="app.name"      value="SimpleRegister"/>
+  <property name="app.name"      value="BookmakerProject"/>
   <property name="app.version"   value="1.0"/>
   <property name="build.home"    value="build"/>
   <!-- The following properties must be defined in
