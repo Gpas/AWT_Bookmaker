@@ -58,7 +58,7 @@ public class RegistrationBean implements Serializable {
         try{
             String hashedPW = PasswordManager.hashPassword(this.getPw0());
             User user = new User(this.getEmail(), this.getFirstname(), this.getLastname(), hashedPW, false);
-            //TODO Username muss unique sein, Prüfung einbauen und in DB auf unique setzen
+            //TODO Username muss unique sein, Pruefung einbauen und in DB auf unique setzen
             Session hibernateSession = session.getSessionFactory().openSession();
             hibernateSession.beginTransaction();
             hibernateSession.save(user);

@@ -2,6 +2,9 @@ build.properties
 
 build
 
+# hibernate config
+src/hibernate.cfg.xml
+
 # Created by https://www.gitignore.io/api/eclipse,java,intellij
 
 ### Eclipse ###

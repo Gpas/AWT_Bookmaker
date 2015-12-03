@@ -38,7 +38,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bookmaker`.`game` (
   `id` INT(11) NOT NULL COMMENT '',
-  `startTime` DATETIME NULL DEFAULT CURRENT_TIMESTAMP COMMENT '',
+  `startTime` DATETIME NULL DEFAULT NULL COMMENT '',
   `homeTeam` INT(11) NULL DEFAULT NULL COMMENT '',
   `guestTeam` INT(11) NULL DEFAULT NULL COMMENT '',
   `owner` INT(11) NULL DEFAULT NULL COMMENT '',
