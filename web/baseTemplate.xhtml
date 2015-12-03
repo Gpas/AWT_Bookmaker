@@ -6,8 +6,8 @@
       xmlns:c="http://java.sun.com/jsp/jstl/core">
 <f:view contentType="text/html"/>
 <h:head>
-    <link rel="stylesheet" type="text/css" href="resources/bootstrap/bootstrap.min.css" />
-    <script src="resources/bootstrap/bootstrap.min.js"></script>
+    <h:outputStylesheet library="bootstrap" name="bootstrap.min.css"  />
+    <h:outputScript library="bootstrap" name="bootstrap.min.js" />
     <f:loadBundle basename="lang" var="bundle"></f:loadBundle>
     <title><ui:insert name="title">Title</ui:insert></title>
 </h:head>
