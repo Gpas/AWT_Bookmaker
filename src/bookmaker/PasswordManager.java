@@ -7,7 +7,10 @@ import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 import java.math.BigInteger;
 
-// Copied from http://howtodoinjava.com/2013/07/22/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+/**
+ * Used for hashing a string and compare a clear text string with his hashed form.
+ * Copied from http://howtodoinjava.com/2013/07/22/how-to-generate-secure-password-hash-md5-sha-pbkdf2-bcrypt-examples/
+ */
 public final class PasswordManager {
 
     private PasswordManager(){

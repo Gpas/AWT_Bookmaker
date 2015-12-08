@@ -10,6 +10,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
 import model.Bet;
+import model.Condition;
 import model.Game;
 import model.User;
 import org.hibernate.Session;
@@ -59,6 +60,21 @@ public class GameManagerBean implements Serializable{
 		Game game = (Game) hibernateSession.get(Game.class, id);
 		hibernateSession.close();
 		return game;
+	}
+
+	public boolean betOnCondition(Condition condition, User user, float amount){
+		if(session.getUser().getBalance() >= amount){
+			Bet bet = new Bet(user, condition, amount);
+			Session hibernateSession = session.getSessionFactory().openSession();
+			hibernateSession.beginTransaction();
+			hibernateSession.save(bet);
+			hibernateSession.getTransaction().commit();
+			hibernateSession.close();
+			return true;
+		}
+		else{
+			return false;
+		}
 	}
 	
 }
