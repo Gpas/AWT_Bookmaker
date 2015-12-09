@@ -72,9 +72,7 @@ public class GameManagerBean implements Serializable{
 			if(user.changeBalance(-amount)){
 				return false;
 			}
-			if(gameowner.changeBalance(amount)){
-				return false;
-			}
+			gameowner.changeBalance(amount);
 			Session hibernateSession = session.getSessionFactory().openSession();
 			hibernateSession.beginTransaction();
 			hibernateSession.save(bet);

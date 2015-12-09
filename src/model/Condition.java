@@ -21,6 +21,8 @@ public class Condition {
 
 	@Column(name = "textId")
 	private int textId;
+	@Column(name = "leadingTeamId")
+	private int leadingTeamId;
 	@Column(name = "oddGain")
 	private int oddGain;
 	@Column(name = "oddBet")
@@ -33,9 +35,10 @@ public class Condition {
 
 	}
 
-	public Condition(Game game, int textId, int oddGain, int oddBet){
+	public Condition(Game game, int textId, int leadingTeamId, int oddGain, int oddBet){
 		this.game = game;
 		this.textId = textId;
+		this.leadingTeamId = leadingTeamId;
 		this.oddGain = oddGain;
 		this.oddBet = oddBet;
 	}
@@ -86,5 +89,13 @@ public class Condition {
 
 	public void setBets(Set<Bet> bets) {
 		this.bets = bets;
+	}
+
+	public int getLeadingTeamId() {
+		return leadingTeamId;
+	}
+
+	public void setLeadingTeamId(int leadingTeamId) {
+		this.leadingTeamId = leadingTeamId;
 	}
 }
