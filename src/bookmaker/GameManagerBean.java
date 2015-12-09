@@ -63,11 +63,23 @@ public class GameManagerBean implements Serializable{
 	}
 
 	public boolean betOnCondition(Condition condition, User user, float amount){
-		if(session.getUser().getBalance() >= amount){
+		if(user.getBalance() >= amount){
+			// Create new bet
 			Bet bet = new Bet(user, condition, amount);
+			// Get the gameowner
+			User gameowner = condition.getGame().getOwner();
+			// Move the money from user to gameowner
+			if(user.changeBalance(-amount)){
+				return false;
+			}
+			if(gameowner.changeBalance(amount)){
+				return false;
+			}
 			Session hibernateSession = session.getSessionFactory().openSession();
 			hibernateSession.beginTransaction();
 			hibernateSession.save(bet);
+			hibernateSession.save(user);
+			hibernateSession.save(gameowner);
 			hibernateSession.getTransaction().commit();
 			hibernateSession.close();
 			return true;
