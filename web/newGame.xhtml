@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      >
+<f:view contentType="text/html"/>
+<h:head>
+</h:head>
+<h:body bgcolor="white">
+<ui:composition template="baseTemplate.xhtml">
+<ui:define name="title">
+#{bundle.creategame}
+</ui:define>
+<ui:define name="content">
+
+  <h1>#{bundle.creategame}</h1>
+
+  <h:form id="gameForm" >
+  
+  <div class="form-group">
+  	<label for="menuhome">#{bundle.choosteams}</label><br/>
+    <t:selectOneMenu id="menuhome" >
+  	<t:selectItems
+  	  value="#{utility.teams}"
+  	  var="team"
+  	  itemLabel="#{team.value}"
+  	  itemValue="#{team.key}"
+  	/>
+  	</t:selectOneMenu>
+  	<t:selectOneMenu id="menuguest" >
+  	<t:selectItems
+  	  value="#{utility.teams}"
+  	  var="team"
+  	  itemLabel="#{team.value}"
+  	  itemValue="#{team.key}"
+  	/>
+  	</t:selectOneMenu>
+  	</div>
+  	
+    <div class="form-group">
+      <label for="starttime">#{bundle.starttime}</label><br/>                  
+      <t:inputDate 
+        type="both"
+        popupCalendar="true" 
+        id="starttime" 
+        value="#{gameManagerBean.startTime}"
+      />
+    </div>
+  
+  
+  <div class="form-group">
+  	<label for="menucond">#{bundle.choosteams}</label><br/>
+    <t:selectOneMenu id="menucond" >
+  	<t:selectItems
+  	  value="#{utility.conditions}"
+  	  var="cond"
+  	  itemLabel="#{cond.value}"
+  	  itemValue="#{cond.key}"
+  	/>
+  	</t:selectOneMenu>
+  	
+  	</div>
+
+ </h:form>
+
+<h:link outcome="listGames">games</h:link>
+</ui:define>
+</ui:composition>
+</h:body>
+</html>

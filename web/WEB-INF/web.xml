@@ -47,6 +47,12 @@
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
     </context-param>
+    
+    <!-- add apache tomahawk tag library -->
+     <context-param>
+        <param-name>facelets.LIBRARIES</param-name>
+        <param-value>/WEB-INF/tomahawk.taglib.xml</param-value>
+    </context-param>
 
     <!-- Filter for tomahawk -->
     <filter>
