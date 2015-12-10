@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="t_condition") //condition is a reserved sql keyword, so we use t_condition instead
+@Table(name="[condition]") //condition is a reserved sql keyword, so we need to use []
 public class Condition {
 
 	@Id

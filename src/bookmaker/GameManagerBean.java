@@ -86,5 +86,22 @@ public class GameManagerBean implements Serializable{
 			return false;
 		}
 	}
+
+	public boolean undoBet(Bet bet){
+		User user = bet.getUser();
+		User gameowner = bet.getCondition().getGame().getOwner();
+		if(gameowner.changeBalance(-bet.getAmount())){
+			return false;
+		}
+		user.changeBalance(bet.getAmount());
+		Session hibernateSession = session.getSessionFactory().openSession();
+		hibernateSession.beginTransaction();
+		hibernateSession.save(user);
+		hibernateSession.save(gameowner);
+		hibernateSession.delete(bet);
+		hibernateSession.getTransaction().commit();
+		hibernateSession.close();
+		return true;
+	}
 	
 }

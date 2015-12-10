@@ -5,7 +5,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.Date;
 import java.util.List;
 
+import bookmaker.GameManagerBean;
 import bookmaker.PasswordManager;
+import bookmaker.SessionBean;
 import model.*;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -53,15 +55,13 @@ public class TestCondition extends TestCase {
         query.setMaxResults(1);
         List result = query.list();
         User user = (User) result.get(0);
+        session.close();
         Game game = new Game(new Date(System.currentTimeMillis()), user, 1, 2);
         Condition condition = new Condition(game, 1, 1, 5, 1);
+        SessionBean sessionBean = new SessionBean();
+        GameManagerBean manager = new GameManagerBean();
+        manager.betOnCondition(condition, user, 10);
         Bet bet = new Bet(user, condition, 10);
-        session.beginTransaction();
-        session.save(game);
-        session.save(condition);
-        session.save(bet);
-        session.getTransaction().commit();
-        session.close();
     }
 
 }

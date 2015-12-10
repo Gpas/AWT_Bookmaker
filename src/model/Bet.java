@@ -22,7 +22,7 @@ public class Bet {
 	private User user;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="conditionId")
+	@JoinColumn(name="[condition]") //condition is a reserved sql keyword, so we need to use []
 	private Condition condition;
 
 	@Column(name = "amount")
