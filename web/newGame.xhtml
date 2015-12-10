@@ -49,13 +49,12 @@
       />
       </div>
       
-   <h:commandButton value="+">
+   <h:commandButton value="#{bundle.addcond}">
         <f:ajax render="condition" />
    </h:commandButton>
-  
+   <br/>
    <h:outputText id="condition">
-  	<label for="menucond">#{bundle.choosteams}</label><br/>
-    <t:selectOneMenu id="menucond" id="cond0" >
+    <t:selectOneMenu id="menucond" >
   	<t:selectItems
   	  value="#{utility.conditions}"
   	  var="cond"
@@ -63,6 +62,14 @@
   	  itemValue="#{cond.key}"
   	/>
   	</t:selectOneMenu>
+  	<h:inputText>
+  	  <f:convertNumber type="number"/>
+  	  <f:validateDoubleRange minimum="0.5" maximum="100"/> 
+  	</h:inputText>
+  	<br/>
+  	<h:commandButton value="#{bundle.addcond}">
+        <f:ajax  />
+    </h:commandButton>
    </h:outputText>
 
  </h:form>
