@@ -39,7 +39,7 @@
   	</t:selectOneMenu>
   	</div>
   	
-    <div class="form-group">
+     <div class="form-group">
       <label for="starttime">#{bundle.starttime}</label><br/>                  
       <t:inputDate 
         type="both"
@@ -47,12 +47,15 @@
         id="starttime" 
         value="#{gameManagerBean.startTime}"
       />
-    </div>
+      </div>
+      
+   <h:commandButton value="+">
+        <f:ajax render="condition" />
+   </h:commandButton>
   
-  
-  <div class="form-group">
+   <h:outputText id="condition">
   	<label for="menucond">#{bundle.choosteams}</label><br/>
-    <t:selectOneMenu id="menucond" >
+    <t:selectOneMenu id="menucond" id="cond0" >
   	<t:selectItems
   	  value="#{utility.conditions}"
   	  var="cond"
@@ -60,8 +63,7 @@
   	  itemValue="#{cond.key}"
   	/>
   	</t:selectOneMenu>
-  	
-  	</div>
+   </h:outputText>
 
  </h:form>
 
