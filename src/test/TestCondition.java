@@ -7,6 +7,7 @@ import java.util.List;
 
 import bookmaker.PasswordManager;
 import model.*;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -46,9 +47,19 @@ public class TestCondition extends TestCase {
 
     @SuppressWarnings({ "unchecked" })
     public void testBetOnCondition() {
-        String pw = "qwasd1234wasd";
         Session session = sessionFactory.openSession();
+        String hql = "FROM User";
+        Query query = session.createQuery(hql);
+        query.setMaxResults(1);
+        List result = query.list();
+        User user = (User) result.get(0);
+        Game game = new Game(new Date(System.currentTimeMillis()), user, 1, 2);
+        Condition condition = new Condition(game, 1, 1, 5, 1);
+        Bet bet = new Bet(user, condition, 10);
         session.beginTransaction();
+        session.save(game);
+        session.save(condition);
+        session.save(bet);
         session.getTransaction().commit();
         session.close();
     }

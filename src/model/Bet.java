@@ -22,7 +22,7 @@ public class Bet {
 	private User user;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name="condition")
+	@JoinColumn(name="conditionId")
 	private Condition condition;
 
 	@Column(name = "amount")
