@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 
@@ -42,7 +43,10 @@ public class RegistrationBean implements Serializable {
     
     
     public String getMessage() {
-        return "hello "+firstname+" "+lastname;
+        return message;
+    }
+    public void setMessage(String message){
+        this.message = message;
     }
     
     public RegistrationBean(){
@@ -58,7 +62,6 @@ public class RegistrationBean implements Serializable {
         try{
             String hashedPW = PasswordManager.hashPassword(this.getPw0());
             User user = new User(this.getEmail(), this.getFirstname(), this.getLastname(), hashedPW, false);
-            //TODO Username muss unique sein, Pruefung einbauen und in DB auf unique setzen
             Session hibernateSession = session.getSessionFactory().openSession();
             hibernateSession.beginTransaction();
             hibernateSession.save(user);
@@ -68,6 +71,7 @@ public class RegistrationBean implements Serializable {
             return "home";
         }
         catch(Exception e){
+            message = e.getMessage();
             return "registration";
         }
 
