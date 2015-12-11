@@ -48,11 +48,10 @@
         value="#{gameManagerBean.startTime}"
       />
       </div>
-      
-   <h:commandButton value="#{bundle.addcond}">
-        <f:ajax render="condition" />
-   </h:commandButton>
-   <br/>
+    <h:commandButton value="#{bundle.addcond}">
+      <f:ajax render="condition" />
+    </h:commandButton>
+    <br/>  
    <h:outputText id="condition">
     <t:selectOneMenu id="menucond" >
   	<t:selectItems
@@ -67,9 +66,6 @@
   	  <f:validateDoubleRange minimum="0.5" maximum="100"/> 
   	</h:inputText>
   	<br/>
-  	<h:commandButton value="#{bundle.addcond}">
-        <f:ajax  />
-    </h:commandButton>
    </h:outputText>
 
  </h:form>

@@ -23,15 +23,21 @@ public class GameManagerBean implements Serializable{
 	
 	
 	private Date startTime;
-	private int homeTeam, guestTeam;
+	private int homeTeam, guestTeam,
+		condToRemove;
+	private List<Integer> conditions;
 	
 	public void setStartTime(Date startTime){this.startTime=startTime;}
 	public void setHomeTeam(int homeTeam){this.homeTeam=homeTeam;}
 	public void setGuestTeam(int guestTeam){this.guestTeam=guestTeam;}
+	public void setCondToRemove(int condToRemove){this.condToRemove=condToRemove;}
+	public void setConditions(List<Integer> conditions){this.conditions=conditions;}
 	
 	public Date getStartTime(){return this.startTime;}
 	public int getHomeTeam(){return this.homeTeam;}
 	public int getGuestTeam(){return this.guestTeam;}
+	public int getCondToRemove(){return this.condToRemove;}
+	public List<Integer> getConditions(){return this.conditions;}
 
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean session;
@@ -59,15 +65,6 @@ public class GameManagerBean implements Serializable{
 	
 	public void ListGames(){
 		
-	}
-
-	public void createNewGame(){
-		
-		User u = session.getUser();
-		Game g = new Game(startTime,u,homeTeam,guestTeam);
-		
-		
-		saveGame(g);
 	}
 	
 	public void saveGame(Game game){
@@ -125,6 +122,28 @@ public class GameManagerBean implements Serializable{
 		hibernateSession.getTransaction().commit();
 		hibernateSession.close();
 		return true;
+	}
+	
+	
+	//-------------- section for game creation
+	
+	public void createNewGame(){
+		
+		User u = session.getUser();
+		Game g = new Game(startTime,u,homeTeam,guestTeam);
+		
+		
+		saveGame(g);
+	}
+	
+	//-------------- manipulate condition list for game creation
+	public void removCondition(){
+		if(condToRemove < conditions.size())
+			conditions.remove(condToRemove);
+	}
+	
+	public void addCondition(){
+		conditions.add(1);
 	}
 	
 }
