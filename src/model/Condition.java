@@ -1,5 +1,6 @@
 package model;
 
+import com.sun.deploy.util.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -23,6 +24,8 @@ public class Condition {
 	private int textId;
 	@Column(name = "leadingTeamId")
 	private int leadingTeamId;
+	@Column(name = "[params]")
+	private String params;
 	@Column(name = "oddGain")
 	private int oddGain;
 	@Column(name = "oddBet")
@@ -41,6 +44,28 @@ public class Condition {
 		this.leadingTeamId = leadingTeamId;
 		this.oddGain = oddGain;
 		this.oddBet = oddBet;
+		this.params = "";
+	}
+
+	public Condition(Game game, int textId, int leadingTeamId, String params, int oddGain, int oddBet){
+		this.game = game;
+		this.textId = textId;
+		this.leadingTeamId = leadingTeamId;
+		this.oddGain = oddGain;
+		this.oddBet = oddBet;
+		this.params = params;
+	}
+
+	public int[] getParamsAsInts(){
+		if(params != ""){
+			String temp[] = StringUtils.splitString(params,",");
+			int[] params = new int[temp.length];
+			for( int i = 0; i < temp.length; i++){
+				params[i] = Integer.parseInt(temp[i]);
+			}
+			return params;
+		}
+		return new int[1];
 	}
 
 	public int getId() {
@@ -97,5 +122,13 @@ public class Condition {
 
 	public void setLeadingTeamId(int leadingTeamId) {
 		this.leadingTeamId = leadingTeamId;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
 	}
 }

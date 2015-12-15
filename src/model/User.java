@@ -53,7 +53,7 @@ public class User {
     }
 
     public boolean changeBalance(float amount){
-            if((this.balance + amount < 0)){
+            if(((this.balance + amount) < 0)){
                 return false;
             }
             else{

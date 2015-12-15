@@ -92,7 +92,7 @@ public class GameManagerBean implements Serializable{
 			// Get the gameowner
 			User gameowner = condition.getGame().getOwner();
 			// Move the money from user to gameowner
-			if(user.changeBalance(-amount)){
+			if(!user.changeBalance(-amount)){
 				return false;
 			}
 			gameowner.changeBalance(amount);
