@@ -48,29 +48,48 @@
         value="#{gameManagerBean.startTime}"
       />
       </div>
-      
-   <h:commandButton value="#{bundle.addcond}">
-        <f:ajax render="condition" />
-   </h:commandButton>
-   <br/>
-   <h:outputText id="condition">
-    <t:selectOneMenu id="menucond" >
+  
+  <!-- Condition Input -->
+  
+    <t:selectOneMenu id="menuwin" value="#{gameManagerBean.winteam}">
+      <f:selectItem  itemValue="#{bundle.home}"/>
+      <f:selectItem  itemValue="#{bundle.guest}"/>
+    </t:selectOneMenu>
+    
+    <t:selectOneMenu id="menucond" value="#{gameManagerBean.chooscond}">
   	<t:selectItems
   	  value="#{utility.conditions}"
   	  var="cond"
   	  itemLabel="#{cond.value}"
   	  itemValue="#{cond.key}"
   	/>
-  	</t:selectOneMenu>
+   
+   </t:selectOneMenu>
   	<h:inputText>
   	  <f:convertNumber type="number"/>
   	  <f:validateDoubleRange minimum="0.5" maximum="100"/> 
   	</h:inputText>
   	<br/>
-  	<h:commandButton value="#{bundle.addcond}">
-        <f:ajax  />
+
+    <h:commandButton value="#{bundle.addcond}">
+      <f:ajax
+        execute="menuwin menucond"
+        listener="#{gameManagerBean.addCondition}"
+        render="condTable"
+        
+      />
     </h:commandButton>
-   </h:outputText>
+    <br/>
+     <h:dataTable id="condTable" var="cond" value="#{gameManagerBean.conditions}" border="1">
+     <h:column>#{cond.leadingTeam}</h:column>
+     <h:column>#{cond.textId}</h:column>
+     <h:column>#{cond.oddGain}</h:column>
+     <h:column>#{cond.oddBet}</h:column>
+   </h:dataTable>
+
+    
+
+  
 
  </h:form>
 
