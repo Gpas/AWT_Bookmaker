@@ -26,7 +26,8 @@ public class GameManagerBean implements Serializable{
 	
 	private Date startTime;
 	private int homeTeam, guestTeam,
-		condToRemove;
+		condToRemove,
+		state=0;
 	private List<ProtoCondition> conditions=new ArrayList<>();
 	private String winteam,chooscond;
 	
@@ -34,6 +35,7 @@ public class GameManagerBean implements Serializable{
 	public void setHomeTeam(int homeTeam){this.homeTeam=homeTeam;}
 	public void setGuestTeam(int guestTeam){this.guestTeam=guestTeam;}
 	public void setCondToRemove(int condToRemove){this.condToRemove=condToRemove;}
+	public void setState(int state){this.state = state;}
 	public void setConditions(List<ProtoCondition> conditions){this.conditions=conditions;}
 	public void setWinteam(String winteam){this.winteam = winteam;}
 	public void setChooscond(String choosCond){this.chooscond=choosCond;}
@@ -42,6 +44,7 @@ public class GameManagerBean implements Serializable{
 	public int getHomeTeam(){return this.homeTeam;}
 	public int getGuestTeam(){return this.guestTeam;}
 	public int getCondToRemove(){return this.condToRemove;}
+	public int getState(){return this.state;}
 	public List<ProtoCondition> getConditions(){return this.conditions;}
     public String getWinteam(){return this.winteam;}
 	public String getChooscond(){return this.chooscond;}
@@ -129,6 +132,12 @@ public class GameManagerBean implements Serializable{
 		hibernateSession.getTransaction().commit();
 		hibernateSession.close();
 		return true;
+	}
+	
+	//-------------- 
+	
+	public void nextState(){
+		this.state+=1;
 	}
 	
 	//-------------- section for game creation

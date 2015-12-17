@@ -17,8 +17,8 @@
 
   <h1>#{bundle.creategame}</h1>
 
-  <h:form id="gameForm" >
-  
+
+<h:form id="gameform" rendered="#{gameManagerBean.state == 0}" >
   <div class="form-group">
   	<label for="menuhome">#{bundle.choosteams}</label><br/>
     <t:selectOneMenu id="menuhome" >
@@ -48,9 +48,15 @@
         value="#{gameManagerBean.startTime}"
       />
       </div>
-  
+       <h:commandButton class="btn btn-default"
+         id="submit"
+         action="#{gameManagerBean.nextState}"
+         value="#{bundle.submit}"
+       />
+   </h:form>game
   <!-- Condition Input -->
   
+  <h:form id="conditionform" rendered="#{gameManagerBean.state == 1}" >
     <t:selectOneMenu id="menuwin" value="#{gameManagerBean.winteam}">
       <f:selectItem  itemValue="#{bundle.home}"/>
       <f:selectItem  itemValue="#{bundle.guest}"/>
@@ -63,7 +69,6 @@
   	  itemLabel="#{cond.value}"
   	  itemValue="#{cond.key}"
   	/>
-   
    </t:selectOneMenu>
   	<h:inputText>
   	  <f:convertNumber type="number"/>
@@ -93,9 +98,6 @@
      <h:column>#{cond.oddBet}</h:column>
      <h:column>remove</h:column>
    </h:dataTable>
-
-    
-
   
 
  </h:form>
