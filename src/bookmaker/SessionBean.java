@@ -25,7 +25,9 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 public class SessionBean implements Serializable {
 
     FacesContext context = FacesContext.getCurrentInstance();
-    ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
+ //   ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
+    ResourceBundle bundle = ResourceBundle.getBundle("lang");
+
 
     private User user;
     private String language;

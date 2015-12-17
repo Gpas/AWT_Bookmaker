@@ -1,5 +1,6 @@
 package model;
 
+import com.sun.deploy.util.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -23,10 +24,10 @@ public class Condition {
 	private int textId;
 	@Column(name = "leadingTeamId")
 	private int leadingTeamId;
-	@Column(name = "oddGain")
-	private int oddGain;
-	@Column(name = "oddBet")
-	private int oddBet;
+	@Column(name = "[params]")
+	private String params;
+	@Column(name = "odd")
+	private int odd;
 
 	@OneToMany(mappedBy="condition")
 	private Set<Bet> bets = new HashSet<Bet>();
@@ -35,12 +36,32 @@ public class Condition {
 
 	}
 
-	public Condition(Game game, int textId, int leadingTeamId, int oddGain, int oddBet){
+	public Condition(Game game, int textId, int leadingTeamId, int odd){
 		this.game = game;
 		this.textId = textId;
 		this.leadingTeamId = leadingTeamId;
-		this.oddGain = oddGain;
-		this.oddBet = oddBet;
+		this.params = "";
+		this.odd = odd;
+	}
+
+	public Condition(Game game, int textId, int leadingTeamId, String params, int odd){
+		this.game = game;
+		this.textId = textId;
+		this.leadingTeamId = leadingTeamId;
+		this.params = params;
+		this.odd = odd;
+	}
+
+	public int[] getParamsAsInts(){
+		if(params != ""){
+			String temp[] = StringUtils.splitString(params,",");
+			int[] params = new int[temp.length];
+			for( int i = 0; i < temp.length; i++){
+				params[i] = Integer.parseInt(temp[i]);
+			}
+			return params;
+		}
+		return null;
 	}
 
 	public int getId() {
@@ -67,20 +88,12 @@ public class Condition {
 		this.textId = textId;
 	}
 
-	public int getOddGain() {
-		return oddGain;
+	public int getOdd() {
+		return odd;
 	}
 
-	public void setOddGain(int oddGain) {
-		this.oddGain = oddGain;
-	}
-
-	public int getOddBet() {
-		return oddBet;
-	}
-
-	public void setOddBet(int oddBet) {
-		this.oddBet = oddBet;
+	public void setOdd(int odd) {
+		this.odd = odd;
 	}
 
 	public Set<Bet> getBets() {
@@ -97,5 +110,13 @@ public class Condition {
 
 	public void setLeadingTeamId(int leadingTeamId) {
 		this.leadingTeamId = leadingTeamId;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
 	}
 }

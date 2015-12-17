@@ -7,6 +7,7 @@ import java.util.List;
 
 import bookmaker.GameManagerBean;
 import bookmaker.PasswordManager;
+import bookmaker.PropertiesUtil;
 import bookmaker.SessionBean;
 import model.*;
 import org.hibernate.Query;
@@ -20,7 +21,7 @@ import junit.framework.TestCase;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-public class TestCondition extends TestCase {
+public class TestProperties extends TestCase {
     private SessionFactory sessionFactory;
 
     @Override
@@ -48,8 +49,11 @@ public class TestCondition extends TestCase {
     }
 
     @SuppressWarnings({ "unchecked" })
-    public void testBetOnCondition() {
-        Session session = sessionFactory.openSession();
+    public void testPropertiesUtil() {
+        PropertiesUtil.readProperties("en");
+        System.out.println(PropertiesUtil.getTeamList());
+
+        /*Session session = sessionFactory.openSession();
         String hql = "FROM User";
         Query query = session.createQuery(hql);
         query.setMaxResults(1);
@@ -65,7 +69,7 @@ public class TestCondition extends TestCase {
         SessionBean sessionBean = new SessionBean();
         GameManagerBean manager = new GameManagerBean();
         manager.setSession(sessionBean);
-        assertTrue(manager.betOnCondition(condition, user, 10));
+        assertTrue(manager.betOnCondition(condition, user, 10));*/
     }
 
 }
