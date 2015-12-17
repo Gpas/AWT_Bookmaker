@@ -26,10 +26,8 @@ public class Condition {
 	private int leadingTeamId;
 	@Column(name = "[params]")
 	private String params;
-	@Column(name = "oddGain")
-	private int oddGain;
-	@Column(name = "oddBet")
-	private int oddBet;
+	@Column(name = "odd")
+	private int odd;
 
 	@OneToMany(mappedBy="condition")
 	private Set<Bet> bets = new HashSet<Bet>();
@@ -38,22 +36,20 @@ public class Condition {
 
 	}
 
-	public Condition(Game game, int textId, int leadingTeamId, int oddGain, int oddBet){
+	public Condition(Game game, int textId, int leadingTeamId, int odd){
 		this.game = game;
 		this.textId = textId;
 		this.leadingTeamId = leadingTeamId;
-		this.oddGain = oddGain;
-		this.oddBet = oddBet;
 		this.params = "";
+		this.odd = odd;
 	}
 
-	public Condition(Game game, int textId, int leadingTeamId, String params, int oddGain, int oddBet){
+	public Condition(Game game, int textId, int leadingTeamId, String params, int odd){
 		this.game = game;
 		this.textId = textId;
 		this.leadingTeamId = leadingTeamId;
-		this.oddGain = oddGain;
-		this.oddBet = oddBet;
 		this.params = params;
+		this.odd = odd;
 	}
 
 	public int[] getParamsAsInts(){
@@ -65,7 +61,7 @@ public class Condition {
 			}
 			return params;
 		}
-		return new int[1];
+		return null;
 	}
 
 	public int getId() {
@@ -92,20 +88,12 @@ public class Condition {
 		this.textId = textId;
 	}
 
-	public int getOddGain() {
-		return oddGain;
+	public int getOdd() {
+		return odd;
 	}
 
-	public void setOddGain(int oddGain) {
-		this.oddGain = oddGain;
-	}
-
-	public int getOddBet() {
-		return oddBet;
-	}
-
-	public void setOddBet(int oddBet) {
-		this.oddBet = oddBet;
+	public void setOdd(int odd) {
+		this.odd = odd;
 	}
 
 	public Set<Bet> getBets() {
