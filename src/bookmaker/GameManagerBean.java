@@ -26,10 +26,9 @@ public class GameManagerBean implements Serializable{
 	
 	private Date startTime;
 	private int homeTeam, guestTeam,
-		condToRemove,
-		chooscond;
+		condToRemove;
 	private List<ProtoCondition> conditions=new ArrayList<>();
-	private String winteam;
+	private String winteam,chooscond;
 	
 	public void setStartTime(Date startTime){this.startTime=startTime;}
 	public void setHomeTeam(int homeTeam){this.homeTeam=homeTeam;}
@@ -37,7 +36,7 @@ public class GameManagerBean implements Serializable{
 	public void setCondToRemove(int condToRemove){this.condToRemove=condToRemove;}
 	public void setConditions(List<ProtoCondition> conditions){this.conditions=conditions;}
 	public void setWinteam(String winteam){this.winteam = winteam;}
-	public void setChooscond(int choosCond){this.chooscond=choosCond;}
+	public void setChooscond(String choosCond){this.chooscond=choosCond;}
 	
 	public Date getStartTime(){return this.startTime;}
 	public int getHomeTeam(){return this.homeTeam;}
@@ -45,7 +44,7 @@ public class GameManagerBean implements Serializable{
 	public int getCondToRemove(){return this.condToRemove;}
 	public List<ProtoCondition> getConditions(){return this.conditions;}
     public String getWinteam(){return this.winteam;}
-	public int getChooscond(){return this.chooscond;}
+	public String getChooscond(){return this.chooscond;}
     
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean session;

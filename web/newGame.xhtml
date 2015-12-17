@@ -81,10 +81,17 @@
     </h:commandButton>
     <br/>
      <h:dataTable id="condTable" var="cond" value="#{gameManagerBean.conditions}" border="1">
-     <h:column>#{cond.leadingTeam}</h:column>
-     <h:column>#{cond.textId}</h:column>
+     <h:column>
+     <ui:param name="txid" value="#{cond.textId}"/>
+     <h:outputFormat value="#{condbundle[txid]}">
+       <f:param value="#{cond.leadingTeam}"/>
+       <f:param value=""/>
+       <f:param value="baz"/>
+     </h:outputFormat>
+     </h:column>
      <h:column>#{cond.oddGain}</h:column>
      <h:column>#{cond.oddBet}</h:column>
+     <h:column>remove</h:column>
    </h:dataTable>
 
     
