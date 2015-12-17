@@ -26,15 +26,15 @@ public class GameManagerBean implements Serializable{
 	
 	private Date startTime;
 	private int homeTeam, guestTeam,
-		condToRemove,
 		state=0;
 	private List<ProtoCondition> conditions=new ArrayList<>();
 	private String winteam,chooscond;
+	private ProtoCondition condToRemove;
 	
 	public void setStartTime(Date startTime){this.startTime=startTime;}
 	public void setHomeTeam(int homeTeam){this.homeTeam=homeTeam;}
 	public void setGuestTeam(int guestTeam){this.guestTeam=guestTeam;}
-	public void setCondToRemove(int condToRemove){this.condToRemove=condToRemove;}
+	public void setCondToRemove(ProtoCondition condToRemove){this.condToRemove=condToRemove;}
 	public void setState(int state){this.state = state;}
 	public void setConditions(List<ProtoCondition> conditions){this.conditions=conditions;}
 	public void setWinteam(String winteam){this.winteam = winteam;}
@@ -43,7 +43,7 @@ public class GameManagerBean implements Serializable{
 	public Date getStartTime(){return this.startTime;}
 	public int getHomeTeam(){return this.homeTeam;}
 	public int getGuestTeam(){return this.guestTeam;}
-	public int getCondToRemove(){return this.condToRemove;}
+	public ProtoCondition getCondToRemove(){return this.condToRemove;}
 	public int getState(){return this.state;}
 	public List<ProtoCondition> getConditions(){return this.conditions;}
     public String getWinteam(){return this.winteam;}
@@ -149,9 +149,10 @@ public class GameManagerBean implements Serializable{
 	}
 	
 	//-------------- manipulate condition list for game creation
-	public void removeCondition(){
-		if(condToRemove < conditions.size())
+	public String removeCondition(){
+		if(conditions.contains(condToRemove))
 			conditions.remove(condToRemove);
+		return null;
 	}
 	
 	public void addCondition(AjaxBehaviorEvent e){

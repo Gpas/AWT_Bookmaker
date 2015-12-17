@@ -61,7 +61,7 @@ public class TestCondition extends TestCase {
         session.getTransaction().commit();
         session.close();
         Game game = new Game(new Date(System.currentTimeMillis()), user, 1, 2);
-        Condition condition = new Condition(game, 1, 1, 10, 1);
+        Condition condition = new Condition(game, 1, 1, 10);
         SessionBean sessionBean = new SessionBean();
         GameManagerBean manager = new GameManagerBean();
         manager.setSession(sessionBean);
