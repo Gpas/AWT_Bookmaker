@@ -24,15 +24,14 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 @SessionScoped
 public class SessionBean implements Serializable {
 
-    FacesContext context = FacesContext.getCurrentInstance();
- //   ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
-    ResourceBundle bundle = ResourceBundle.getBundle("lang");
+    ResourceBundle bundle = ResourceBundle.getBundle("lang", FacesContext.getCurrentInstance().getViewRoot().getLocale());
+    //ResourceBundle bundle = ResourceBundle.getBundle("lang");
 
 
     private User user;
-    private String language;
     private String message, title;
     private String errorLogin;
+    private Locale locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
 
     private SessionFactory sessionFactory;
 
@@ -71,12 +70,6 @@ public class SessionBean implements Serializable {
                     errorLogin = "";
                     return "home";
                 }
-                else{
-                    //Invalid password
-                    errorLogin ="Invalid combination";
-                    user = new User();
-                    return "home";
-                }
             }
             catch(Exception e){
                 //Error
@@ -85,8 +78,8 @@ public class SessionBean implements Serializable {
                 return "home";
             }
         }
-        //Invalid Username
-        errorLogin ="Invalid combination";
+        //Invalid Username or Password
+        errorLogin = bundle.getString("loginError");
         user = new User();
         return "home";
 
@@ -109,7 +102,7 @@ public class SessionBean implements Serializable {
             return user;
         }
         else{
-            throw new Exception("User with username '"+username+"' doesn't exist!");
+            throw new Exception(bundle.getString("loginError"));
         }
     }
 
@@ -121,10 +114,13 @@ public class SessionBean implements Serializable {
         hibernateSession.close();
     }
 
-    public void changeLanguage(ActionEvent e){
-        language = e.getComponent().getId();
-        Locale lang = new Locale(language);
-        bundle = ResourceBundle.getBundle("lang", lang);
+    public String changeLanguage(String langId){
+        FacesContext faceContext = FacesContext.getCurrentInstance();
+        locale = Locale.forLanguageTag(langId);
+        bundle = ResourceBundle.getBundle("lang", locale);
+        faceContext.getViewRoot().setLocale(locale);
+        String viewId = faceContext.getViewRoot().getViewId();
+        return viewId+"?faces-redirect=true";
     }
 
     public SessionFactory getSessionFactory() {
@@ -139,20 +135,20 @@ public class SessionBean implements Serializable {
         this.user = user;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     public String getTitle() {
@@ -175,11 +171,6 @@ public class SessionBean implements Serializable {
 //        title = bundle.getString("tLogin");
 //        message =  MessageFormat.format(bundle.getString("mLogin"), user.getUsername());
 //        return "login";
-//    }
-//
-//    public String logout() {
-//        init();
-//        return "home";
 //    }
 //
 //    public String register() {
