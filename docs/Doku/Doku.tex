@@ -1,0 +1,89 @@
+\listfiles
+\documentclass[a4paper, abstracton]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath, amsfonts, enumerate}
+\usepackage{graphicx}		% graphics
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{hyperref}		% enables the usage of links
+\usepackage{glossaries}		% glossary
+\setlength{\parindent}{0pt} 	% disable padding of first sentence in a paragraph
+\setlength{\parskip}{11pt}		% disable gap between parapgraphs
+\usepackage{fixltx2e}		% enables textsubscripting
+\usepackage{fancyhdr}		% used for page layout
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{listings}		% http://ctan.org/pkg/listings
+
+\lstset{
+  basicstyle=\ttfamily,
+  mathescape
+}
+
+% add font of scrartcl / koma: -> european writing style, wider pages and so on. See def. of KOMA / scratcl
+\addtokomafont{author}{\normalsize} 
+\addtokomafont{date}{\normalsize} 
+%\setkomafont{disposition}{\bfseries}
+
+\setlength{\headheight}{48pt}
+
+% style of all other pages
+\fancypagestyle{basicpagestyle}{
+	\fancyhf{}								% clear everything
+	\fancyfoot[C]{\thepage}
+	\renewcommand{\footrulewidth} {1pt}		% set rule thickness
+	\renewcommand{\headrulewidth} {1pt}
+	\rhead{Bern University of Applied Sciences}
+	\lhead{\includegraphics[width=0.8cm]{images/BFHlogo.png}}
+	% \fancyfoot[L]{}
+	% \fancyfoot[R]{}
+
+}
+
+% style of first page
+\fancypagestyle{titlepage}{
+   \fancyhf{}
+   \renewcommand{\footrulewidth} {0pt}		% set rule thickness
+   \renewcommand{\headrulewidth} {1pt}
+   \lhead{\includegraphics[width=0.8cm]{images/BFHlogo.png}} %  add logo
+   \fancyhead[R]{Bern University of Applied Sciences} % text
+}
+
+\pagestyle{basicpagestyle}
+
+\begin{document}
+\title{\vspace{1cm}AWT Bookmaker \vspace{1cm}}
+\author{
+  Stefan Andonie\\
+  \texttt{@students.bfh.ch}
+  \and
+  Pascal Grüter\\
+  \texttt{grutp1@students.bfh.ch}\vspace{1cm}
+}
+
+\date{Biel, \today}
+\vspace{3cm}
+\maketitle
+\thispagestyle{titlepage}
+
+%\includegraphics[width=15cm]{images/titlepage.jpeg}
+
+\pagebreak
+\begin{abstract}
+Zusammenfassung
+\end{abstract}
+\pagebreak
+\tableofcontents	% add table of contents (takes 2x typesetting to generate)
+\pagebreak
+\listoffigures		% add list of figures (takes 2x typesetting to generate)
+
+\pagebreak	% see difference between pagebreak, newpage and clearpage
+
+
+\pagebreak
+
+
+\pagebreak	
+
+
+\end{document}

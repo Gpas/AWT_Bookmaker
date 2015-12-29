@@ -1,0 +1,9 @@
+# exclude latex shit:
+
+*.log
+*.aux
+*.dvi
+*.lof
+*.out
+*.synctex.gz
+*.toc
