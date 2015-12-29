@@ -58,8 +58,8 @@ public class GameManagerBean implements Serializable{
 
 	public GameManagerBean(){}
 	
-	public List<Game> getUserGames(){
-		List<Game> games = new ArrayList<Game>();
+	public List<Game> listUserGames(){
+		List<Game> games = new ArrayList<>();
 		if(session.getUser().getIsBookmaker()){
 			games.addAll(session.getUser().getGames());
 			return games;
@@ -71,10 +71,6 @@ public class GameManagerBean implements Serializable{
 			}
 			return games;
 		}
-	}
-	
-	public void ListGames(){
-		
 	}
 	
 	public void saveGame(Game game){

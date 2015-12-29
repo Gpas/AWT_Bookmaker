@@ -31,8 +31,11 @@
                         </div>
                         <div class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-left">
-                                <li><h:link outcome="registration" value="#{bundle.navbarRegister}"></h:link></li>
-                                <li><h:link outcome="listGames" value="#{bundle.navbarGames}"></h:link></li>
+                                <ui:repeat value="#{sessionBean.links}" var="link">
+                                    <li class="#{view.viewId eq link.viewId ? 'active' : ''}">
+                                        <h:link value="#{link.text}" outcome="#{link.outcome}" />
+                                    </li>
+                                </ui:repeat>
                             </ul>
                             <h:form id="langForm" class="navbar-form navbar-left">
                                 <h:commandLink class="btn btn-default" id="de" action="#{sessionBean.changeLanguage('de')}" value="Deutsch">
