@@ -42,7 +42,7 @@ public class PropertiesUtil {
         String key = "";
         while (enumeration.hasMoreElements()) {
             key = enumeration.nextElement();
-            tempMap.put(key,bundle.getString(key));
+            tempMap.put(bundle.getString(key),key);
         }
 
         return tempMap;
