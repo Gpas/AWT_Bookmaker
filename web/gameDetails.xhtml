@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+<h:head>
+</h:head>
+<h:body bgcolor="white">
+    <ui:composition template="baseTemplate.xhtml">
+        <ui:define name="title">
+        </ui:define>
+        <ui:define name="content">
+            <div class="row">
+                <h2 class="col-md-4">Team 1</h2>
+                <h2 class="col-md-2" style="text-align: center"><b>vs</b></h2>
+                <h2 class="col-md-4" style="text-align: right">Team 2</h2>
+            </div>
+            <h3>Betpossibilities</h3>
+            <h:dataTable value="#{GameManagerBean.activGame.conditions}" var="cond"
+                         styleClass="order-table"
+                         headerClass="order-table-header"
+                         rowClasses="order-table-odd-row,order-table-even-row">
+                <h:column>
+                    <f:facet name="header">Condition</f:facet>
+                    <!-- #{cond.id} -->
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Odds</f:facet>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Amount</f:facet>
+                </h:column>
+
+                <h:column>
+                    <f:facet name="header">Option</f:facet>
+                    <h:button class="btn btn-default">Bet</h:button>
+                </h:column>
+
+            </h:dataTable>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

@@ -23,18 +23,12 @@
   	<label for="menuhome">#{bundle.choosteams}</label><br/>
     <t:selectOneMenu id="menuhome" >
   	<t:selectItems
-  	  value="#{utility.teams}"
-  	  var="team"
-  	  itemLabel="#{team.value}"
-  	  itemValue="#{team.key}"
+  	  value="#{sessionBean.propertiesUtil.teamList}"
   	/>
   	</t:selectOneMenu>
   	<t:selectOneMenu id="menuguest" >
   	<t:selectItems
-  	  value="#{utility.teams}"
-  	  var="team"
-  	  itemLabel="#{team.value}"
-  	  itemValue="#{team.key}"
+  	  value="#{sessionBean.propertiesUtil.teamList}"
   	/>
   	</t:selectOneMenu>
   	</div>
@@ -64,10 +58,7 @@
     
     <t:selectOneMenu id="menucond" value="#{gameManagerBean.chooscond}">
   	<t:selectItems
-  	  value="#{utility.conditions}"
-  	  var="cond"
-  	  itemLabel="#{cond.value}"
-  	  itemValue="#{cond.key}"
+  	  value="#{sessionBean.propertiesUtil.conditionList}"
   	/>
    </t:selectOneMenu>
   	<h:inputText>

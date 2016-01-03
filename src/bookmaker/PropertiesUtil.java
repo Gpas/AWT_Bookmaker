@@ -2,18 +2,21 @@ package bookmaker;
 
 import model.Condition;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 import java.text.Format;
 import java.util.*;
 
 /**
  * Utility class for fetching the appropriate text for conditions and teams from the properties file.
  */
-public final class PropertiesUtil {
+public class PropertiesUtil {
 
-    private static ResourceBundle langBundle, condBundle, teamBundle;
-    private static Map<String, String> conditions, teams;
+    private ResourceBundle langBundle, condBundle, teamBundle;
+    private Map<String, String> conditions, teams;
 
-    private PropertiesUtil(){
+    public PropertiesUtil(){
 
     }
 
@@ -21,25 +24,25 @@ public final class PropertiesUtil {
     /**
      * Reads the properties file for the corresponding language and saves the conditions and teams in maps
      * Needs to be called once for proper initialization and each time the language changes
-     * @param language the desired language
+     * @param locale the desired language
      */
-    public static void readProperties(String language){
-        langBundle = ResourceBundle.getBundle("lang", new Locale(language));
-        condBundle = ResourceBundle.getBundle("conditions", new Locale(language));
-        teamBundle = ResourceBundle.getBundle("teams", new Locale(language));
+    public void readProperties(Locale locale){
+        langBundle = ResourceBundle.getBundle("lang", locale);
+        condBundle = ResourceBundle.getBundle("conditions", locale);
+        teamBundle = ResourceBundle.getBundle("teams", locale);
 
         conditions = bundleToMap(condBundle);
         teams = bundleToMap(teamBundle);
     }
 
-    private static Map<String, String> bundleToMap(ResourceBundle bundle){
+    private Map<String, String> bundleToMap(ResourceBundle bundle){
         // get the keys
         Enumeration<String> enumeration = bundle.getKeys();
         Map<String, String> tempMap = new HashMap<String, String>();
         String key = "";
         while (enumeration.hasMoreElements()) {
             key = enumeration.nextElement();
-            tempMap.put(key,bundle.getString(key));
+            tempMap.put(bundle.getString(key),key);
         }
 
         return tempMap;
@@ -50,7 +53,7 @@ public final class PropertiesUtil {
      * @param id condition-ID
      * @return condition text in String
      */
-    public static String getConditionPerId(String id){
+    public String getConditionPerId(String id){
         return conditions.get(id);
     }
 
@@ -60,7 +63,7 @@ public final class PropertiesUtil {
      * @param leadingTeam the leading team
      * @return condition text in String
      */
-    public static String getConditionPerId(String id, String leadingTeam){
+    public String getConditionPerId(String id, String leadingTeam){
         return String.format(conditions.get(id), leadingTeam);
     }
 
@@ -72,7 +75,7 @@ public final class PropertiesUtil {
      * @param params if type is LEAD_TIME_AMOUNT, time and amount are needed, else only one int
      * @return condition text in String
      */
-    public static String getConditionPerId(String id, String leadingTeam, int[] params){
+    public String getConditionPerId(String id, String leadingTeam, int[] params){
         return String.format(conditions.get(id), leadingTeam, params);
     }
 
@@ -81,7 +84,7 @@ public final class PropertiesUtil {
      * @param id team-ID
      * @return Teamname in String
      */
-    public static String getTeamPerId(String id){
+    public String getTeamPerId(String id){
         return teams.get(id);
     }
 
@@ -90,7 +93,7 @@ public final class PropertiesUtil {
      * Used for rendering the team select options
      * @return Map<String, String>
      */
-    public static Map<String, String> getTeamList(){
+    public Map<String, String> getTeamList(){
         return teams;
     }
 
@@ -99,7 +102,7 @@ public final class PropertiesUtil {
      * Used for rendering the condition select options
      * @return Map<String, String>
      */
-    public static Map<String, String> getConditionList(){
+    public Map<String, String> getConditionList(){
         return conditions;
     }
 

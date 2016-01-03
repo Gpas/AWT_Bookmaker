@@ -1,13 +1,13 @@
 package bookmaker;
 
-
-
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -24,17 +24,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 @SessionScoped
 public class SessionBean implements Serializable {
 
-    FacesContext context = FacesContext.getCurrentInstance();
- //   ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
-    ResourceBundle bundle = ResourceBundle.getBundle("lang");
-
-
     private User user;
-    private String language;
     private String message, title;
     private String errorLogin;
-
     private SessionFactory sessionFactory;
+    private Locale locale;
+    private ResourceBundle bundle;
+    private PropertiesUtil propertiesUtil;
 
     public SessionBean(){
         // Create the SessionFactory
@@ -52,6 +48,17 @@ public class SessionBean implements Serializable {
         }
         //Init user
         user = new User();
+        //Init language
+        locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
+        bundle = ResourceBundle.getBundle("lang", locale);
+        //Init navigation
+        links.add(new Navlink("registration","navbarRegister"));
+        links.add(new Navlink("listGames", "navbarGames"));
+        links.add(new Navlink("newGame", "navbarCreateGame"));
+        this.reloadNavlinks();
+        //Load bundles for properties util
+        propertiesUtil = new PropertiesUtil();
+        propertiesUtil.readProperties(locale);
     }
 
     public User getUser() {
@@ -71,12 +78,6 @@ public class SessionBean implements Serializable {
                     errorLogin = "";
                     return "home";
                 }
-                else{
-                    //Invalid password
-                    errorLogin ="Invalid combination";
-                    user = new User();
-                    return "home";
-                }
             }
             catch(Exception e){
                 //Error
@@ -85,8 +86,8 @@ public class SessionBean implements Serializable {
                 return "home";
             }
         }
-        //Invalid Username
-        errorLogin ="Invalid combination";
+        //Invalid Username or Password
+        errorLogin = bundle.getString("loginError");
         user = new User();
         return "home";
 
@@ -109,7 +110,7 @@ public class SessionBean implements Serializable {
             return user;
         }
         else{
-            throw new Exception("User with username '"+username+"' doesn't exist!");
+            throw new Exception(bundle.getString("loginError"));
         }
     }
 
@@ -121,10 +122,19 @@ public class SessionBean implements Serializable {
         hibernateSession.close();
     }
 
-    public void changeLanguage(ActionEvent e){
-        language = e.getComponent().getId();
-        Locale lang = new Locale(language);
-        bundle = ResourceBundle.getBundle("lang", lang);
+    public String changeLanguage(String langId){
+        FacesContext faceContext = FacesContext.getCurrentInstance();
+        locale = Locale.forLanguageTag(langId);
+        bundle = ResourceBundle.getBundle("lang", locale);
+        faceContext.getViewRoot().setLocale(locale);
+        //Get the current page
+        String viewId = faceContext.getViewRoot().getViewId();
+        //Reload the text of navlinks in the link list
+        this.reloadNavlinks();
+        //Reload util
+        propertiesUtil.readProperties(locale);
+        // Return the current page with reload
+        return viewId+"?faces-redirect=true";
     }
 
     public SessionFactory getSessionFactory() {
@@ -139,20 +149,20 @@ public class SessionBean implements Serializable {
         this.user = user;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
     public String getMessage() {
         return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Locale getLocale() {
+        return locale;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
     }
 
     public String getTitle() {
@@ -171,15 +181,84 @@ public class SessionBean implements Serializable {
         this.errorLogin = errorLogin;
     }
 
+    public PropertiesUtil getPropertiesUtil() {
+        return propertiesUtil;
+    }
+
+    public void setPropertiesUtil(PropertiesUtil propertiesUtil) {
+        this.propertiesUtil = propertiesUtil;
+    }
+
+    //region Navigation Handling
+    //Navigation Handling
+    //**************************************
+    public class Navlink{
+
+        private String outcome;
+        private String identifier;
+        private String text;
+        private String viewId;
+
+        public Navlink(String outcome, String identifier){
+            this.outcome = outcome;
+            this.identifier = identifier;
+            this.viewId = "/" + outcome + ".xhtml";
+        }
+
+        public String getOutcome() {
+            return outcome;
+        }
+
+        public void setOutcome(String outcome) {
+            this.outcome = outcome;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public void setIdentifier(String identifier) {
+            this.identifier = identifier;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
+        }
+
+        public String getViewId() {
+            return viewId;
+        }
+
+        public void setViewId(String viewId) {
+            this.viewId = viewId;
+        }
+    }
+
+    private List<Navlink> links = new ArrayList<>();
+
+    public void reloadNavlinks(){
+        for(Navlink link : links){
+            link.text = bundle.getString(link.identifier);
+        }
+    }
+
+    public List<Navlink> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Navlink> links) {
+        this.links = links;
+    }
+    //endregion
+
     //    public String login() {
 //        title = bundle.getString("tLogin");
 //        message =  MessageFormat.format(bundle.getString("mLogin"), user.getUsername());
 //        return "login";
-//    }
-//
-//    public String logout() {
-//        init();
-//        return "home";
 //    }
 //
 //    public String register() {

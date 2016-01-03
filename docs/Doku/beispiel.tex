@@ -1,0 +1,136 @@
+\section{Projekt VR Sickness}
+Wir stellen uns zuerst die Frage wie kann man die VR Sickness überhaupt messen und versuchen danach einen solchen messbaren Test aufzubauen.
+
+\subsection{Auswertung}
+Probleme:
+
+\begin{itemize}
+\item Wird einem Proband schlecht ist er bis zu seiner Genesung nicht brauchbar für weitere Tests. Jedoch sollte die Schwelle zur Krankheit ausgereizt werden um sie zu finden.
+
+\item Die Testzeit ist stark begrenzt weil die Brille meistens nicht länger als ein paar Minuten getragen wird damit sich Personen schneller erholen können. Auch steigert ein kurzer Test die Bereitschaft an einem Folgetest mitzumachen.
+
+\item Wie misst man Übelkeit?
+
+\item Stellt sich nach mehreren Versuchen eine Toleranz ein? Wie ist die zu beurteilen? Verursachen zu extreme Szenen höhere Toleranzen? Ist das Testen von einfach nach schwierig eine Lösung?
+
+\end{itemize}
+
+\subsection{Parameter}
+Ein Parameter ist ein Wertepaar welches untersucht wird.
+Je nach Parameter kann die Testperson zwischen on/off, oder einer Interpolation zwischen zwei Extremwerten aussuchen. Oder ein voreingestellter Wert wird der Testperson angezeigt.
+
+Ein Mehrwert des Projektes ist herauszufinden welche Parameter sich als nützlich und welche sich als schädlich herausstellen. Oder welche Parameter keinen Einfluss haben.
+
+
+\begin{table}[]
+
+\label{my-label}
+\begin{tabular}{|l| p{8cm} |}
+\hline
+\textbf{Parameter} & \textbf{Beschreibung} \\ \hline
+Cockpit ja/mittel/nein
+& Als Cockpit ist eine Kabine in irgendeiner Form gemeint. Ein fixer Kasten der auf Bewegungen des Kopfes reagiert aber nicht auf die globale Bewegung in der Szene. Z.B. in einem Flugzeug oder Auto sitzen. Nein bedeutet überhaupt kein Cockpit. Mittel bedeutet ein Cockpit welches nur an den Rändern in gewissen Blickwinkeln sichtbar ist. Ja steht für ein Cockpit, dass so gross ist, das der Proband immer ein Teil des Cockpits sieht.                      \\ \hline
+Detailtreue / Synthetisch
+& Mit diesem Parameter wird untersucht ob die Anzahl an Details zu einer anderen Wahrnehmung führt: z.B. werden bei einer Szene mit vielen Details, Texturen, Effekte und Gegenstände (Figuren, Details, usw), diese immer mehr entfernt. Kameraanimation und Geschwindigkeit bleiben gleich.\\ \hline
+Kameraanimation schnell / langsam 
+& Hier wird untersucht ob die Geschwindigkeit der Kameratranslation einen Einfluss auf den Probanden hat.
+\\ \hline
+Kamerarotation schnell / langsam &
+Dasselbe wie vorher aber diesmal nur auf die Rotation bezogen.
+\\ \hline
+Eigener Körper in der Szene &
+Ändert sich das Wohlbefinden wenn ein eigener Körper in die Szene gerendert wird? Dazu gehört die Nase, Arme mit Händen und der Restliche Körper. Diese können einzeln oder in Kombination in die Szene gerendert werden.
+\\ \hline
+Objekte in der Szene &
+Objekte werden in der Szene rotiert, verschoben und skaliert. Wie reagiert ein Proband wenn die Objekte "agressiver" bewegt oder wenn mehr solche Objekte in der Szene sind. \\ \hline
+Effekte & Verschiedene Effekte werden auf die Kamera angewendet: Depth of field, Anti-Aliasing, Graustufen, Vignettierung, etc \\ \hline
+Bewegung Animiert / gesteuert & Hat der Proband eine höhere Toleranz wenn er die Bewegung der Kamera selber steuert im Vergleich mit einer vorgefertigten Animation?
+\end{tabular}
+\caption{Parameter}
+\end{table}
+
+\subsubsection{Out of Scope Parameter}
+Auf einige Parameter wollen wir nicht weiter eingehen:
+\begin{itemize}
+\item Technische Parameter: wir simulieren nicht künstlich eine schlechtere VR Brille: Parameter wie Bildwiederhohlungsfrequenz, Auflösung, Kontrast oder künstliche Verzögerungen im Tracking des Kopfes.
+\end{itemize}
+
+
+\clearpage
+
+\subsection{Szenen}
+
+
+Zusammenfassend benötigen wir drei verschiedene Szenen:
+
+\begin{itemize}
+	\item Proband statisch und Kamera statisch
+	\item Proband statisch und Kamera dynamisch
+	\item Proband dynamisch und Kamera dynamisch
+\end{itemize}
+
+Der letzte Fall benötigt eine VR Brille wo leichtes um hergehen möglich ist und der nicht erwähnte Fall Proband dynamisch und Kamera statisch (reagiert nicht oder falsch auf Bewegungen) wird weggelassen.
+Die verschiedenen Parameter werden nicht in allen Szenen getestet. Zum Beispiel wird es sehr wahrscheinlich nur eine Szene geben, wo die Detailtreue eingestellt werden kann.
+
+\subsubsection{Statischer Proband mit statischer Kamera}
+In dieser Szene reagiert die Kamera nur auf die Kopfbewegung des Probanden. Rotationen und Translation werden also nicht animiert.
+
+\textbf{Offene Punkte:}
+\begin{itemize}
+\item Sitzt der Proband auch in der Szene?
+\item Welche Parameter werden in dieser Szene gemessen?
+\end{itemize}
+
+\subsubsection{Statischer Proband mit dynamischer Kamera}
+
+In dieser Szene bleibt der Proband an Ort aber die Kamera bewegt sich. Damit können die Parameter Cockpit, Detailtreue, Kameraanimation und Eigener Körper getestet werden.
+
+\subsubsection{Dynamischer Proband mit dynamischer Kamera}
+
+Eigentlich dasselbe wie die vorherige Szene aber diesmal kann der Proband sich frei bewegen.
+
+\textbf{Offene Punkte}
+\begin{itemize}
+\item Ist Dynamisch/Statischer Proband ein Parameter? Oder kann dies vernachlässigt werden, da es unrealistisch ist jemanden an den Stuhl zu "fesseln"
+\end{itemize}
+
+\subsection{Szenebeschreibung}
+Hier werden die effektiven Szenen beschrieben und welche Parameter wie getestet werden können.
+
+\subsubsection{Szene 1: "Zimmer"}
+Proband: statisch und sitzend. Kamera: statisch \\
+In dieser Szene sitzt der Charakter in einem Zimmer an einem Tisch. Der Proband kann sich im Zimmer umsehen indem er den Kopf bewegt.
+Mögliche Parameter: 
+\begin{itemize}
+\item Detailtreue, Objekte im Zimmer werden mit immer weniger Detail dargestellt und auch ausgeblendet bis am Schluss nur noch der Tisch immer Zimmer ist.
+\item Eigener Körper, Ohne Körper sieht der Proband den Stuhl, mit Körper kann der Proband die Hände bewegen und sieht einen Körper wenn er nach unten schaut.
+\item Bewegende Objekte, zum Beispiel fliegen Bälle herum oder ein Modelflugzeug oder ganz viele kleine Kugeln.
+\item Kameraeffekte 
+\end{itemize}
+
+\subsubsection{Szene 2: "Autofahrt"}
+Proband: statisch und sitzend. Kamera: dynamisch, am Auto. \\
+Eine Autofahrt durch ein Dorf.
+Mögliche Parameter:
+\begin{itemize}
+\item Cockpit, das Innere des Auto wird dargestellt oder nicht.
+\item Detailtreue, Umgebung ist möglichst realistisch oder möglichst abstrakt
+\item Kamera, Geschwindigkeit des Autos
+\item Eigener Körper, Figur sitzt im Auto oder nur Hände und Arme oder gar nichts
+\item Bewegende Objekte, andere Autos auf Strasse und Fussgänger
+\item Kameraeffekte 
+\end{itemize}
+
+\subsubsection{Szene 3: "Hauserkundung"}
+Proband: dynamisch, kann sich in definiertem Raum bewegen.
+Kamera: dynamisch, folgt der Figur. \\
+Der Charakter befindet sich in einem Haus und bewegt sich, wenn der Proband sich bewegt. Das Haus sollte ähnlich gross sein, wie der echte Raum, in welchem sich der Proband befindet. 
+Mögliche Parameter:
+\begin{itemize}
+\item Detailtreue, Umgebung ist möglichst realistisch oder möglichst abstrakt, ausblenden von Gegenständen
+\item Kamera, Geschwindigkeit des Charakter, bewegt er sich gleich schnell wie Proband?
+\item Eigener Körper, Ganzer Körper oder nur Hände/Arme oder gar nichts
+\item Bewegende Objekte, ähnlich wie beim Zimmer
+\item Kameraeffekte 
+\end{itemize}
+
