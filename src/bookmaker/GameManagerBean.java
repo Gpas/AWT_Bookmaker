@@ -1,6 +1,7 @@
 package bookmaker;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,52 +25,40 @@ public class GameManagerBean implements Serializable{
 	
 	
 	private Date startTime;
-	private int condToRemove, state=0;
+	private int state=0;
 	private List<Condition> conditions=new ArrayList<>();
-	private String[] conditionValues = null;
-	private String winteam, chooseCond, odd, homeTeam, guestTeam;
+	private BigDecimal[] conditionValues = null;
+	private BigDecimal odd = BigDecimal.ZERO;
+	private String winteam, chooseCond, homeTeam, guestTeam;
 	private Game newGame;
 
-	private String debugMessage = "Test";
-
-	
 	public void setStartTime(Date startTime){this.startTime=startTime;}
 	public void setHomeTeam(String homeTeam){this.homeTeam=homeTeam;}
 	public void setGuestTeam(String guestTeam){this.guestTeam=guestTeam;}
-	public void setCondToRemove(int condToRemove){this.condToRemove=condToRemove;}
 	public void setState(int state){this.state = state;}
 	public void setConditions(List<Condition> conditions){this.conditions=conditions;}
 	public void setWinteam(String winteam){this.winteam = winteam;}
 	public void setChooseCond(String chooseCond){this.chooseCond =chooseCond;}
 
-	public String getOdd() {
+	public BigDecimal getOdd() {
 		return odd;
 	}
 
-	public void setOdd(String odd) {
+	public void setOdd(BigDecimal odd) {
 		this.odd = odd;
 	}
 
-	public String[] getConditionValues() {
+	public BigDecimal[] getConditionValues() {
 		return conditionValues;
 	}
 
-	public void setConditionValues(String[] conditionValues) {
+	public void setConditionValues(BigDecimal[] conditionValues) {
 		this.conditionValues = conditionValues;
-	}
-
-	public String getDebugMessage() {
-		return debugMessage;
-	}
-
-	public void setDebugMessage(String debugMessage) {
-		this.debugMessage = debugMessage;
 	}
 
 	public Date getStartTime(){return this.startTime;}
 	public String getHomeTeam(){return this.homeTeam;}
 	public String getGuestTeam(){return this.guestTeam;}
-	public int getCondToRemove(){return this.condToRemove;}
 	public int getState(){return this.state;}
 	public List<Condition> getConditions(){return this.conditions;}
     public String getWinteam(){return this.winteam;}
@@ -98,7 +87,7 @@ public class GameManagerBean implements Serializable{
 			return games;
 		}
 	}
-	
+
 	public void saveGame(Game game){
 		Session hibernateSession = session.getSessionFactory().openSession();
 		hibernateSession.beginTransaction();
@@ -169,19 +158,27 @@ public class GameManagerBean implements Serializable{
 	
 	//-------------- section for game creation
 	
-	public void createNewGame(){
-		Game g = new Game(startTime,session.getUser(),Integer.parseInt(homeTeam),Integer.parseInt(guestTeam));
-		saveGame(g);
+	public void createGame(){
+		Session hibernateSession = session.getSessionFactory().openSession();
+		hibernateSession.beginTransaction();
+		hibernateSession.saveOrUpdate(newGame);
+		for(Condition cond : conditions){
+			hibernateSession.saveOrUpdate(cond);
+		}
+		hibernateSession.getTransaction().commit();
+		hibernateSession.close();
+		newGame = null;
+		this.state=0;
 	}
 
 	public void setParamFields(AjaxBehaviorEvent e){
 		// One parameter
 		if(chooseCond.equals("2") || chooseCond.equals("3")){
-			conditionValues = new String[1];
+			conditionValues = new BigDecimal[]{BigDecimal.ZERO};
 		}
 		// Two parameters
 		else if(chooseCond.equals("4")){
-			conditionValues = new String[2];
+			conditionValues = new BigDecimal[]{BigDecimal.ZERO, BigDecimal.ZERO};
 		}
 		// No parameters
 		else{
@@ -190,30 +187,29 @@ public class GameManagerBean implements Serializable{
 	}
 	
 	//-------------- manipulate condition list for game creation
-	public String removeCondition(){
-		if(conditions.contains(condToRemove))
-			conditions.remove(condToRemove);
-		return null;
+	public void removeCondition(Condition cond){
+		if(conditions.contains(cond))
+			conditions.remove(cond);
 	}
 	
 	public void addCondition(AjaxBehaviorEvent e){
-		if(chooseCond.equals("2") || chooseCond.equals("3") || chooseCond.equals("4")){
+		int condId = Integer.parseInt(chooseCond);
+		if(condId >= 2){
 			String values = "";
-			if(conditionValues != null){
-				for(String item : conditionValues){
-					values += item +",";
+			if(conditionValues != null && conditionValues.length > 0){
+				for(BigDecimal item : conditionValues){
+					if(item != null){
+						values = values + "," + item.toString();
+					}
 				}
-				//Delete last char
-				values = values.substring(0, values.length()-1);
+				//Delete first char
+				values = values.substring(1, values.length());
 			}
-			conditions.add(new Condition(newGame, Integer.parseInt(chooseCond), Integer.parseInt(winteam) , Integer.parseInt(odd), values));
-			debugMessage = "Game " +newGame.getId() + ", cond "+chooseCond + ", winteam " + winteam + ", odd " + odd + ", values " + values;
+			conditions.add(new Condition(newGame, condId, Integer.parseInt(winteam) , odd.intValue(), values));
 		}
 		else{
-			conditions.add(new Condition(newGame, Integer.parseInt(chooseCond), Integer.parseInt(winteam) , Integer.parseInt(odd)));
-			debugMessage = "Game " +newGame.getId() + ", cond "+chooseCond + ", winteam " + winteam + ", odd " + odd;
+			conditions.add(new Condition(newGame, condId, Integer.parseInt(winteam) , odd.intValue()));
 		}
-		debugMessage = "Test Test";
 	}
 	
 }

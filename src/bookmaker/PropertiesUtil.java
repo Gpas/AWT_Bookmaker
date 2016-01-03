@@ -6,6 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.text.Format;
+import java.text.MessageFormat;
 import java.util.*;
 
 /**
@@ -14,7 +15,7 @@ import java.util.*;
 public class PropertiesUtil {
 
     private ResourceBundle langBundle, condBundle, teamBundle;
-    private Map<String, String> conditions, teams;
+    private Map<String, String> conditions, teams, conditionsSwapped, teamsSwapped, tempMap, tempMapSwapped;
 
     public PropertiesUtil(){
 
@@ -31,52 +32,62 @@ public class PropertiesUtil {
         condBundle = ResourceBundle.getBundle("conditions", locale);
         teamBundle = ResourceBundle.getBundle("teams", locale);
 
-        conditions = bundleToMap(condBundle);
-        teams = bundleToMap(teamBundle);
+        bundleToMap(condBundle);
+        conditions = tempMap;
+        conditionsSwapped = tempMapSwapped;
+        bundleToMap(teamBundle);
+        teams = tempMap;
+        teamsSwapped = tempMapSwapped;
     }
 
-    private Map<String, String> bundleToMap(ResourceBundle bundle){
+    private void bundleToMap(ResourceBundle bundle) {
         // get the keys
         Enumeration<String> enumeration = bundle.getKeys();
-        Map<String, String> tempMap = new HashMap<String, String>();
+        tempMap = new HashMap<>();
+        tempMapSwapped = new HashMap<>();
         String key = "";
         while (enumeration.hasMoreElements()) {
             key = enumeration.nextElement();
-            tempMap.put(bundle.getString(key),key);
+            tempMap.put(bundle.getString(key), key);
+            tempMapSwapped.put(key, bundle.getString(key));
         }
 
-        return tempMap;
-    }
-
-    /**
-     * For a draw or properties where no team leads
-     * @param id condition-ID
-     * @return condition text in String
-     */
-    public String getConditionPerId(String id){
-        return conditions.get(id);
-    }
-
-    /**
-     * When one team leads without specific parameters
-     * @param id condition-ID
-     * @param leadingTeam the leading team
-     * @return condition text in String
-     */
-    public String getConditionPerId(String id, String leadingTeam){
-        return String.format(conditions.get(id), leadingTeam);
     }
 
     /**
      * For the situations where one team leads at a specific time and/or amount of goals
      * Gets the appropriate condition text with variables for the corresponding id
      * @param id condition-ID
-     * @param leadingTeam the leading team
-     * @param params if type is LEAD_TIME_AMOUNT, time and amount are needed, else only one int
+     * @param leadingTeam the leading team, else empty string
+     * @param params additional params when needed, else null
      * @return condition text in String
      */
-    public String getConditionPerId(String id, String leadingTeam, int[] params){
-        return String.format(conditions.get(id), leadingTeam, params);
+    public String getConditionPerId(String id, String leadingTeam, String params){
+        int[] paramsInt = {};
+        if(params.contains(",")){
+            String temp[] = params.split(",");
+            paramsInt = new int[temp.length];
+            for( int i = 0; i < temp.length; i++){
+                paramsInt[i] = Integer.parseInt(temp[i]);
+            }
+        }
+        else if(params != ""){
+            paramsInt = new int[1];
+            paramsInt[0] = Integer.parseInt(params);
+        }
+        if(paramsInt.length == 2){
+            return MessageFormat.format(conditionsSwapped.get(id), leadingTeam, paramsInt[0], paramsInt[1]);
+        }
+        else if(paramsInt.length == 1){
+            return MessageFormat.format(conditionsSwapped.get(id), leadingTeam, paramsInt[0]);
+        }
+        else if(leadingTeam != "")
+        {
+            return MessageFormat.format(conditionsSwapped.get(id), leadingTeam);
+        }
+        else{
+            return conditionsSwapped.get(id);
+        }
     }
 
     /**
@@ -85,7 +96,7 @@ public class PropertiesUtil {
      * @return Teamname in String
      */
     public String getTeamPerId(String id){
-        return teams.get(id);
+        return teamsSwapped.get(id);
     }
 
     /**

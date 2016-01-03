@@ -51,18 +51,6 @@ public class Condition {
 		this.odd = odd;
 	}
 
-	public int[] getParamsAsInts(){
-		if(params != ""){
-			String temp[] =params.split(",");
-			int[] params = new int[temp.length];
-			for( int i = 0; i < temp.length; i++){
-				params[i] = Integer.parseInt(temp[i]);
-			}
-			return params;
-		}
-		return null;
-	}
-
 	public int getId() {
 		return id;
 	}
