@@ -53,7 +53,7 @@ public class SessionBean implements Serializable {
         bundle = ResourceBundle.getBundle("lang", locale);
         //Init navigation
         links.add(new Navlink("registration","navbarRegister"));
-        links.add(new Navlink("listGames", "navbarGames"));
+        links.add(new Navlink("games", "navbarGames"));
         links.add(new Navlink("newGame", "navbarCreateGame"));
         this.reloadNavlinks();
         //Load bundles for properties util

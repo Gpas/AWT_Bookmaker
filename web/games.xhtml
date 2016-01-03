@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<f:view contentType="text/html"/>
+<f:metadata>
+    <f:viewParam name="game" value="#{gameViewerBean.activGameId}" />
+    <f:event type="preRenderView" listener="#{gameViewerBean.loadGameDetails}"/>
+</f:metadata>
+<h:head>
+</h:head>
+<h:body bgcolor="white">
+    <ui:composition template="baseTemplate.xhtml">
+        <ui:define name="title">
+            <h:outputText rendered="#{gameViewerBean.activGameId == -1}">#{bundle.gameListTitle}</h:outputText>
+            <h:outputText rendered="#{gameViewerBean.activGameId != -1}">Game Nr. #{gameViewerBean.activGame.id}</h:outputText>
+        </ui:define>
+        <ui:define name="content">
+            <h:outputText rendered="#{gameViewerBean.activGameId == -1}">
+                #{gameViewerBean.activGameId}
+                <h2>#{bundle.gameListTitle}</h2>
+
+                <h:dataTable value="#{gameViewerBean.listUserGames()}" var="game" styleClass="table table-striped">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.gameListHomeTeam}"/>
+                        </f:facet>
+                        #{sessionBean.propertiesUtil.getTeamPerId(game.homeTeam)}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.gameListGuestTeam}"/>
+                        </f:facet>
+                        #{sessionBean.propertiesUtil.getTeamPerId(game.guestTeam)}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.gameListStarttime}"/>
+                        </f:facet>
+                        #{game.startTime}
+                    </h:column>
+                    <h:column>
+                    </h:column>
+                </h:dataTable>
+            </h:outputText>
+            <h:outputText rendered="#{gameViewerBean.activGameId != -1}">
+                <h:form id="betForm">
+                    #{gameViewerBean.activGameId}
+                    <div class="row">
+                        <h2 class="col-md-4">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.homeTeam)}</h2>
+                        <h2 class="col-md-2" style="text-align: center"><b>vs</b></h2>
+                        <h2 class="col-md-4" style="text-align: right">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.guestTeam)}</h2>
+                    </div>
+                    <h3>Betpossibilities</h3>
+                    <h:dataTable value="#{gameViewerBean.conditions}" var="cond"
+                                 styleClass="table table-striped">
+                        <h:column>
+                            <f:facet name="header">Condition</f:facet>
+                            #{sessionBean.propertiesUtil.getConditionPerId(cond.textId, sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), cond.params)}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Odds</f:facet>
+                            #{cond.odd}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Amount</f:facet>
+                            <h:inputText id="amount" value="#{gameViewerBean.betAmount}"></h:inputText>
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">Option</f:facet>
+                            <h:commandButton action="#{gameViewerBean.betOnCondtion(cond.id)}" class="btn btn-default" value="#{bundle.betButton}" />
+                        </h:column>
+
+                    </h:dataTable>
+                </h:form>
+            </h:outputText>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
+
+    
+

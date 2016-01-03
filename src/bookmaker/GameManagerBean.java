@@ -2,10 +2,7 @@ package bookmaker;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -32,6 +29,7 @@ public class GameManagerBean implements Serializable{
 	private BigDecimal odd = BigDecimal.ZERO;
 	private String winteam, chooseCond, homeTeam, guestTeam;
 	private Game newGame;
+
 
 	public void setStartTime(Date startTime){this.startTime=startTime;}
 	public void setHomeTeam(String homeTeam){this.homeTeam=homeTeam;}
@@ -73,35 +71,6 @@ public class GameManagerBean implements Serializable{
 	}
 
 	public GameManagerBean(){}
-	
-	public List<Game> listUserGames(){
-		List<Game> games = new ArrayList<>();
-		User user = session.getUser();
-		if(user.getIsBookmaker()){
-			Session hibernateSession = session.getSessionFactory().openSession();
-			String hql = "FROM Game game WHERE game.owner.id = :userId";
-			Query query = hibernateSession.createQuery(hql);
-			query.setParameter("userId", user.getId());
-			List result = query.list();
-			games.addAll(result);
-			hibernateSession.close();
-			return games;
-		}
-		else{
-			Session hibernateSession = session.getSessionFactory().openSession();
-			String hql = "FROM Bet bet " +
-					"left join fetch bet.condition condition " +
-					"left join fetch condition.game " +
-					"WHERE bet.user.id = :userId";
-			Query query = hibernateSession.createQuery(hql);
-			query.setParameter("userId", user.getId());
-			List<Bet> result = query.list();
-			for(Bet bet : result){
-				games.add(bet.getCondition().getGame());
-			}
-			return games;
-		}
-	}
 
 	public void saveGame(Game game){
 		Session hibernateSession = session.getSessionFactory().openSession();
@@ -116,48 +85,6 @@ public class GameManagerBean implements Serializable{
 		Game game = (Game) hibernateSession.get(Game.class, id);
 		hibernateSession.close();
 		return game;
-	}
-
-	public boolean betOnCondition(Condition condition, User user, float amount){
-		if(user.getBalance() >= amount){
-			// Create new bet
-			Bet bet = new Bet(user, condition, amount);
-			// Get the gameowner
-			User gameowner = condition.getGame().getOwner();
-			// Move the money from user to gameowner
-			if(!user.changeBalance(-amount)){
-				return false;
-			}
-			gameowner.changeBalance(amount);
-			Session hibernateSession = session.getSessionFactory().openSession();
-			hibernateSession.beginTransaction();
-			hibernateSession.save(bet);
-			hibernateSession.save(user);
-			hibernateSession.save(gameowner);
-			hibernateSession.getTransaction().commit();
-			hibernateSession.close();
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-
-	public boolean undoBet(Bet bet){
-		User user = bet.getUser();
-		User gameowner = bet.getCondition().getGame().getOwner();
-		if(gameowner.changeBalance(-bet.getAmount())){
-			return false;
-		}
-		user.changeBalance(bet.getAmount());
-		Session hibernateSession = session.getSessionFactory().openSession();
-		hibernateSession.beginTransaction();
-		hibernateSession.save(user);
-		hibernateSession.save(gameowner);
-		hibernateSession.delete(bet);
-		hibernateSession.getTransaction().commit();
-		hibernateSession.close();
-		return true;
 	}
 	
 	//-------------- 

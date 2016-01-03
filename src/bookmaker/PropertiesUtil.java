@@ -5,6 +5,7 @@ import model.Condition;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.text.Format;
 import java.text.MessageFormat;
 import java.util.*;
@@ -57,21 +58,21 @@ public class PropertiesUtil {
     /**
      * For the situations where one team leads at a specific time and/or amount of goals
      * Gets the appropriate condition text with variables for the corresponding id
-     * @param id condition-ID
+     * @param id conditionTextId
      * @param leadingTeam the leading team, else empty string
      * @param params additional params when needed, else null
      * @return condition text in String
      */
     public String getConditionPerId(String id, String leadingTeam, String params){
-        int[] paramsInt = {};
-        if(params.contains(",")){
+        int[] paramsInt = new int[0];
+        if(params != null && !params.isEmpty() && params.contains(",")){
             String temp[] = params.split(",");
             paramsInt = new int[temp.length];
             for( int i = 0; i < temp.length; i++){
                 paramsInt[i] = Integer.parseInt(temp[i]);
             }
         }
-        else if(params != ""){
+        else if(params != null && !params.isEmpty()){
             paramsInt = new int[1];
             paramsInt[0] = Integer.parseInt(params);
         }
@@ -81,7 +82,7 @@ public class PropertiesUtil {
         else if(paramsInt.length == 1){
             return MessageFormat.format(conditionsSwapped.get(id), leadingTeam, paramsInt[0]);
         }
-        else if(leadingTeam != "")
+        else if(leadingTeam != null && !leadingTeam.isEmpty())
         {
             return MessageFormat.format(conditionsSwapped.get(id), leadingTeam);
         }
