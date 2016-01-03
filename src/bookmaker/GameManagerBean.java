@@ -17,6 +17,7 @@ import model.Condition;
 import model.Game;
 import model.User;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 @ManagedBean
@@ -75,13 +76,27 @@ public class GameManagerBean implements Serializable{
 	
 	public List<Game> listUserGames(){
 		List<Game> games = new ArrayList<>();
-		if(session.getUser().getIsBookmaker()){
-			games.addAll(session.getUser().getGames());
+		User user = session.getUser();
+		if(user.getIsBookmaker()){
+			Session hibernateSession = session.getSessionFactory().openSession();
+			String hql = "FROM Game game WHERE game.owner.id = :userId";
+			Query query = hibernateSession.createQuery(hql);
+			query.setParameter("userId", user.getId());
+			List result = query.list();
+			games.addAll(result);
+			hibernateSession.close();
 			return games;
 		}
 		else{
-			Set<Bet> bets = session.getUser().getBets();
-			for(Bet bet : bets){
+			Session hibernateSession = session.getSessionFactory().openSession();
+			String hql = "FROM Bet bet " +
+					"left join fetch bet.condition condition " +
+					"left join fetch condition.game " +
+					"WHERE bet.user.id = :userId";
+			Query query = hibernateSession.createQuery(hql);
+			query.setParameter("userId", user.getId());
+			List<Bet> result = query.list();
+			for(Bet bet : result){
 				games.add(bet.getCondition().getGame());
 			}
 			return games;
