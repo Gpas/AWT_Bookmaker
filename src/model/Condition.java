@@ -43,7 +43,7 @@ public class Condition {
 		this.odd = odd;
 	}
 
-	public Condition(Game game, int textId, int leadingTeamId, String params, int odd){
+	public Condition(Game game, int textId, int leadingTeamId, int odd, String params){
 		this.game = game;
 		this.textId = textId;
 		this.leadingTeamId = leadingTeamId;

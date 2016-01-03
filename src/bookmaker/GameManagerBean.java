@@ -14,7 +14,6 @@ import javax.faces.event.AjaxBehaviorEvent;
 import model.Bet;
 import model.Condition;
 import model.Game;
-import model.ProtoCondition;
 import model.User;
 
 import org.hibernate.Session;
@@ -25,29 +24,56 @@ public class GameManagerBean implements Serializable{
 	
 	
 	private Date startTime;
-	private int homeTeam, guestTeam,
-		condToRemove,
-		state=0;
-	private List<ProtoCondition> conditions=new ArrayList<>();
-	private String winteam,chooscond;
+	private int condToRemove, state=0;
+	private List<Condition> conditions=new ArrayList<>();
+	private String[] conditionValues = null;
+	private String winteam, chooseCond, odd, homeTeam, guestTeam;
+	private Game newGame;
+
+	private String debugMessage = "Test";
+
 	
 	public void setStartTime(Date startTime){this.startTime=startTime;}
-	public void setHomeTeam(int homeTeam){this.homeTeam=homeTeam;}
-	public void setGuestTeam(int guestTeam){this.guestTeam=guestTeam;}
+	public void setHomeTeam(String homeTeam){this.homeTeam=homeTeam;}
+	public void setGuestTeam(String guestTeam){this.guestTeam=guestTeam;}
 	public void setCondToRemove(int condToRemove){this.condToRemove=condToRemove;}
 	public void setState(int state){this.state = state;}
-	public void setConditions(List<ProtoCondition> conditions){this.conditions=conditions;}
+	public void setConditions(List<Condition> conditions){this.conditions=conditions;}
 	public void setWinteam(String winteam){this.winteam = winteam;}
-	public void setChooscond(String choosCond){this.chooscond=choosCond;}
-	
+	public void setChooseCond(String chooseCond){this.chooseCond =chooseCond;}
+
+	public String getOdd() {
+		return odd;
+	}
+
+	public void setOdd(String odd) {
+		this.odd = odd;
+	}
+
+	public String[] getConditionValues() {
+		return conditionValues;
+	}
+
+	public void setConditionValues(String[] conditionValues) {
+		this.conditionValues = conditionValues;
+	}
+
+	public String getDebugMessage() {
+		return debugMessage;
+	}
+
+	public void setDebugMessage(String debugMessage) {
+		this.debugMessage = debugMessage;
+	}
+
 	public Date getStartTime(){return this.startTime;}
-	public int getHomeTeam(){return this.homeTeam;}
-	public int getGuestTeam(){return this.guestTeam;}
+	public String getHomeTeam(){return this.homeTeam;}
+	public String getGuestTeam(){return this.guestTeam;}
 	public int getCondToRemove(){return this.condToRemove;}
 	public int getState(){return this.state;}
-	public List<ProtoCondition> getConditions(){return this.conditions;}
+	public List<Condition> getConditions(){return this.conditions;}
     public String getWinteam(){return this.winteam;}
-	public String getChooscond(){return this.chooscond;}
+	public String getChooseCond(){return this.chooseCond;}
     
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean session;
@@ -133,15 +159,34 @@ public class GameManagerBean implements Serializable{
 	//-------------- 
 	
 	public void nextState(){
+		//User goes to the condition form
+		if(state == 0){
+			//Create game, so we can add conditions
+			newGame = new Game(startTime,session.getUser(),Integer.parseInt(homeTeam),Integer.parseInt(guestTeam));
+		}
 		this.state+=1;
 	}
 	
 	//-------------- section for game creation
 	
 	public void createNewGame(){
-		User u = session.getUser();
-		Game g = new Game(startTime,u,homeTeam,guestTeam);
+		Game g = new Game(startTime,session.getUser(),Integer.parseInt(homeTeam),Integer.parseInt(guestTeam));
 		saveGame(g);
+	}
+
+	public void setParamFields(AjaxBehaviorEvent e){
+		// One parameter
+		if(chooseCond.equals("2") || chooseCond.equals("3")){
+			conditionValues = new String[1];
+		}
+		// Two parameters
+		else if(chooseCond.equals("4")){
+			conditionValues = new String[2];
+		}
+		// No parameters
+		else{
+			conditionValues = null;
+		}
 	}
 	
 	//-------------- manipulate condition list for game creation
@@ -151,7 +196,23 @@ public class GameManagerBean implements Serializable{
 	}
 	
 	public void addCondition(AjaxBehaviorEvent e){
-		conditions.add(new ProtoCondition(winteam, chooscond,0,0));
+		if(chooseCond.equals("2") || chooseCond.equals("3") || chooseCond.equals("4")){
+			String values = "";
+			if(conditionValues != null){
+				for(String item : conditionValues){
+					values += item +",";
+				}
+				//Delete last char
+				values = values.substring(0, values.length()-1);
+			}
+			conditions.add(new Condition(newGame, Integer.parseInt(chooseCond), Integer.parseInt(winteam) , Integer.parseInt(odd), values));
+			debugMessage = "Game " +newGame.getId() + ", cond "+chooseCond + ", winteam " + winteam + ", odd " + odd + ", values " + values;
+		}
+		else{
+			conditions.add(new Condition(newGame, Integer.parseInt(chooseCond), Integer.parseInt(winteam) , Integer.parseInt(odd)));
+			debugMessage = "Game " +newGame.getId() + ", cond "+chooseCond + ", winteam " + winteam + ", odd " + odd;
+		}
+		debugMessage = "Test Test";
 	}
 	
 }

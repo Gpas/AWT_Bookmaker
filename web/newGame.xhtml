@@ -21,12 +21,12 @@
 <h:form id="gameform" rendered="#{gameManagerBean.state == 0}" >
   <div class="form-group">
   	<label for="menuhome">#{bundle.choosteams}</label><br/>
-    <t:selectOneMenu id="menuhome" >
+    <t:selectOneMenu id="menuhome" value="#{gameManagerBean.homeTeam}">
   	<t:selectItems
   	  value="#{sessionBean.propertiesUtil.teamList}"
   	/>
   	</t:selectOneMenu>
-  	<t:selectOneMenu id="menuguest" >
+  	<t:selectOneMenu id="menuguest" value="#{gameManagerBean.guestTeam}">
   	<t:selectItems
   	  value="#{sessionBean.propertiesUtil.teamList}"
   	/>
@@ -47,49 +47,58 @@
          action="#{gameManagerBean.nextState}"
          value="#{bundle.submit}"
        />
-   </h:form>game
+</h:form>
   <!-- Condition Input -->
-  
-  <h:form id="conditionform" rendered="#{gameManagerBean.state == 1}" >
+
+<h:form id="conditionform" rendered="#{gameManagerBean.state == 1}" >
     <t:selectOneMenu id="menuwin" value="#{gameManagerBean.winteam}">
-      <f:selectItem  itemValue="#{bundle.home}"/>
-      <f:selectItem  itemValue="#{bundle.guest}"/>
+      <f:selectItem  itemLabel="#{sessionBean.propertiesUtil.getTeamPerId(gameManagerBean.homeTeam)}" itemValue="#{gameManagerBean.homeTeam}"/>
+      <f:selectItem  itemLabel="#{sessionBean.propertiesUtil.getTeamPerId(gameManagerBean.guestTeam)}" itemValue="#{gameManagerBean.guestTeam}"/>
     </t:selectOneMenu>
     
-    <t:selectOneMenu id="menucond" value="#{gameManagerBean.chooscond}">
-  	<t:selectItems
-  	  value="#{sessionBean.propertiesUtil.conditionList}"
-  	/>
+    <t:selectOneMenu id="menucond" value="#{gameManagerBean.chooseCond}">
+        <t:selectItems
+          value="#{sessionBean.propertiesUtil.conditionList}"
+        />
+        <f:ajax
+           execute="@this"
+           listener="#{gameManagerBean.setParamFields}"
+           render="conditionValues"
+                />
    </t:selectOneMenu>
-  	<h:inputText>
-  	  <f:convertNumber type="number"/>
-  	  <f:validateDoubleRange minimum="0.5" maximum="100"/> 
-  	</h:inputText>
+      <h:outputLabel value="Odds (X:1)" />
+      <h:inputText value="#{gameManagerBean.odd}" />
+      <h:panelGroup id="conditionValues">
+          <ui:repeat value="#{gameManagerBean.conditionValues}" var="param" varStatus="status">
+              <h:outputLabel value="Param Nr. #{status.step}" />
+              <h:inputText value="#{gameManagerBean.conditionValues[status.index]}">
+                <f:convertNumber integerOnly="true"/>
+                <f:validateDoubleRange minimum="1" maximum="100"/>
+              </h:inputText>
+          </ui:repeat>
+      </h:panelGroup>
   	<br/>
 
     <h:commandButton value="#{bundle.addcond}">
       <f:ajax
-        execute="menuwin menucond"
+        execute="@form"
         listener="#{gameManagerBean.addCondition}"
-        render="condTable"
+        render="condTable debug"
         
       />
     </h:commandButton>
     <br/>
      <h:dataTable id="condTable" var="cond" value="#{gameManagerBean.conditions}" border="1">
      <h:column>
-     <ui:param name="txid" value="#{cond.textId}"/>
-     <h:outputFormat value="#{condbundle[txid]}">
-       <f:param value="#{cond.leadingTeam}"/>
-       <f:param value=""/>
-       <f:param value="baz"/>
-     </h:outputFormat>
+         #{sessionBean.propertiesUtil.getConditionPerId(cond.textId, cond.leadingTeamId, cond.params)}
      </h:column>
-     <h:column>#{cond.oddGain}</h:column>
-     <h:column>#{cond.oddBet}</h:column>
+     <h:column>#{cond.odd}</h:column>
      <h:column>remove</h:column>
    </h:dataTable>
-  
+
+      <h:panelGroup id="debug">
+       #{gameManagerBean.debugMessage}
+      </h:panelGroup>
 
  </h:form>
 

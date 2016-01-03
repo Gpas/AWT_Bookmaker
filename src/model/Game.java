@@ -45,7 +45,6 @@ public class Game {
 		this.guestTeam=guestTeam;
 	}
 
-
 	public int getId() {
 		return id;
 	}
