@@ -190,9 +190,10 @@ public class GameManagerBean implements Serializable{
 	}
 	
 	//-------------- manipulate condition list for game creation
-	public void removeCondition(){
-		if(condToRemove < conditions.size())
+	public String removeCondition(){
+		if(conditions.contains(condToRemove))
 			conditions.remove(condToRemove);
+		return null;
 	}
 	
 	public void addCondition(AjaxBehaviorEvent e){

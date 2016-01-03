@@ -93,7 +93,17 @@
          #{sessionBean.propertiesUtil.getConditionPerId(cond.textId, cond.leadingTeamId, cond.params)}
      </h:column>
      <h:column>#{cond.odd}</h:column>
-     <h:column>remove</h:column>
+     <h:column>
+       <h:commandButton 
+         value="Delete" 
+         action="#{gameManagerBean.removeCondition}"
+       >                
+       <f:setPropertyActionListener 
+         target="#{gameManagerBean.condToRemove}"
+         value="#{cond}"
+       />
+       </h:commandButton>
+     </h:column>
    </h:dataTable>
 
       <h:panelGroup id="debug">
