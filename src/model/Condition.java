@@ -114,7 +114,7 @@ public class Condition {
 		return occurred;
 	}
 
-	public void setOccurred(boolean occurred) {
+	public void isOccurred(boolean occurred) {
 		this.occurred = occurred;
 	}
 }
