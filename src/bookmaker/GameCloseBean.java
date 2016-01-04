@@ -1,20 +1,30 @@
 package bookmaker;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+
+import model.Condition;
 import model.Game;
 
 @ManagedBean
 @SessionScoped
 public class GameCloseBean implements Serializable{
 	
-	public GameCloseBean(){}
+	public GameCloseBean(){
+	}
 	
-	private int closeGameId = -1;
+	private int closeGameId = 1;
 	private Game closeGame;
+	private List<Condition> conditions;
 
 	public int getCloseGameId() {
 		return closeGameId;
@@ -28,6 +38,41 @@ public class GameCloseBean implements Serializable{
 	public void setCloseGame(Game closeGame) {
 		this.closeGame = closeGame;
 	}
+	public List<Condition> getConditions() {
+		return conditions;
+	}
+	public void setConditions(List<Condition> conditions) {
+		this.conditions = conditions;
+	}
+	
+    @ManagedProperty(value = "#{sessionBean}")
+    private SessionBean session;
+
+    public void setSession(SessionBean session) {
+        this.session = session;
+    }
 	
 
+	public void loadGameDetails(){
+		if(closeGameId != -1){
+			// Load Conditions
+			Session hibernateSession = session.getSessionFactory().openSession();
+			String hql = "FROM Condition cond WHERE cond.game.id = :gameId";
+			Query query = hibernateSession.createQuery(hql);
+			query.setParameter("gameId", closeGameId);
+			// Add conditions to list for displaying in datatable
+			this.conditions = query.list();
+			Set<Condition> conditions = new HashSet<>(this.conditions);
+			// Load Game and add Conditions
+			hql = "FROM Game game WHERE game.id = :gameId";
+			query = hibernateSession.createQuery(hql);
+			query.setParameter("gameId", closeGameId);
+			closeGame = (Game) query.list().get(0);
+			closeGame.setConditions(conditions);
+			hibernateSession.close();
+		}
+	}
+	
+	
+	
 }

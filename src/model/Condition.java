@@ -29,7 +29,7 @@ public class Condition {
 	private int odd;
 	
 	@Column(name = "occurred")
-	private boolean occurred;
+	private boolean occurred = false;
 
 	@OneToMany(mappedBy="condition")
 	private Set<Bet> bets = new HashSet<Bet>();

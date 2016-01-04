@@ -10,10 +10,25 @@
 <h:body bgcolor="white">
     <ui:composition template="baseTemplate.xhtml">
         <ui:define name="title">
-            
+            #{bundle.closeGame}
         </ui:define>
         <ui:define name="content">
-
+			 <h1>#{bundle.closeGame}</h1>
+			 #{bundle.closeGameText}
+			  #{gameCloseBean.closeGameId}
+			  #{gameCloseBean.loadGameDetails()};
+			 #{gameCloseBean.closeGame.id}
+			 
+		    <div class="row">
+              <h3 class="col-md-4">
+              #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.homeTeam)}
+              </h3>
+              <h3 class="col-md-2" style="text-align: center"><b>vs</b></h3>
+              <h3 class="col-md-4" style="text-align: right">
+              #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.guestTeam)}
+              </h3>
+            </div>
+			 
     
         </ui:define>
     </ui:composition>
