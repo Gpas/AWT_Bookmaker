@@ -29,10 +29,9 @@
               </h3>
             </div>
             #{gameCloseBean.closeGame.startTime}
-            
-            
 
-            <h:selectManyCheckbox>
+           <h:form>
+            <h:selectManyCheckbox value="gameCloseBean.checkBoxes">
    			  <f:selectItems
    			   value="#{gameCloseBean.conditions}"
    			   var="cond"
@@ -44,7 +43,8 @@
    			   )}"
    			  />
    		    </h:selectManyCheckbox>
-			 
+   		    
+		</h:form>
     
         </ui:define>
     </ui:composition>

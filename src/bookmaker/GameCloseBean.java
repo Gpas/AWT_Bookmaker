@@ -25,6 +25,7 @@ public class GameCloseBean implements Serializable{
 	private int closeGameId = 1;
 	private Game closeGame;
 	private List<Condition> conditions;
+	private int[] checkBoxes;
 
 	public int getCloseGameId() {
 		return closeGameId;
@@ -43,6 +44,12 @@ public class GameCloseBean implements Serializable{
 	}
 	public void setConditions(List<Condition> conditions) {
 		this.conditions = conditions;
+	}
+	public int[] getCheckBoxes() {
+		return checkBoxes;
+	}
+	public void setCheckBoxes(int[] checkBoxes) {
+		this.checkBoxes = checkBoxes;
 	}
 	
     @ManagedProperty(value = "#{sessionBean}")
@@ -72,6 +79,20 @@ public class GameCloseBean implements Serializable{
 			hibernateSession.close();
 		}
 	}
+	
+	public void closeGame(){
+		closeGame.setClosed(true);
+		for(int i : checkBoxes)
+			conditions.get(i).setOccurred(true);
+		
+		Session hibernateSession = session.getSessionFactory().openSession();
+		hibernateSession.beginTransaction();
+		hibernateSession.save(closeGame);
+		hibernateSession.getTransaction().commit();
+		hibernateSession.close();
+	}
+
+
 	
 	
 	
