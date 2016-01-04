@@ -27,6 +27,9 @@ public class Condition {
 	private String params;
 	@Column(name = "odd")
 	private int odd;
+	
+	@Column(name = "occurred")
+	private boolean occurred = false;
 
 	@OneToMany(mappedBy="condition")
 	private Set<Bet> bets = new HashSet<Bet>();
@@ -105,5 +108,13 @@ public class Condition {
 
 	public void setParams(String params) {
 		this.params = params;
+	}
+	
+	public boolean isOccurred() {
+		return occurred;
+	}
+
+	public void setOccurred(boolean occurred) {
+		this.occurred = occurred;
 	}
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+<f:view contentType="text/html"/>
+<h:head>
+</h:head>
+<h:body bgcolor="white">
+    <ui:composition template="baseTemplate.xhtml">
+        <ui:define name="title">
+            #{bundle.closeGame}
+        </ui:define>
+        <ui:define name="content">
+			 <h1>#{bundle.closeGame}</h1>
+			 #{bundle.closeGameText}
+			
+			 #{gameCloseBean.loadGameDetails()}
+			
+			 
+		    <div class="row">
+              <h3 class="col-md-4">
+              #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.homeTeam)}
+              </h3>
+              <h3 class="col-md-2" style="text-align: center"><b>vs</b></h3>
+              <h3 class="col-md-4" style="text-align: right">
+              #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.guestTeam)}
+              </h3>
+            </div>
+            #{gameCloseBean.closeGame.startTime}
+
+           <h:form>
+            <h:selectManyCheckbox value="gameCloseBean.checkBoxes">
+   			  <f:selectItems
+   			   value="#{gameCloseBean.conditions}"
+   			   var="cond"
+   			   itemValue="#{cond.id}" 
+   			   itemLabel="#{sessionBean.propertiesUtil.getConditionPerId(
+   			     cond.id, 
+   			     sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), 
+   			     cond.params
+   			   )}"
+   			  />
+   		    </h:selectManyCheckbox>
+   		    
+		</h:form>
+    
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

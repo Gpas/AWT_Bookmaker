@@ -30,6 +30,9 @@ public class Game {
     private int homeTeam;
 	@Column(name ="guestTeam")
 	private int guestTeam;
+	
+	@Column(name = "closed")
+	private boolean closed = false;
 
 	@OneToMany(mappedBy = "game")
 	private Set<Condition> conditions = new HashSet<Condition>();
@@ -91,5 +94,13 @@ public class Game {
 
 	public void setConditions(Set<Condition> conditions) {
 		this.conditions = conditions;
+	}
+
+	public boolean isClosed() {
+		return closed;
+	}
+
+	public void setClosed(boolean closed) {
+		this.closed = closed;
 	}
 }
