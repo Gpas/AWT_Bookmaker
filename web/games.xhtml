@@ -2,8 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-<f:view contentType="text/html"/>
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+
 <f:metadata>
     <f:viewParam name="game" value="#{gameViewerBean.activGameId}" />
     <f:event type="preRenderView" listener="#{gameViewerBean.loadGameDetails}"/>
@@ -13,47 +14,58 @@
 <h:body bgcolor="white">
     <ui:composition template="baseTemplate.xhtml">
         <ui:define name="title">
-            <h:outputText rendered="#{gameViewerBean.activGameId == -1}">#{bundle.gameListTitle}</h:outputText>
-            <h:outputText rendered="#{gameViewerBean.activGameId != -1}">Game Nr. #{gameViewerBean.activGame.id}</h:outputText>
+            <h:panelGroup id="titleGroup">
+                <h:outputText rendered="#{gameViewerBean.activGameId == -1}">#{bundle.gameListTitle}</h:outputText>
+                <h:outputText rendered="#{gameViewerBean.activGameId != -1}">Game Nr. #{gameViewerBean.activGame.id}</h:outputText>
+            </h:panelGroup>
         </ui:define>
         <ui:define name="content">
-            <h:outputText rendered="#{gameViewerBean.activGameId == -1}">
-                #{gameViewerBean.activGameId}
-                <h2>#{bundle.gameListTitle}</h2>
+            <h:panelGroup id="contentGroup">
+                <h:outputText id="message">#{gameViewerBean.message}</h:outputText>
+                <!-- Section for listing all Games -->
+                <h:outputText rendered="#{gameViewerBean.activGameId == -1}">
+                    <h2>#{bundle.gameListTitle}</h2>
 
-                <h:dataTable value="#{gameViewerBean.listUserGames()}" var="game" styleClass="table table-striped">
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{bundle.gameListHomeTeam}"/>
-                        </f:facet>
-                        #{sessionBean.propertiesUtil.getTeamPerId(game.homeTeam)}
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{bundle.gameListGuestTeam}"/>
-                        </f:facet>
-                        #{sessionBean.propertiesUtil.getTeamPerId(game.guestTeam)}
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">
-                            <h:outputText value="#{bundle.gameListStarttime}"/>
-                        </f:facet>
-                        #{game.startTime}
-                    </h:column>
-                    <h:column>
-                    </h:column>
-                </h:dataTable>
-            </h:outputText>
-            <h:outputText rendered="#{gameViewerBean.activGameId != -1}">
-                <h:form id="betForm">
-                    #{gameViewerBean.activGameId}
+                    <h:dataTable value="#{gameViewerBean.listUserGames()}" var="game" styleClass="table table-striped">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.gameListHomeTeam}"/>
+                            </f:facet>
+                            #{sessionBean.propertiesUtil.getTeamPerId(game.homeTeam)}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.gameListGuestTeam}"/>
+                            </f:facet>
+                            #{sessionBean.propertiesUtil.getTeamPerId(game.guestTeam)}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.gameListStarttime}"/>
+                            </f:facet>
+                            #{game.startTime}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Goto"/>
+                            </f:facet>
+                            <h:button class="btn btn-primary" outcome="games?game=#{game.id}" value="Goto" />
+                        </h:column>
+                    </h:dataTable>
+                </h:outputText>
+                <!-- Section for displaying one selected game -->
+                <h:outputText rendered="#{gameViewerBean.activGameId != -1}">
                     <div class="row">
                         <h2 class="col-md-4">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.homeTeam)}</h2>
                         <h2 class="col-md-2" style="text-align: center"><b>vs</b></h2>
                         <h2 class="col-md-4" style="text-align: right">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.guestTeam)}</h2>
+                        <h:form>
+                            <h:commandButton class="btn btn-default" value="Back to List" action="#{gameViewerBean.resetGameId}">
+                            </h:commandButton>
+                        </h:form>
                     </div>
                     <h3>Betpossibilities</h3>
-                    <h:dataTable value="#{gameViewerBean.conditions}" var="cond"
+                    <t:dataTable id="betTable" value="#{gameViewerBean.conditions}" var="cond"
                                  styleClass="table table-striped">
                         <h:column>
                             <f:facet name="header">Condition</f:facet>
@@ -66,18 +78,33 @@
                         </h:column>
 
                         <h:column>
-                            <f:facet name="header">Amount</f:facet>
-                            <h:inputText id="amount" value="#{gameViewerBean.betAmount}"></h:inputText>
+                            <f:facet name="header">Betamount</f:facet>
+                            <h:form id="betGroup">
+                                <h:inputText id="amount" rendered="#{gameViewerBean.getSavedBetAmount(cond.id) == 0}"  value="#{gameViewerBean.betAmount}"></h:inputText>
+                                <h:commandButton rendered="#{gameViewerBean.getSavedBetAmount(cond.id) == 0}"
+                                                 class="btn btn-success" value="#{bundle.betButton}"
+                                        >
+                                    <f:ajax
+                                            listener="#{gameViewerBean.betOnCondition(cond)}"
+                                            execute="@this amount"
+                                            render="@form message"
+                                            />
+                                </h:commandButton>
+                                <h:outputText rendered="#{gameViewerBean.getSavedBetAmount(cond.id) != 0}">#{gameViewerBean.getSavedBetAmount(cond.id)}</h:outputText>
+                                <h:commandButton rendered="#{gameViewerBean.getSavedBetAmount(cond.id) != 0}"
+                                                 class="btn btn-warning" value="#{bundle.undoBetButton}" >
+                                    <f:ajax
+                                            listener="#{gameViewerBean.undoBet(cond)}"
+                                            execute="@this"
+                                            render="@form message"
+                                            />
+                                </h:commandButton>
+                            </h:form>
                         </h:column>
 
-                        <h:column>
-                            <f:facet name="header">Option</f:facet>
-                            <h:commandButton action="#{gameViewerBean.betOnCondtion(cond.id)}" class="btn btn-default" value="#{bundle.betButton}" />
-                        </h:column>
-
-                    </h:dataTable>
-                </h:form>
-            </h:outputText>
+                    </t:dataTable>
+                </h:outputText>
+            </h:panelGroup>
         </ui:define>
     </ui:composition>
 </h:body>

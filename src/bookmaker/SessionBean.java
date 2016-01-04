@@ -255,21 +255,4 @@ public class SessionBean implements Serializable {
     }
     //endregion
 
-    //    public String login() {
-//        title = bundle.getString("tLogin");
-//        message =  MessageFormat.format(bundle.getString("mLogin"), user.getUsername());
-//        return "login";
-//    }
-//
-//    public String register() {
-//        return "register";
-//    }
-//
-
-//
-//    private void init(){
-//        title = bundle.getString("tHome");
-//        message = bundle.getString("mHome");
-//        user = null;
-//    }
 }

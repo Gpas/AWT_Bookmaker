@@ -10,16 +10,12 @@ import org.hibernate.Session;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
+import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class GameViewerBean implements Serializable {
 
     @ManagedProperty(value = "#{sessionBean}")
@@ -32,7 +28,10 @@ public class GameViewerBean implements Serializable {
     private Game activGame;
     private int activGameId = -1;
     private List<Condition> conditions;
-    private int betAmount;
+    private float betAmount;
+    private String message;
+    private Map<String, Bet> bets;
+    private User gameowner;
 
 
     public GameViewerBean(){
@@ -40,9 +39,9 @@ public class GameViewerBean implements Serializable {
     }
 
     public List<Game> listUserGames(){
-        List<Game> games = new ArrayList<>();
         User user = session.getUser();
         if(user.getIsBookmaker()){
+            List<Game> games = new ArrayList<>();
             Session hibernateSession = session.getSessionFactory().openSession();
             String hql = "FROM Game game WHERE game.owner.id = :userId";
             Query query = hibernateSession.createQuery(hql);
@@ -61,15 +60,22 @@ public class GameViewerBean implements Serializable {
             Query query = hibernateSession.createQuery(hql);
             query.setParameter("userId", user.getId());
             List<Bet> result = query.list();
+            Set<Game> gamesSet = new HashSet<>();
             for(Bet bet : result){
-                games.add(bet.getCondition().getGame());
+                gamesSet.add(bet.getCondition().getGame());
             }
             hibernateSession.close();
-            return games;
+            return new ArrayList<>(gamesSet);
         }
     }
 
+    public String resetGameId(){
+        activGameId = -1;
+        return "games";
+    }
+
     public void loadGameDetails(){
+        message = "";
         if(activGameId != -1){
             // Load Conditions
             Session hibernateSession = session.getSessionFactory().openSession();
@@ -80,56 +86,91 @@ public class GameViewerBean implements Serializable {
             this.conditions = query.list();
             Set<Condition> conditions = new HashSet<>(this.conditions);
             // Load Game and add Conditions
-            hql = "FROM Game game WHERE game.id = :gameId";
+            hql = "FROM Game game left join fetch game.owner user WHERE game.id = :gameId";
             query = hibernateSession.createQuery(hql);
             query.setParameter("gameId", activGameId);
             activGame = (Game) query.list().get(0);
             activGame.setConditions(conditions);
+            this.gameowner = activGame.getOwner();
+            // Load the saved bets for this game if user is gambler
+            User user = session.getUser();
+            if(!user.getIsBookmaker()){
+                this.bets = new HashMap<>();
+                hql = "FROM Bet bet left join fetch bet.condition cond WHERE bet.user.id = :userId AND cond.game.id = :gameId";
+                query = hibernateSession.createQuery(hql);
+                query.setParameter("gameId", activGameId);
+                query.setParameter("userId", user.getId());
+                List<Bet> betsList = query.list();
+                for(Bet bet : betsList){
+                    this.bets.put(Integer.toString(bet.getCondition().getId()),bet);
+                }
+            }
             hibernateSession.close();
         }
     }
 
-    public boolean betOnCondition(Condition condition){
-        User user = session.getUser();
+    public float getSavedBetAmount(String condId){
+        if(bets.containsKey(condId)){
+            return bets.get(condId).getAmount();
+        }
+        else{
+            return 0;
+        }
+    }
+
+    public void betOnCondition(Condition condition){
+        Session hibernateSession = session.getSessionFactory().openSession();
+        User user = hibernateSession.get(User.class, session.getUser().getId());
         if(user.getBalance() >= betAmount){
             // Create new bet
             Bet bet = new Bet(user, condition, betAmount);
-            // Get the gameowner
-            User gameowner = condition.getGame().getOwner();
             // Move the money from user to gameowner
-            if(!user.changeBalance(-betAmount)){
-                return false;
+            if(!user.changeBalance(betAmount, false)){
+                message = "Not enough balance!";
+                return;
             }
-            gameowner.changeBalance(betAmount);
-            Session hibernateSession = session.getSessionFactory().openSession();
+            gameowner.changeBalance(betAmount, true);
             hibernateSession.beginTransaction();
             hibernateSession.save(bet);
             hibernateSession.save(user);
+            session.setUser(user);
             hibernateSession.save(gameowner);
             hibernateSession.getTransaction().commit();
             hibernateSession.close();
-            return true;
+            // Put it in the bet map, so the ui gets refreshed
+            this.bets.put(Integer.toString(condition.getId()),bet);
+            message = "Successfully placed a bet";
+            return;
         }
         else{
-            return false;
+            message = "Not enough balance!";
+            return;
         }
     }
 
-    public boolean undoBet(Bet bet){
-        User user = bet.getUser();
-        User gameowner = bet.getCondition().getGame().getOwner();
-        if(gameowner.changeBalance(-bet.getAmount())){
-            return false;
-        }
-        user.changeBalance(bet.getAmount());
+    public void undoBet(Condition condition){
         Session hibernateSession = session.getSessionFactory().openSession();
+        Bet bet = this.bets.get(Integer.toString(condition.getId()));
+        //  delete Bet object
+        String sql = "DELETE FROM bet WHERE id = :betId";
+        Query query = hibernateSession.createSQLQuery(sql);
+        query.setParameter("betId", bet.getId());
+        query.executeUpdate();
+        User user = hibernateSession.get(User.class, session.getUser().getId());
+        User gameowner = hibernateSession.get(User.class, this.gameowner.getId());
+        if(!gameowner.changeBalance(bet.getAmount(),false)){
+            message = "Gameowner has not enough balance!";
+            return;
+        }
+        user.changeBalance(bet.getAmount(),true);
         hibernateSession.beginTransaction();
         hibernateSession.save(user);
+        session.setUser(user);
         hibernateSession.save(gameowner);
-        hibernateSession.delete(bet);
+        this.gameowner = gameowner;
         hibernateSession.getTransaction().commit();
         hibernateSession.close();
-        return true;
+        return;
     }
 
 
@@ -157,11 +198,19 @@ public class GameViewerBean implements Serializable {
         this.conditions = conditions;
     }
 
-    public int getBetAmount() {
+    public float getBetAmount() {
         return betAmount;
     }
 
-    public void setBetAmount(int betAmount) {
+    public void setBetAmount(float betAmount) {
         this.betAmount = betAmount;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

@@ -52,12 +52,16 @@ public class User {
         this.isBookmaker = isBookmaker;
     }
 
-    public boolean changeBalance(float amount){
-            if(((this.balance + amount) < 0)){
+    public boolean changeBalance(float amount, boolean addition){
+            if(addition){
+                this.balance += amount;
+                return true;
+            }
+            else if(((this.balance - amount) < 0)){
                 return false;
             }
             else{
-                this.balance += amount;
+                this.balance -= amount;
                 return true;
             }
     }

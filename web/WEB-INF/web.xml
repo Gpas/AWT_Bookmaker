@@ -54,6 +54,12 @@
         <param-value>/WEB-INF/tomahawk.taglib.xml</param-value>
     </context-param>
 
+    <!-- Disable partial view state for specific sites -->
+    <context-param>
+        <param-name>javax.faces.FULL_STATE_SAVING_VIEW_IDS</param-name>
+        <param-value>/games.xhtml</param-value>
+    </context-param>
+
     <!-- Filter for tomahawk -->
     <filter>
         <filter-name>MyFacesExtensionsFilter</filter-name>
