@@ -35,7 +35,7 @@
    			  <f:selectItems
    			   value="#{gameCloseBean.conditions}"
    			   var="cond"
-   			   itemValue="#{cond.id}" 
+   			   itemValue="#{cond}" 
    			   itemLabel="#{sessionBean.propertiesUtil.getConditionPerId(
    			     cond.id, 
    			     sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), 
@@ -43,7 +43,12 @@
    			   )}"
    			  />
    		    </h:selectManyCheckbox>
-   		    
+   		    <h:commandButton 
+   			    class="btn btn-default"
+   			    id="submit"
+   			    action="#{gameCloseBean.closeGame}"
+   			    value="#{bundle.submit}"
+   			/>
 		</h:form>
     
         </ui:define>
