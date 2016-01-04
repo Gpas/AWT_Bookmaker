@@ -15,9 +15,9 @@
         <ui:define name="content">
 			 <h1>#{bundle.closeGame}</h1>
 			 #{bundle.closeGameText}
-			  #{gameCloseBean.closeGameId}
-			  #{gameCloseBean.loadGameDetails()};
-			 #{gameCloseBean.closeGame.id}
+			
+			 #{gameCloseBean.loadGameDetails()}
+			
 			 
 		    <div class="row">
               <h3 class="col-md-4">
@@ -28,6 +28,22 @@
               #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.guestTeam)}
               </h3>
             </div>
+            #{gameCloseBean.closeGame.startTime}
+            
+            
+
+            <h:selectManyCheckbox>
+   			  <f:selectItems
+   			   value="#{gameCloseBean.conditions}"
+   			   var="cond"
+   			   itemValue="#{cond.id}" 
+   			   itemLabel="#{sessionBean.propertiesUtil.getConditionPerId(
+   			     cond.id, 
+   			     sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), 
+   			     cond.params
+   			   )}"
+   			  />
+   		    </h:selectManyCheckbox>
 			 
     
         </ui:define>
