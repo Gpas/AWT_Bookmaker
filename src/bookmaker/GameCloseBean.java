@@ -26,7 +26,7 @@ public class GameCloseBean implements Serializable{
 	public GameCloseBean(){
 	}
 	
-	private int closeGameId = 1;
+	private int closeGameId = -1;
 	private Game closeGame;
 	private List<Condition> conditions;
 	private List<Integer> checkBoxes=new ArrayList<>();
@@ -79,14 +79,19 @@ public class GameCloseBean implements Serializable{
 	
 
 	public void loadGamesToClose(){
-		if(closeGameId != -1){
+		if(closeGameId == -1){
 			// Load a List of Games not jet closed
 			Session hibernateSession = session.getSessionFactory().openSession();
 			String hql = "FROM Game game "
-					+ "WHERE game.startTime after :time "
-					+ "AND game.closed = :state";
+					+ "WHERE game.startTime < :time "
+					+ "AND NOT game.closed = :state";
+			
+			Date d= new Date(System.currentTimeMillis()-MIN90);
+			String timestring= d.toString();
+			msg = timestring;
+			
 			Query query = hibernateSession.createQuery(hql);
-			query.setParameter("time", new Date(System.currentTimeMillis()-MIN90));
+			query.setParameter("time", d);
 			query.setParameter("state", false);
 			this.setGamesToClose(query.list());
 			hibernateSession.close();
