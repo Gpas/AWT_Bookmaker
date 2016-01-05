@@ -31,11 +31,11 @@
             #{gameCloseBean.closeGame.startTime}
 
            <h:form>
-            <h:selectManyCheckbox value="gameCloseBean.checkBoxes">
+            <h:selectManyCheckbox value="#{gameCloseBean.checkBoxes}">
    			  <f:selectItems
    			   value="#{gameCloseBean.conditions}"
    			   var="cond"
-   			   itemValue="#{cond}" 
+   			   itemValue="#{cond.id}" 
    			   itemLabel="#{sessionBean.propertiesUtil.getConditionPerId(
    			     cond.id, 
    			     sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), 
@@ -50,6 +50,7 @@
    			    value="#{bundle.submit}"
    			/>
 		</h:form>
+		#{gameCloseBean.msg}
     
         </ui:define>
     </ui:composition>

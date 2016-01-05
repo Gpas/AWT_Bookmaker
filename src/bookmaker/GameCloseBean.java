@@ -1,6 +1,7 @@
 package bookmaker;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,8 @@ public class GameCloseBean implements Serializable{
 	private int closeGameId = 1;
 	private Game closeGame;
 	private List<Condition> conditions;
-	private List<Condition> checkBoxes;
+	private List<Integer> checkBoxes=new ArrayList<>();
+	private String msg="";
 
 	public int getCloseGameId() {
 		return closeGameId;
@@ -45,11 +47,17 @@ public class GameCloseBean implements Serializable{
 	public void setConditions(List<Condition> conditions) {
 		this.conditions = conditions;
 	}
-	public List<Condition> getCheckBoxes() {
+	public List<Integer> getCheckBoxes() {
 		return checkBoxes;
 	}
-	public void setCheckBoxes(List<Condition> checkBoxes) {
+	public void setCheckBoxes(List<Integer> checkBoxes) {
 		this.checkBoxes = checkBoxes;
+	}
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 	
     @ManagedProperty(value = "#{sessionBean}")
@@ -82,15 +90,25 @@ public class GameCloseBean implements Serializable{
 	
 	public void closeGame(){
 		closeGame.setClosed(true);
-		for(Condition cond : checkBoxes)
-			cond.setOccurred(true);
-		
-		Session hibernateSession = session.getSessionFactory().openSession();
-		hibernateSession.beginTransaction();
-		hibernateSession.save(closeGame);
-		hibernateSession.getTransaction().commit();
-		hibernateSession.close();
+		msg="";
+		for(int i: checkBoxes){
+			Condition c =conditions.get(i-1);
+			String s = 
+			session.getPropertiesUtil().getConditionPerId(
+				""+c.getId(),
+				session.getPropertiesUtil().getTeamPerId(""+c.getLeadingTeamId()),
+				c.getParams()
+			);
+			
+			msg+=" -"+s+"<br/>";
+		}
+//		Session hibernateSession = session.getSessionFactory().openSession();
+//		hibernateSession.beginTransaction();
+//		hibernateSession.save(closeGame);
+//		hibernateSession.getTransaction().commit();
+//		hibernateSession.close();
 	}
+
 
 
 	
