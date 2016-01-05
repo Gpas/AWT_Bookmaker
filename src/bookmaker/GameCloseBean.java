@@ -2,6 +2,7 @@ package bookmaker;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,14 +21,17 @@ import model.Game;
 @SessionScoped
 public class GameCloseBean implements Serializable{
 	
+	private static final long MIN90 = (long) 54E5;
+	
 	public GameCloseBean(){
 	}
 	
-	private int closeGameId = 1;
+	private int closeGameId = -1;
 	private Game closeGame;
 	private List<Condition> conditions;
 	private List<Integer> checkBoxes=new ArrayList<>();
 	private String msg="";
+	private List<Game> gamesToClose;
 
 	public int getCloseGameId() {
 		return closeGameId;
@@ -68,6 +72,22 @@ public class GameCloseBean implements Serializable{
     }
 	
 
+	public void loadGameToClose(){
+		if(closeGameId != -1){
+			// Load a List of Games not jet closed
+			Session hibernateSession = session.getSessionFactory().openSession();
+			String hql = "FROM Game game "
+					+ "WHERE game.startTime after :time "
+					+ "AND game.closed = :state";
+			Query query = hibernateSession.createQuery(hql);
+			query.setParameter("time", new Date(System.currentTimeMillis()-MIN90));
+			query.setParameter("state", false);
+			this.gamesToClose = query.list();
+			hibernateSession.close();
+		}
+	}
+    
+    
 	public void loadGameDetails(){
 		if(closeGameId != -1){
 			// Load Conditions
@@ -89,24 +109,23 @@ public class GameCloseBean implements Serializable{
 	}
 	
 	public void closeGame(){
-		closeGame.setClosed(true);
+		
 		msg="";
-		for(int i: checkBoxes){
-			Condition c =conditions.get(i-1);
-			String s = 
-			session.getPropertiesUtil().getConditionPerId(
-				""+c.getId(),
-				session.getPropertiesUtil().getTeamPerId(""+c.getLeadingTeamId()),
-				c.getParams()
-			);
+		for(int i: checkBoxes)
+			for(Condition c: conditions)
+				if(c.getId() == i){
+					c.setOccurred(true);
+					//msg+=" -"+i+"-";
+				}
+		
 			
-			msg+=" -"+s+"<br/>";
-		}
-//		Session hibernateSession = session.getSessionFactory().openSession();
-//		hibernateSession.beginTransaction();
-//		hibernateSession.save(closeGame);
-//		hibernateSession.getTransaction().commit();
-//		hibernateSession.close();
+		closeGame.setClosed(true);
+		
+		Session hibernateSession = session.getSessionFactory().openSession();
+		hibernateSession.beginTransaction();
+		hibernateSession.save(closeGame);
+		hibernateSession.getTransaction().commit();
+		hibernateSession.close();
 	}
 
 
