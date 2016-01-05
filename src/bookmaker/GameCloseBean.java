@@ -26,7 +26,7 @@ public class GameCloseBean implements Serializable{
 	public GameCloseBean(){
 	}
 	
-	private int closeGameId = -1;
+	private int closeGameId = 1;
 	private Game closeGame;
 	private List<Condition> conditions;
 	private List<Integer> checkBoxes=new ArrayList<>();
@@ -63,6 +63,12 @@ public class GameCloseBean implements Serializable{
 	public void setMsg(String msg) {
 		this.msg = msg;
 	}
+	public List<Game> getGamesToClose() {
+		return gamesToClose;
+	}
+	public void setGamesToClose(List<Game> gamesToClose) {
+		this.gamesToClose = gamesToClose;
+	}
 	
     @ManagedProperty(value = "#{sessionBean}")
     private SessionBean session;
@@ -82,7 +88,7 @@ public class GameCloseBean implements Serializable{
 			Query query = hibernateSession.createQuery(hql);
 			query.setParameter("time", new Date(System.currentTimeMillis()-MIN90));
 			query.setParameter("state", false);
-			this.gamesToClose = query.list();
+			this.setGamesToClose(query.list());
 			hibernateSession.close();
 		}
 	}
@@ -109,25 +115,26 @@ public class GameCloseBean implements Serializable{
 	}
 	
 	public void closeGame(){
+		Session hibernateSession = session.getSessionFactory().openSession();
+		hibernateSession.beginTransaction();
 		
-		msg="";
+		//msg="";
 		for(int i: checkBoxes)
 			for(Condition c: conditions)
 				if(c.getId() == i){
 					c.setOccurred(true);
+					hibernateSession.update(c);
 					//msg+=" -"+i+"-";
 				}
 		
 			
 		closeGame.setClosed(true);
 		closeGameId = -1;
-		
-		Session hibernateSession = session.getSessionFactory().openSession();
-		hibernateSession.beginTransaction();
-		hibernateSession.save(closeGame);
+		hibernateSession.update(closeGame);
 		hibernateSession.getTransaction().commit();
 		hibernateSession.close();
 	}
+
 
 
 
