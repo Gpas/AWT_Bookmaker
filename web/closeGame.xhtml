@@ -14,11 +14,51 @@
         </ui:define>
         <ui:define name="content">
 			 <h1>#{bundle.closeGame}</h1>
-			 #{bundle.closeGameText}
+			  
+			<f:subview rendered="{gameCloseBean.closeGameId == -1)}">
+			#{gameCloseBean.loadGamesToClose()}
+			<h:dataTable value="#{gameCloseBean.gamesToClose}" var="game">
+			  <h:column>
+			    <f:facet name="header">
+			     <h:outputText>
+			     #{bundle.home}
+			     </h:outputText>
+			    </f:facet>
+			    <h:outputText>
+			     #{sessionBean.propertiesUtil.getTeamPerId(game.homeTeam)}
+			    </h:outputText>
+			  </h:column>
+              <h:column>
+			    <f:facet name="header">
+			     <h:outputText>
+			     #{bundle.guest}
+			     </h:outputText>
+			    </f:facet>
+			    <h:outputText>
+			     #{sessionBean.propertiesUtil.getTeamPerId(game.guestTeam)}
+			    </h:outputText>
+			  </h:column>
+			  <h:column>
+			    <f:facet name="header">
+			     <h:outputText>
+			     #{bundle.gameListStarttime}
+			     </h:outputText>
+			    </f:facet>
+			    <h:outputText>
+			     #{game.startTime}
+			    </h:outputText>
+			  </h:column>
+			  <h:column>
+			    <h:outputText>
+			     #{game.id}
+			    </h:outputText>
+			  </h:column>
+			</h:dataTable>
+			</f:subview>
 			
-			 #{gameCloseBean.loadGameDetails()}
-			
-			 
+			<f:subview rendered="{gameCloseBean.closeGameId > -1)}">
+			#{gameCloseBean.loadGameDetails()}
+			#{bundle.closeGameText}
 		    <div class="row">
               <h3 class="col-md-4">
               #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.homeTeam)}
@@ -50,8 +90,8 @@
    			    value="#{bundle.submit}"
    			/>
 		</h:form>
-		#{gameCloseBean.msg}
-    
+        </f:subview>
+        
         </ui:define>
     </ui:composition>
 </h:body>

@@ -72,7 +72,7 @@ public class GameCloseBean implements Serializable{
     }
 	
 
-	public void loadGameToClose(){
+	public void loadGamesToClose(){
 		if(closeGameId != -1){
 			// Load a List of Games not jet closed
 			Session hibernateSession = session.getSessionFactory().openSession();
@@ -95,7 +95,7 @@ public class GameCloseBean implements Serializable{
 			String hql = "FROM Condition cond WHERE cond.game.id = :gameId";
 			Query query = hibernateSession.createQuery(hql);
 			query.setParameter("gameId", closeGameId);
-			// Add conditions to list for displaying in datatable
+			// Add conditions to list for displaying
 			this.conditions = query.list();
 			Set<Condition> conditions = new HashSet<>(this.conditions);
 			// Load Game and add Conditions
@@ -120,6 +120,7 @@ public class GameCloseBean implements Serializable{
 		
 			
 		closeGame.setClosed(true);
+		closeGameId = -1;
 		
 		Session hibernateSession = session.getSessionFactory().openSession();
 		hibernateSession.beginTransaction();
