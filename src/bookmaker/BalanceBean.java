@@ -6,6 +6,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import org.hibernate.Session;
+
 import model.User;
 
 @ManagedBean
@@ -68,8 +70,11 @@ public class BalanceBean implements Serializable{
 			 
 			 User u = session.getUser();
 			 u.changeBalance(ammount, true);
-			 
-			 
+			 Session hibernateSession = session.getSessionFactory().openSession();
+			 hibernateSession.beginTransaction();
+		     hibernateSession.update(u);
+			 hibernateSession.getTransaction().commit();
+			 hibernateSession.close();
 			 ammount=0;
 			 clear = false;
 			 msg="transactionComplete";
