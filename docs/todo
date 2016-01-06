@@ -1,0 +1,16 @@
+Stefan:
+Credit Card Formular when balance not enough, You should allow the card 1234 1234 1234 1234 with validation code 234 for me to test the game
+Navigation for user/bookmaker
+Documentation
+
+Pascal:
+List games on start
+List games for bookmaker with betamount with loss
+List games for users, with gain/loss, closed/running
+
+
+Check bundles, internationalization
+Add FR as Language
+Javadoc
+
+
