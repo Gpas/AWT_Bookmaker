@@ -76,7 +76,7 @@ public class RegistrationBean implements Serializable {
         try{
             
             if(validateFields()){
-            	String hashedPW = PasswordManager.hashPassword(this.getPw0());
+            String hashedPW = PasswordManager.hashPassword(this.getPw0());
             User user = new User(this.getEmail(), this.getFirstname(), this.getLastname(), hashedPW, false);
             Session hibernateSession = session.getSessionFactory().openSession();
             hibernateSession.beginTransaction();
@@ -84,6 +84,7 @@ public class RegistrationBean implements Serializable {
             hibernateSession.getTransaction().commit();
             hibernateSession.close();
             session.setUser(user);
+            msg="regSuc";
             return "home";
             }else{return "registration";}
         }
@@ -148,6 +149,6 @@ public class RegistrationBean implements Serializable {
             msg=PW_MISMATCH;
         }
         
-    	return false;
+    	return true;
     }
 }
