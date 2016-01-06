@@ -95,9 +95,7 @@ public class GameCloseBean implements Serializable{
 			query.setParameter("state", false);
 			this.setGamesToClose(query.list());
 			hibernateSession.close();
-		
 	}
-    
     
 	public void loadGameDetails(){
 		if(closeGameId != -1){
@@ -131,7 +129,6 @@ public class GameCloseBean implements Serializable{
 					c.setOccurred(true);
 					hibernateSession.update(c);
 				}
-		
 			
 		closeGame.setClosed(true);
 		closeGameId = -1;
@@ -139,11 +136,4 @@ public class GameCloseBean implements Serializable{
 		hibernateSession.getTransaction().commit();
 		hibernateSession.close();
 	}
-
-
-
-
-	
-	
-	
 }
