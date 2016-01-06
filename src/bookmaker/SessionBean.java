@@ -52,8 +52,8 @@ public class SessionBean implements Serializable {
         locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
         bundle = ResourceBundle.getBundle("lang", locale);
         //Init navigation
-        links.add(new Navlink("registration","navbarRegister"));
         links.add(new Navlink("games", "navbarGames"));
+        links.add(new Navlink("registration","navbarRegister"));
         
         this.reloadNavlinks();
         //Load bundles for properties util
@@ -76,6 +76,9 @@ public class SessionBean implements Serializable {
                     //Successful login
                     user = userTemp;
                     errorLogin = "";
+                    
+                    //remove registration link
+                    removeNavLink("registration");
                     
                     //set up navigation according to role
                     links.add(new Navlink("balance", "navbarBalance"));
@@ -110,6 +113,10 @@ public class SessionBean implements Serializable {
         removeNavLink("balance");
         removeNavLink("newGame");
         removeNavLink("closeGame");
+        
+        //add registration link
+        links.add(new Navlink("registration","navbarRegister"));
+        
         this.reloadNavlinks();
         return "home";
     }
