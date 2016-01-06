@@ -49,7 +49,18 @@
 			     #{game.startTime}
 			    </h:outputText>
 			  </h:column>
-			
+			  <h:column>
+                <f:facet name="header">
+			     <h:outputText>
+			     #{bundle.closeGame}
+			     </h:outputText>
+			    </f:facet>
+			    <h:outputText>
+			     <h:form>
+			     <h:commandButton value="#{bundle.closeGame}" action="#{gameCloseBean.setCloseGameId(game.id)}"/>
+			     </h:form>
+			    </h:outputText>
+			  </h:column>
 			</h:dataTable>
 			</h:panelGroup>
 			
@@ -86,6 +97,7 @@
    			    action="#{gameCloseBean.closeGame}"
    			    value="#{bundle.submit}"
    			/>
+   			<h:commandButton value="#{bundle.back}" action="#{gameCloseBean.setCloseGameId(-1)}"/>
 		</h:form>
         </h:panelGroup>
         
