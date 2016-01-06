@@ -106,6 +106,11 @@ public class SessionBean implements Serializable {
 
     public String logout(){
         user = new User();
+        //remove navigation links that are no longer needed
+        removeNavLink("balance");
+        removeNavLink("newGame");
+        removeNavLink("closeGame");
+        this.reloadNavlinks();
         return "home";
     }
 
@@ -146,6 +151,12 @@ public class SessionBean implements Serializable {
         propertiesUtil.readProperties(locale);
         // Return the current page with reload
         return viewId+"?faces-redirect=true";
+    }
+    
+    private void removeNavLink(String linkstr){
+    	for(int i=0;i<links.size();i++)
+    		if(links.get(i).getOutcome().equals(linkstr))
+    			links.remove(i);    	
     }
 
     public SessionFactory getSessionFactory() {
