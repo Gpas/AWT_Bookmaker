@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:t="http://myfaces.apache.org/tomahawk">
+<f:view contentType="text/html"/>
+<h:head>
+</h:head>
+<h:body bgcolor="white">
+    <ui:composition template="baseTemplate.xhtml">
+        <ui:define name="title">
+            #{bundle.balance}
+        </ui:define>
+        <ui:define name="content">
+			 <h1>#{bundle.balance}</h1>
+			 
+			 
+			 <h3>#{bundle[balanceBean.msg]}</h3>
+			 
+			 <h:form rendered="#{balanceBean.clear == false}">
+             		 
+			 <div >
+			   #{bundle.cardNumber}
+			   <h:inputText value="#{balanceBean.cardinputA}" size="4" required="true"/>
+			   <h:inputText value="#{balanceBean.cardinputB}" size="4" required="true"/>
+			   <h:inputText value="#{balanceBean.cardinputC}" size="4" required="true"/>
+			   <h:inputText value="#{balanceBean.cardinputD}" size="4" required="true"/>
+			 </div>
+			 <div>
+			   #{bundle.cardValidate}
+			   <h:inputText value="#{balanceBean.validation}" size="3" required="true"/>
+			 </div>
+			 <h:commandButton 
+			   class="btn btn-default"
+			   action="#{balanceBean.validateCreditCard()}"
+			   value="#{bundle.verify}"
+			 />
+			 </h:form>
+			 
+			<h:form rendered="#{balanceBean.clear}">
+			  <h:inputText value="#{balanceBean.ammount}" size="20" required="true"/>
+			  <h:commandButton 
+			   class="btn btn-default"
+			   action="#{balanceBean.addToBalance()}"
+			   value="#{bundle.deposit}"
+			 />
+			</h:form>
+			  
+			  
+			<hr/>
+        	#{bundle.yourcredit} : #{balanceBean.getCurrentBalance()}
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
