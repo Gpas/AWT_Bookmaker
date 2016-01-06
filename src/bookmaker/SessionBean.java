@@ -55,6 +55,7 @@ public class SessionBean implements Serializable {
         links.add(new Navlink("registration","navbarRegister"));
         links.add(new Navlink("games", "navbarGames"));
         links.add(new Navlink("newGame", "navbarCreateGame"));
+        links.add(new Navlink("balance", "navbarBalance"));
         this.reloadNavlinks();
         //Load bundles for properties util
         propertiesUtil = new PropertiesUtil();

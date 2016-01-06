@@ -15,16 +15,42 @@ public class BalanceBean implements Serializable{
 	private static final int CARD_NUM = 1234;
 	private static final int VALIDATION = 234;
 	
-	private int card_input0,
-		card_input1,
-	    card_input2,
-	    card_input3,
-	    validation_input;
+	private int cardinputA,
+		cardinputB,
+	    cardinputC,
+	    cardinputD,
+	    validation;
+	private String msg="validateCard";
+	private float ammount=0;
+	
+	public int getCardinputA(){return this.cardinputA;}
+	public int getCardinputB(){return this.cardinputB;}
+	public int getCardinputC(){return this.cardinputC;}
+	public int getCardinputD(){return this.cardinputD;}
+	public void setCardinputA(int in){this.cardinputA=in;}
+	public void setCardinputB(int in){this.cardinputB=in;}
+	public void setCardinputC(int in){this.cardinputC=in;}
+	public void setCardinputD(int in){this.cardinputD=in;}
+	
+	public int getValidation(){return this.validation;}
+	public void setValidation(int v){this.validation=v;}
+	
+	public float getAmmount(){return this.ammount;}
+	public void setAmmount(float ammount){this.ammount=ammount;}
+	
+	public String getMsg() {
+		return msg;
+	}
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
 	
 	@ManagedProperty(value = "#{sessionBean}")
 	private SessionBean session;
 	
 	private boolean clear = false;
+	
+	public boolean isClear(){return this.clear;}
 	
 	 public void setSession(SessionBean session) {
 	        this.session = session;
@@ -36,27 +62,48 @@ public class BalanceBean implements Serializable{
 		 return s;
 	 }
 	 
-	 public void addToBalance(float f){
+	 public void addToBalance(){
 		 
-		 if(clear){
+		 if(clear && ammount > 0){
+			 
 			 User u = session.getUser();
-			 u.changeBalance(f, true);
+			 u.changeBalance(ammount, true);
+			 
+			 
+			 ammount=0;
+			 clear = false;
+			 msg="transactionComplete";
+		 }else{
+			 msg="transactionFailed";
 		 }
 	 }
 	 
-	 public boolean validateCreditCard(){
+	 public void validateCreditCard(){
 		 
-		 if(CARD_NUM == card_input0)
-		 if(CARD_NUM == card_input1)
-		 if(CARD_NUM == card_input2)
-		 if(CARD_NUM == card_input3)
-	     if(VALIDATION == validation_input){
+		 if(CARD_NUM == cardinputA &&
+		    CARD_NUM == cardinputB &&
+		    CARD_NUM == cardinputC &&
+		    CARD_NUM == cardinputD &&
+	        VALIDATION == validation){
+			 
 	    	 clear = true;
-	    	 return true;
+	    	 msg="valSuc";
+	    	 cardinputA=0;
+	    	 cardinputB=0;
+	    	 cardinputC=0;
+	    	 cardinputD=0;
+	    	 validation=0;
+	     }else{ 
+		   msg="valError";
+		   clear = false;
 	     }
-	    	 
+	 }
+	 
+	 public boolean numberValidation(){
+		 
 		 return false;
 	 }
+
 	 
 	 
 }
