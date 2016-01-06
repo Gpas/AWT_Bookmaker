@@ -54,8 +54,7 @@ public class SessionBean implements Serializable {
         //Init navigation
         links.add(new Navlink("registration","navbarRegister"));
         links.add(new Navlink("games", "navbarGames"));
-        links.add(new Navlink("newGame", "navbarCreateGame"));
-        links.add(new Navlink("balance", "navbarBalance"));
+        
         this.reloadNavlinks();
         //Load bundles for properties util
         propertiesUtil = new PropertiesUtil();
@@ -77,6 +76,17 @@ public class SessionBean implements Serializable {
                     //Successful login
                     user = userTemp;
                     errorLogin = "";
+                    
+                    //set up navigation according to role
+                    links.add(new Navlink("balance", "navbarBalance"));
+                    
+                    if(user.getIsBookmaker()){
+                    	links.add(new Navlink("newGame", "navbarCreateGame"));
+                    	links.add(new Navlink("closeGame", "navbarCloseGame"));
+                    }else{
+                    	
+                    }
+                    this.reloadNavlinks();
                     return "home";
                 }
             }
