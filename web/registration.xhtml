@@ -35,10 +35,12 @@
                 </div>
                 </h:form>
 
-                <h3>#{registrationBean.message}</h3>
+				<ui:param name="msg" value="#{registrationBean.msg}"></ui:param>
+                <h:outputFormat value="#{bundle[msg]}" >
+   					<f:param value="#{bundle[registrationBean.param0]}" />
+  					 <f:param value="#{registrationBean.param1}" />
+				</h:outputFormat>	
 
-                <h:link outcome="listGames">games</h:link>
-                <h:link outcome="newGame">games</h:link>
             </ui:define>
         </ui:composition>
     </h:body>

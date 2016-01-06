@@ -17,6 +17,20 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class RegistrationBean implements Serializable {
 	
+	
+	private final static int MIN_FIRSTNAME=3,
+			MIN_LASTNAME=3,
+			MIN_PW=6;
+	
+	private final static String FIRSTNAME ="firstname",
+			LASTNAME="lastname",
+			EMAIL="email",
+			PW0="password",
+			PW1="passwordrepeat",
+			FIELD_EMTY="fieldEmpty",
+			TOO_SHORT="tooShort",
+			PW_MISMATCH="pwMismatch";
+	
 	//FacesContext context = FacesContext.getCurrentInstance();
    // ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
 
@@ -27,7 +41,7 @@ public class RegistrationBean implements Serializable {
         this.session = session;
     }
 
-    private String firstname,lastname,email,pw0,pw1,message;
+    private String firstname,lastname,email,pw0,pw1,msg="nan",param0="",param1="";
     
     public String getFirstname(){return firstname;}
     public String getLastname(){return lastname;}
@@ -42,12 +56,12 @@ public class RegistrationBean implements Serializable {
     public void setPw1(String pw1){this.pw1=pw1;}
     
     
-    public String getMessage() {
-        return message;
-    }
-    public void setMessage(String message){
-        this.message = message;
-    }
+    public String getMsg() {return msg;}
+    public void setMsg(String msg){ this.msg = msg;}
+    public String getParam0() {return param0;}
+    public void setParam0(String param){ this.param0 = param;}
+    public String getParam1() {return param1;}
+    public void setParam1(String param){ this.param1 = param;}
     
     public RegistrationBean(){
         init();
@@ -60,7 +74,9 @@ public class RegistrationBean implements Serializable {
     
     public String register(){
         try{
-            String hashedPW = PasswordManager.hashPassword(this.getPw0());
+            
+            if(validateFields()){
+            	String hashedPW = PasswordManager.hashPassword(this.getPw0());
             User user = new User(this.getEmail(), this.getFirstname(), this.getLastname(), hashedPW, false);
             Session hibernateSession = session.getSessionFactory().openSession();
             hibernateSession.beginTransaction();
@@ -69,9 +85,10 @@ public class RegistrationBean implements Serializable {
             hibernateSession.close();
             session.setUser(user);
             return "home";
+            }else{return "registration";}
         }
         catch(Exception e){
-            message = e.getMessage();
+            msg = e.getMessage();
             return "registration";
         }
 
@@ -82,4 +99,55 @@ public class RegistrationBean implements Serializable {
     	return "listGames";
     }
     
+    private boolean validateFields(){
+
+    	if(firstname == null){
+    		msg=FIELD_EMTY;
+    		param0=FIRSTNAME;
+    		return false;
+    	}
+    	if(lastname == null){
+    		msg=FIELD_EMTY;
+    		param0=LASTNAME;
+    		return false;
+    	}
+    	if(email == null){
+    		msg=FIELD_EMTY;
+    		param0=EMAIL;
+    		return false;
+    	}	
+    	if(pw1 == null){
+    		msg=FIELD_EMTY;
+    		param0=PW0;
+    		return false;
+    	}
+    	if(pw0 == null){
+    		msg=FIELD_EMTY;
+    		param0=PW1;
+    		return false;
+    	}
+    	if(firstname.length() < MIN_FIRSTNAME){
+    		msg=TOO_SHORT;
+    		param0=FIRSTNAME;
+    		param1=""+MIN_FIRSTNAME;
+    		return false;
+    	}
+        if(lastname.length() < MIN_LASTNAME){
+        	msg=TOO_SHORT;
+        	param0=LASTNAME;
+        	param1=""+MIN_LASTNAME;
+        	return false;
+        }
+        if(pw0.length() < MIN_PW){
+        	msg=TOO_SHORT;
+        	param0=PW0;
+        	param1=""+MIN_PW;
+        	return false;
+        }
+        if(!pw0.equals(pw1)){
+            msg=PW_MISMATCH;
+        }
+        
+    	return false;
+    }
 }
