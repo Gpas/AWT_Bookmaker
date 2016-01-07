@@ -71,7 +71,7 @@
 \pagebreak
 
 \section{Einleitung}
-  
+
   Für das Semesterprojekt im Modul Advanced Web Technologie wurde ein Wettsystem
   als Webapplikation implementiert.
   Das System wurde mit Java Server Faces realisiert und soll auf einem Apache
@@ -93,8 +93,21 @@
   Die Daten bzw. die instanzen der Domainclasses werden mit Hilfe eines ORMappers
   an eine Relationelle Datenbank angebunden und so persistiert.
 
-  \subsection{Paketstrucktur}
-  
+  \subsection{Projektstrucktur}
+
+  Dieses Patten findet sich in der Strucktur des Projektes wider.
+  Im Sourceverzeichniss finden wir das bookmaker und das model packet und
+  ausserhalb den das Webverzeichniss, es enthält die Views und deren ressourcen
+  und die JSF konfiguration.
+  Das bookmakerpacket enthält sämtliche Controllers und einige Hilfsklassen und
+  Methoden die es erlauben properties und Objekte zu laden oder Objekte zu
+  manipulieren und zu speichern.
+  Dort werden die Ausgabe werte für die Views berechnet und das System bedient.
+  Das Modelpacket enthält die Domainmodel Klassen. Die Darin enthaltene
+  Buissneslogik erlaubt es benutzer und Wetten zu erstellen und Wetten
+  Abzuschliessen. Hier wird der Zustand des Systems abgebildet.
+  Des Weiteren befinden sich im Sourceverzeichniss die Mehrsprachigen properties
+  files und weiter konfiguretions files.
 
 \section{Model}
 
