@@ -117,50 +117,47 @@
   (Siehe Abbildung \ref{fig:domain_model} auf Seite \pageref{fig:domain_model})
   Beinnhaltet folgende Klassen.
   
-  \begin{description}
-    \item[User]
-      Der User enthält sämtliche eigenchaften eines Benutzers wie
-      den vollstaändigen Namen, Emailadresse, Logininformationen und den Betrag
-      Spielkredits. Der User hat eine Rolle, er ist entweder
-      Bookmaker oder Gambler. Da es nur diese zwei Rollen gibt wurde dem User
-      ein Boolean Attribut gegeben welches ihn als Bookmaker ausweist fall es
-      true ist. Der Bookmaker enthält eine liste von ihn erstelleter spiele.
-      Als Bookmaker können neue Spiele erfasst werden und alte Spiele müssen
-      geschlossen werden. Als Bookmaker kann aber nicht gewettet werden.
-      Der Gambler kann nun auf diese Spiele Wetten aber selber keine Spiele
-      erfassen. Der Gambler enthält eine Liste von ihm erstelter betts.
+  \subsection{User}
+    Der User enthält sämtliche eigenchaften eines Benutzers wie
+    den vollstaändigen Namen, Emailadresse, Logininformationen und den Betrag
+    Spielkredits. Der User hat eine Rolle, er ist entweder
+    Bookmaker oder Gambler. Da es nur diese zwei Rollen gibt wurde dem User
+    ein Boolean Attribut gegeben welches ihn als Bookmaker ausweist fall es
+    true ist. Der Bookmaker enthält eine liste von ihn erstelleter spiele.
+    Als Bookmaker können neue Spiele erfasst werden und alte Spiele müssen
+    geschlossen werden. Als Bookmaker kann aber nicht gewettet werden.
+    Der Gambler kann nun auf diese Spiele Wetten aber selber keine Spiele
+    erfassen. Der Gambler enthält eine Liste von ihm erstelter betts.
       
-    \item[Game]
-      Ein Spiel beinhaltet die id der Teams und eine Liste von Conditions.
-      Jedes Spiel hat ein datum und eine Zeit wann es beginnt.
-      Die Teamnamen sind als mehrsprachiger String in propertiesfiles mit einer
-      id gespeichert.
-      Wenn ein Spiel begonnen hat darf nicht mehr darauf gewettet werden.
-      Das Spiel enthält einen boolean der true ist falls das spiel abgeschlossen
-      wurde (closed). Ein Spiel ist abgeschlossen falls mindestens 90min nach
-      der Anfangszeit der Bookmaker der es erstellt hat die conditions
-      auswählt welche eingetroffen sind (occurred).
+  \subsection{Game}
+    Ein Spiel beinhaltet die id der Teams und eine Liste von Conditions.
+    Jedes Spiel hat ein datum und eine Zeit wann es beginnt.
+    Die Teamnamen sind als mehrsprachiger String in propertiesfiles mit einer
+    id gespeichert.
+    Wenn ein Spiel begonnen hat darf nicht mehr darauf gewettet werden.
+    Das Spiel enthält einen boolean der true ist falls das spiel abgeschlossen
+    wurde (closed). Ein Spiel ist abgeschlossen falls mindestens 90min nach
+    der Anfangszeit der Bookmaker der es erstellt hat die conditions
+    auswählt welche eingetroffen sind (occurred).
       
-    \item[Condition]
-      Conditions sind Ereignisse die während eines Games eintreffen können.
-      Sie gehören immer zu einem Game.
-      Sie beinhalten einene Textid eines mehrsprachigen Textes und parameter
-      die in den Text eingefügtwerden sowie eine Wettquote (odd).  
-      Die Conditions enthalten des weiteren einen boolean der anzeigt ob
-      sie Eingetroffen (occurred) ist (true) oder nicht (false).
-      Dieses Attribut soll beim beenden eines Spieles vom Bookmaker gesetzt
-      werden anschliessend kann bestimmt werden wer gewonnen hat.
-      
-    \item[Bet]
-      Bets können vom Gambler erstellt werden.
-      Betts enthalten eine Condition auf die gewettet wird und einen Betrag
-      der vom Gambler eingesetzt wird. Der Betrag wird beim erstellen vorläufig
-      dem Gambler abgezogen. Wenn ein Spiel beendet wurde erhält der Gambler
-      einen Gewinn der dem Einsatz multipliziert mit der Wettquote entspricht
-      vom bookmaker falls die Condition occurred true ist. Oder Der Bookmaker
-      erhält den Einsatz falls occurred false ist. 
-      
-  \end{description}
+  \subsection{Condition}
+    Conditions sind Ereignisse die während eines Games eintreffen können.
+    Sie gehören immer zu einem Game.
+    Sie beinhalten einene Textid eines mehrsprachigen Textes und parameter
+    die in den Text eingefügtwerden sowie eine Wettquote (odd).  
+    Die Conditions enthalten des weiteren einen boolean der anzeigt ob
+    sie Eingetroffen (occurred) ist (true) oder nicht (false).
+    Dieses Attribut soll beim beenden eines Spieles vom Bookmaker gesetzt
+    werden anschliessend kann bestimmt werden wer gewonnen hat.
+     
+  \subsection{Bet}
+    Bets können vom Gambler erstellt werden.
+    Betts enthalten eine Condition auf die gewettet wird und einen Betrag
+    der vom Gambler eingesetzt wird. Der Betrag wird beim erstellen vorläufig
+    dem Gambler abgezogen. Wenn ein Spiel beendet wurde erhält der Gambler
+    einen Gewinn der dem Einsatz multipliziert mit der Wettquote entspricht
+    vom bookmaker falls die Condition occurred true ist. Oder Der Bookmaker
+    erhält den Einsatz falls occurred false ist. 
 
   \begin{figure}[h!]
   \begin{center}
