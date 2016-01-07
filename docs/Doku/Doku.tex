@@ -55,7 +55,7 @@
 \title{\vspace{1cm}AWT Bookmaker \vspace{1cm}}
 \author{
   Stefan Andonie\\
-  \texttt{@students.bfh.ch}
+  \texttt{andos1@students.bfh.ch}
   \and
   Pascal Grüter\\
   \texttt{grutp1@students.bfh.ch}\vspace{1cm}
@@ -69,6 +69,41 @@
 %\includegraphics[width=15cm]{images/titlepage.jpeg}
 
 \pagebreak
+
+\section{Einleitung}
+  
+  Für das Semesterprojekt im Modul Advanced Web Technologie wurde ein Wettsystem
+  als Webapplikation implementiert.
+  Das System wurde mit Java Server Faces realisiert und soll auf einem Apache
+  Tomcat Applikationsserver laufen.
+  
+  Das Wettsystem soll es einem Buchmacher erlauben Fussballspiele zu erfassen
+  und Wettzenarien für gewisse Ergebnisse und Ereignisse währen eines Spiels mit
+  dazugehörigen Wettquoten zu definieren.
+  Danach sollen Spieler Wetten darauf abschliessen können.
+
+\section{Architektur}
+
+  Unsere Implementierung folgt dem Model, View, Controller pattern.
+  Die Views wurden wie üblich mit JSF in den xhtml files definiert.
+  Diese Views werden jeweils von einem Java Bean gesteuert, das ist der
+  Controller Teil. Die Buissneslogik befindet sich getrennt in eigenen Java
+  Klassen die unser Domainmodel abbilden und auf welche die Controller zugreifen.
+  
+  Die Daten bzw. die instanzen der Domainclasses werden mit Hilfe eines ORMappers
+  an eine Relationelle Datenbank angebunden und so persistiert.
+
+  \subsection{Paketstrucktur}
+  
+
+\section{Model}
+
+  
+
+\section{Views und Controller}
+
+\section{Fazit}
+
 \begin{abstract}
 Zusammenfassung
 \end{abstract}
