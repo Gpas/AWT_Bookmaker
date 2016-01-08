@@ -61,6 +61,8 @@ public class BalanceBean implements Serializable{
 	 
 	 public String getCurrentBalance(){
 		 User u = session.getUser();
+		 Session hibernateSession = session.getSessionFactory().openSession();
+		 u = hibernateSession.load(User.class, u.getId());
 		 String s = String.format("%.2f Fr",u.getBalance());
 		 return s;
 	 }

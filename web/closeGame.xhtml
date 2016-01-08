@@ -15,9 +15,9 @@
         <ui:define name="content">
 			 <h1>#{bundle.closeGame}</h1>
 			<h3>#{bundle.closeGameText}</h3>
+			#{gameCloseBean.msg}
 			<h:panelGroup rendered="#{gameCloseBean.closeGameId == -1}">
 			#{gameCloseBean.loadGamesToClose()}
-			#{gameCloseBean.msg}
 			<h:dataTable value="#{gameCloseBean.gamesToClose}" var="game" styleClass="table table-striped">
 			  <h:column>
 			    <f:facet name="header">
@@ -75,28 +75,40 @@
               #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.guestTeam)}
               </h3>
             </div>
-            #{gameCloseBean.closeGame.startTime}
+            #{bundle.starttime} #{gameCloseBean.closeGame.startTime}
+			<br/>
 
            <h:form>
-            <h:selectManyCheckbox value="#{gameCloseBean.checkBoxes}">
+			   <t:dataTable id="betTable" value="#{gameCloseBean.conditions}" var="cond"
+								styleClass="table table-striped">
+				   <h:column>
+					   <f:facet name="header">#{bundle.conditionTableDescription}</f:facet>
+					   #{sessionBean.propertiesUtil.getConditionPerId(cond.textId, sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), cond.params)}
+				   </h:column>
+				   <h:column>
+					   <f:facet name="header">#{bundle.conditionTrue}</f:facet>
+					   <h:selectBooleanCheckbox value="#{gameCloseBean.checked[cond.id]}"></h:selectBooleanCheckbox>
+				   </h:column>
+			   </t:dataTable>
+<!--			   <h:selectManyCheckbox value="#{gameCloseBean.checkBoxes}">
    			  <f:selectItems
    			   value="#{gameCloseBean.conditions}"
    			   var="cond"
-   			   itemValue="#{cond.id}" 
+   			   itemValue="#{cond.id}"
    			   itemLabel="#{sessionBean.propertiesUtil.getConditionPerId(
    			     cond.textId,
-   			     sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), 
+   			     sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId),
    			     cond.params
    			   )}"
    			  />
-   		    </h:selectManyCheckbox>
+   		    </h:selectManyCheckbox>-->
    		    <h:commandButton 
    			    class="btn btn-primary"
    			    id="submit"
    			    action="#{gameCloseBean.closeGame}"
    			    value="#{bundle.closeGameBtn}"
    			/>
-   			<h:commandButton class="btn btn-default" value="#{bundle.back}" action="#{gameCloseBean.setCloseGameId(-1)}"/>
+   			<h:commandButton stlye="margin-left:20px" class="btn btn-default" value="#{bundle.back}" action="#{gameCloseBean.setCloseGameId(-1)}"/>
 		</h:form>
         </h:panelGroup>
         

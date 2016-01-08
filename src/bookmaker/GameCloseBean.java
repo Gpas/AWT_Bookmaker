@@ -1,16 +1,15 @@
 package bookmaker;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.*;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import model.Bet;
+import model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -32,6 +31,7 @@ public class GameCloseBean implements Serializable{
 	private List<Integer> checkBoxes=new ArrayList<>();
 	private String msg="";
 	private List<Game> gamesToClose;
+	private Map<Long, Boolean> checked = new HashMap<>();
 
 	public int getCloseGameId() {
 		return closeGameId;
@@ -69,8 +69,16 @@ public class GameCloseBean implements Serializable{
 	public void setGamesToClose(List<Game> gamesToClose) {
 		this.gamesToClose = gamesToClose;
 	}
-	
-    @ManagedProperty(value = "#{sessionBean}")
+
+	public Map<Long, Boolean> getChecked() {
+		return checked;
+	}
+
+	public void setChecked(Map<Long, Boolean> checked) {
+		this.checked = checked;
+	}
+
+	@ManagedProperty(value = "#{sessionBean}")
     private SessionBean session;
 
     public void setSession(SessionBean session) {
@@ -101,39 +109,66 @@ public class GameCloseBean implements Serializable{
 		if(closeGameId != -1){
 			// Load Conditions
 			Session hibernateSession = session.getSessionFactory().openSession();
-			String hql = "FROM Condition cond WHERE cond.game.id = :gameId";
+			closeGame = hibernateSession.load(Game.class, closeGameId);
+			/*String hql = "FROM Condition cond left join fetch Bet WHERE cond.game.id = :gameId";
 			Query query = hibernateSession.createQuery(hql);
 			query.setParameter("gameId", closeGameId);
 			// Add conditions to list for displaying
 			this.conditions = query.list();
 			Set<Condition> conditions = new HashSet<>(this.conditions);
 			// Load Game and add Conditions
-			hql = "FROM Game game WHERE game.id = :gameId";
+			hql = "FROM Game game left join fetch game.owner user WHERE game.id = :gameId";
 			query = hibernateSession.createQuery(hql);
 			query.setParameter("gameId", closeGameId);
 			
 			 closeGame = (Game) query.list().get(0);
-			 closeGame.setConditions(conditions);
+			 closeGame.setConditions(conditions);*/
+			// this.gameowner = closeGame.getOwner();
+			this.conditions = new ArrayList<>(closeGame.getConditions());
 	
 			hibernateSession.close();
 		}
 	}
 	
 	public void closeGame(){
-		Session hibernateSession = session.getSessionFactory().openSession();
-		hibernateSession.beginTransaction();
-		
-		for(int i: checkBoxes)
-			for(Condition c: conditions)
-				if(c.getId() == i){
-					c.setOccurred(true);
-					hibernateSession.update(c);
-				}
-			
+		Session hibernateSession;
+		hibernateSession = session.getSessionFactory().openSession();
 		closeGame.setClosed(true);
-		closeGameId = -1;
-		hibernateSession.update(closeGame);
+		hibernateSession.beginTransaction();
+		hibernateSession.saveOrUpdate(closeGame);
 		hibernateSession.getTransaction().commit();
 		hibernateSession.close();
+			for(Condition condition: this.conditions){
+				if(checked.get(condition.getId())){
+					hibernateSession = session.getSessionFactory().openSession();
+					condition.setOccurred(true);
+					String hql = "FROM Bet bet left join fetch bet.user user WHERE bet.condition.id = :condId";
+					Query query = hibernateSession.createQuery(hql);
+					query.setParameter("condId", condition.getId());
+					List<Bet> bets = query.list();
+					for(Bet bet : bets){
+						BigDecimal amount = bet.getAmount().multiply(BigDecimal.valueOf(condition.getOdd()));
+						if(!closeGame.getOwner().changeBalance(amount, false)){
+							// When the gameowner has not enough balance
+							msg = "Gameowner has not enough balance";
+							return;
+						}
+						bet.getUser().changeBalance(amount, true);
+						hibernateSession.beginTransaction();
+						hibernateSession.saveOrUpdate(bet.getUser());
+						hibernateSession.getTransaction().commit();
+						hibernateSession.close();
+					}
+					hibernateSession = session.getSessionFactory().openSession();
+					hql = "UPDATE Condition cond SET cond.occurred = 1 WHERE cond.id = :condID";
+					query = hibernateSession.createQuery(hql);
+					query.setParameter("condID", condition.getId());
+					query.executeUpdate();
+					hibernateSession.close();
+					msg += " ," +condition.getId();
+				}
+			}
+		checked.clear();
+		closeGameId = -1;
 	}
 }

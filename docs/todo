@@ -9,7 +9,8 @@ OK _ List games for bookmaker with betamount with loss
 OK _ List games for users, with gain/loss, closed/running
 OK _ Die Team und Condition Sets in eine ordered Collection ändern
 OK _ Balance in BigDecimal umändern
-Close Game fertigstellen
+
+Close Game fertigstellen -> Condition occured wird nicht in DB gespeichert, keine Ahnung wieso
 
 
 Check bundles, internationalization

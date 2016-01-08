@@ -110,7 +110,7 @@ public class Condition {
 		this.params = params;
 	}
 	
-	public boolean isOccurred() {
+	public boolean getOccurred() {
 		return occurred;
 	}
 
