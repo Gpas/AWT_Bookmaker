@@ -60,7 +60,7 @@ public class PropertiesUtil {
      * Gets the appropriate condition text with variables for the corresponding id
      * @param id conditionTextId
      * @param leadingTeam the leading team, else empty string
-     * @param params additional params when needed, else null
+     * @param params additional params when needed, else empty string
      * @return condition text in String
      */
     public String getConditionPerId(String id, String leadingTeam, String params){

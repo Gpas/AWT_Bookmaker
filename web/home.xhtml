@@ -12,7 +12,36 @@
             #{bundle.homeTitle}
         </ui:define>
         <ui:define name="content">
-            #{bundle.homeWelcomeMessage}
+            <h2>#{bundle.homeWelcomeMessage}</h2>
+            <br/>
+                <h2>#{bundle.homeRunningGames}</h2>
+
+                <h:dataTable value="#{gameManagerBean.listRunningGames()}" var="game" styleClass="table table-striped">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.gameListHomeTeam}"/>
+                        </f:facet>
+                        #{sessionBean.propertiesUtil.getTeamPerId(game.homeTeam)}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.gameListGuestTeam}"/>
+                        </f:facet>
+                        #{sessionBean.propertiesUtil.getTeamPerId(game.guestTeam)}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.gameListStarttime}"/>
+                        </f:facet>
+                        #{game.startTime}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.gotoTitle}"/>
+                        </f:facet>
+                        <h:button class="btn btn-primary" outcome="games?game=#{game.id}" value="#{bundle.gotoGame}" />
+                    </h:column>
+                </h:dataTable>
         </ui:define>
     </ui:composition>
 </h:body>

@@ -4,13 +4,12 @@ Navigation for user/bookmaker
 Documentation
 
 Pascal:
-List games on start
-List games for bookmaker with betamount with loss
-List games for users, with gain/loss, closed/running
+OK _ List games on start
+OK _ List games for bookmaker with betamount with loss
+OK _ List games for users, with gain/loss, closed/running
 
 
 Check bundles, internationalization
-Add FR as Language
 Javadoc
 
 

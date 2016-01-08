@@ -72,6 +72,18 @@ public class GameManagerBean implements Serializable{
 
 	public GameManagerBean(){}
 
+	public List<Game> listRunningGames(){
+		List<Game> games = new ArrayList<>();
+		Session hibernateSession = session.getSessionFactory().openSession();
+		String hql = "FROM Game game WHERE game.startTime > :time";
+		Query query = hibernateSession.createQuery(hql);
+		query.setParameter("time",	new Date(System.currentTimeMillis()));
+		List result = query.list();
+		games.addAll(result);
+		hibernateSession.close();
+		return games;
+	}
+
 	public void saveGame(Game game){
 		Session hibernateSession = session.getSessionFactory().openSession();
 		hibernateSession.beginTransaction();

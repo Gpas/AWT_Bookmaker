@@ -41,7 +41,7 @@
                             value="#{gameManagerBean.startTime}"
                             />
                 </div>
-                <h:commandButton class="btn btn-default"
+                <h:commandButton class="btn btn-primary"
                                  id="submit"
                                  action="#{gameManagerBean.nextState}"
                                  value="#{bundle.submit}"
@@ -109,7 +109,6 @@
 
             </h:form>
 
-            <h:link outcome="listGames">games</h:link>
         </ui:define>
     </ui:composition>
 </h:body>

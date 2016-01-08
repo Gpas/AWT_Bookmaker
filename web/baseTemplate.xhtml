@@ -30,19 +30,30 @@
                             <h:link outcome="home" value="Bookmaker" class="navbar-brand"></h:link>
                         </div>
                         <div class="navbar-collapse collapse">
+                            <!-- Left Navbar with Bookmaker String as Home Link-->
                             <ul class="nav navbar-nav navbar-left">
                                 <ui:repeat value="#{sessionBean.links}" var="link">
                                     <li class="#{view.viewId eq link.viewId ? 'active' : ''}">
                                         <h:link value="#{link.text}" outcome="#{link.outcome}" />
                                     </li>
                                 </ui:repeat>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Language<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <h:form id="langForm" class="navbar-form navbar-left">
+                                            <h:commandLink  id="en" action="#{sessionBean.changeLanguage('en')}" value="English">
+                                            </h:commandLink>
+                                            <br/>
+                                            <h:commandLink  id="fr" action="#{sessionBean.changeLanguage('fr')}" value="Francais">
+                                            </h:commandLink>
+                                            <br/>
+                                            <h:commandLink  id="de" action="#{sessionBean.changeLanguage('de')}" value="Deutsch">
+                                            </h:commandLink>
+                                        </h:form>
+                                    </ul>
+                                </li>
                             </ul>
-                            <h:form id="langForm" class="navbar-form navbar-left">
-                                <h:commandLink class="btn btn-default" id="de" action="#{sessionBean.changeLanguage('de')}" value="Deutsch">
-                                </h:commandLink>
-                                <h:commandLink class="btn btn-default" id="en" action="#{sessionBean.changeLanguage('en')}" value="English">
-                                </h:commandLink>
-                            </h:form>
+                            <!-- Right Navbar with login form -->
                             <h:form id="logoutForm" class="navbar-form navbar-right" rendered="#{sessionBean.user.username != null}" >
                                 <span>#{bundle.navbarLoggedInAs} <b>#{sessionBean.user.firstname} #{sessionBean.user.lastname}</b></span>
                                 <h:commandButton class="btn btn-default" id="logout" action="#{sessionBean.logout}" value="Logout"/>

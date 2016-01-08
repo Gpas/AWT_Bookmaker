@@ -69,6 +69,76 @@ public class GameViewerBean implements Serializable {
         }
     }
 
+    public List<Game> listUserGames(boolean running){
+        User user = session.getUser();
+        if(user.getIsBookmaker()){
+            List<Game> games = new ArrayList<>();
+            Session hibernateSession = session.getSessionFactory().openSession();
+            String hql = "FROM Game game WHERE game.owner.id = :userId AND game.closed = :gameState";
+            Query query = hibernateSession.createQuery(hql);
+            query.setParameter("gameState", !running);
+            query.setParameter("userId", user.getId());
+            List result = query.list();
+            games.addAll(result);
+            hibernateSession.close();
+            return games;
+        }
+        else{
+            Session hibernateSession = session.getSessionFactory().openSession();
+            String hql = "FROM Bet bet " +
+                    "left join fetch bet.condition condition " +
+                    "left join fetch condition.game game " +
+                    "WHERE bet.user.id = :userId AND game.closed = :gameState";
+            Query query = hibernateSession.createQuery(hql);
+            query.setParameter("gameState", !running);
+            query.setParameter("userId", user.getId());
+            List<Bet> result = query.list();
+            Set<Game> gamesSet = new HashSet<>();
+            for(Bet bet : result){
+                gamesSet.add(bet.getCondition().getGame());
+            }
+            hibernateSession.close();
+            return new ArrayList<>(gamesSet);
+        }
+    }
+
+    /**
+     * Gets the possible win or loss for a condition
+     * @param condition the condition
+     * @param win when true, the possible win, when false the possible loss
+     * @return win or loss as int
+     */
+    public int getPossibleResult(Condition condition, boolean win){
+        User user = session.getUser();
+        if(user.getIsBookmaker()){
+            List<Bet> bets = new ArrayList<>();
+            Session hibernateSession = session.getSessionFactory().openSession();
+            String hql = "FROM Bet bet WHERE bet.condition.id = :condId";
+            Query query = hibernateSession.createQuery(hql);
+            query.setParameter("condId", condition.getId());
+            List result = query.list();
+            bets.addAll(result);
+            int intResult = 0;
+            if(win){
+                // Compute win
+                for(Bet bet : bets){
+                    intResult += bet.getAmount();
+                }
+            }
+            else{
+                // Compute loss
+                for(Bet bet : bets){
+                    intResult += bet.getAmount()*condition.getOdd();
+                }
+            }
+            hibernateSession.close();
+            return intResult;
+        }
+        else{
+            return 0;
+        }
+    }
+
     public String resetGameId(){
         activGameId = -1;
         return "games";

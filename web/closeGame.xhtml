@@ -18,7 +18,7 @@
 			<h:panelGroup rendered="#{gameCloseBean.closeGameId == -1}">
 			#{gameCloseBean.loadGamesToClose()}
 			#{gameCloseBean.msg}
-			<h:dataTable value="#{gameCloseBean.gamesToClose}" var="game" border="1">
+			<h:dataTable value="#{gameCloseBean.gamesToClose}" var="game" styleClass="table table-striped">
 			  <h:column>
 			    <f:facet name="header">
 			     <h:outputText>
@@ -57,7 +57,7 @@
 			    </f:facet>
 			    <h:outputText>
 			     <h:form>
-			     <h:commandButton value="#{bundle.closeGame}" action="#{gameCloseBean.setCloseGameId(game.id)}"/>
+			     <h:commandButton class="btn btn-primary" value="#{bundle.closeGame}" action="#{gameCloseBean.setCloseGameId(game.id)}"/>
 			     </h:form>
 			    </h:outputText>
 			  </h:column>
@@ -66,7 +66,6 @@
 			
 			<h:panelGroup rendered="#{gameCloseBean.closeGameId != -1}">
 			#{gameCloseBean.loadGameDetails()}
-			#{bundle.closeGameText}
 		    <div class="row">
               <h3 class="col-md-4">
               #{sessionBean.propertiesUtil.getTeamPerId(gameCloseBean.closeGame.homeTeam)}
@@ -85,19 +84,19 @@
    			   var="cond"
    			   itemValue="#{cond.id}" 
    			   itemLabel="#{sessionBean.propertiesUtil.getConditionPerId(
-   			     cond.id, 
+   			     cond.textId,
    			     sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), 
    			     cond.params
    			   )}"
    			  />
    		    </h:selectManyCheckbox>
    		    <h:commandButton 
-   			    class="btn btn-default"
+   			    class="btn btn-primary"
    			    id="submit"
    			    action="#{gameCloseBean.closeGame}"
-   			    value="#{bundle.submit}"
+   			    value="#{bundle.closeGameBtn}"
    			/>
-   			<h:commandButton value="#{bundle.back}" action="#{gameCloseBean.setCloseGameId(-1)}"/>
+   			<h:commandButton class="btn btn-default" value="#{bundle.back}" action="#{gameCloseBean.setCloseGameId(-1)}"/>
 		</h:form>
         </h:panelGroup>
         

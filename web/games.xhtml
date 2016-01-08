@@ -26,7 +26,7 @@
                 <h:outputText rendered="#{gameViewerBean.activGameId == -1}">
                     <h2>#{bundle.gameListTitle}</h2>
 
-                    <h:dataTable value="#{gameViewerBean.listUserGames()}" var="game" styleClass="table table-striped">
+                    <h:dataTable value="#{gameViewerBean.listUserGames(true)}" var="game" styleClass="table table-striped">
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="#{bundle.gameListHomeTeam}"/>
@@ -52,9 +52,38 @@
                             <h:button class="btn btn-primary" outcome="games?game=#{game.id}" value="Goto" />
                         </h:column>
                     </h:dataTable>
+                    <br/>
+                    <h2>#{bundle.gameListTitle2}</h2>
+
+                    <h:dataTable value="#{gameViewerBean.listUserGames(false)}" var="game" styleClass="table table-striped">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.gameListHomeTeam}"/>
+                            </f:facet>
+                            #{sessionBean.propertiesUtil.getTeamPerId(game.homeTeam)}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.gameListGuestTeam}"/>
+                            </f:facet>
+                            #{sessionBean.propertiesUtil.getTeamPerId(game.guestTeam)}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.gameListStarttime}"/>
+                            </f:facet>
+                            #{game.startTime}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.gotoTitle}"/>
+                            </f:facet>
+                            <h:button class="btn btn-primary" outcome="games?game=#{game.id}" value="#{bundle.gotoGame}" />
+                        </h:column>
+                    </h:dataTable>
                 </h:outputText>
-                <!-- Section for displaying one selected game -->
-                <h:outputText rendered="#{gameViewerBean.activGameId != -1}">
+                <!-- Section for displaying one selected game whenn user is gambler-->
+                <h:outputText rendered="#{(gameViewerBean.activGameId != -1) and (!sessionBean.user.isBookmaker) }">
                     <div class="row">
                         <h2 class="col-md-4">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.homeTeam)}</h2>
                         <h2 class="col-md-2" style="text-align: center"><b>vs</b></h2>
@@ -68,17 +97,17 @@
                     <t:dataTable id="betTable" value="#{gameViewerBean.conditions}" var="cond"
                                  styleClass="table table-striped">
                         <h:column>
-                            <f:facet name="header">Condition</f:facet>
+                            <f:facet name="header">#{bundle.conditionTableDescription}</f:facet>
                             #{sessionBean.propertiesUtil.getConditionPerId(cond.textId, sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), cond.params)}
                         </h:column>
 
                         <h:column>
-                            <f:facet name="header">Odds</f:facet>
+                            <f:facet name="header">#{bundle.conditionTableOdd}</f:facet>
                             #{cond.odd}
                         </h:column>
 
                         <h:column>
-                            <f:facet name="header">Betamount</f:facet>
+                            <f:facet name="header">#{bundle.betTableAmount}</f:facet>
                             <h:form id="betGroup">
                                 <h:inputText id="amount" rendered="#{gameViewerBean.getSavedBetAmount(cond.id) == 0}"  value="#{gameViewerBean.betAmount}"></h:inputText>
                                 <h:commandButton rendered="#{gameViewerBean.getSavedBetAmount(cond.id) == 0}"
@@ -101,7 +130,46 @@
                                 </h:commandButton>
                             </h:form>
                         </h:column>
+                        <h:column>
+                            <f:facet name="header">#{bundle.betTablePossibleWin}</f:facet>
+                            #{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}
+                        </h:column>
 
+                    </t:dataTable>
+                </h:outputText>
+                <!-- Section for displaying one selected game whenn user is bookmaker-->
+                <h:outputText rendered="#{(gameViewerBean.activGameId != -1) and (sessionBean.user.isBookmaker) }">
+                    <div class="row">
+                        <h2 class="col-md-4">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.homeTeam)}</h2>
+                        <h2 class="col-md-2" style="text-align: center"><b>vs</b></h2>
+                        <h2 class="col-md-4" style="text-align: right">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.guestTeam)}</h2>
+                        <h:form>
+                            <h:commandButton class="btn btn-default" value="Back to List" action="#{gameViewerBean.resetGameId}">
+                            </h:commandButton>
+                        </h:form>
+                    </div>
+                    <h3>Betpossibilities</h3>
+                    <t:dataTable value="#{gameViewerBean.conditions}" var="cond"
+                                 styleClass="table table-striped">
+                        <h:column>
+                            <f:facet name="header">#{bundle.conditionTableDescription}</f:facet>
+                            #{sessionBean.propertiesUtil.getConditionPerId(cond.textId, sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), cond.params)}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">#{bundle.conditionTableOdd}</f:facet>
+                            #{cond.odd}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">#{bundle.betTablePossibleWin}</f:facet>
+                            #{gameViewerBean.getPossibleResult(cond, true)}
+                        </h:column>
+
+                        <h:column>
+                            <f:facet name="header">#{bundle.betTablePossibleLoss}</f:facet>
+                            #{gameViewerBean.getPossibleResult(cond, false)}
+                        </h:column>
                     </t:dataTable>
                 </h:outputText>
             </h:panelGroup>
