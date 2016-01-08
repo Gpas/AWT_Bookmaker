@@ -1,6 +1,7 @@
 package bookmaker;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -23,7 +24,7 @@ public class BalanceBean implements Serializable{
 	    cardinputD,
 	    validation;
 	private String msg="validateCard";
-	private float ammount=0;
+	private BigDecimal amount = new BigDecimal("0.00");
 	
 	public int getCardinputA(){return this.cardinputA;}
 	public int getCardinputB(){return this.cardinputB;}
@@ -37,8 +38,8 @@ public class BalanceBean implements Serializable{
 	public int getValidation(){return this.validation;}
 	public void setValidation(int v){this.validation=v;}
 	
-	public float getAmmount(){return this.ammount;}
-	public void setAmmount(float ammount){this.ammount=ammount;}
+	public BigDecimal getAmount(){return this.amount;}
+	public void setAmount(BigDecimal amount){this.amount = amount;}
 	
 	public String getMsg() {
 		return msg;
@@ -66,16 +67,16 @@ public class BalanceBean implements Serializable{
 	 
 	 public void addToBalance(){
 		 
-		 if(clear && ammount > 0){
+		 if(clear && amount.intValue() > 0){
 			 
 			 User u = session.getUser();
-			 u.changeBalance(ammount, true);
+			 u.changeBalance(amount, true);
 			 Session hibernateSession = session.getSessionFactory().openSession();
 			 hibernateSession.beginTransaction();
 		     hibernateSession.update(u);
 			 hibernateSession.getTransaction().commit();
 			 hibernateSession.close();
-			 ammount=0;
+			 amount = BigDecimal.ZERO;
 			 clear = false;
 			 msg="transactionComplete";
 		 }else{

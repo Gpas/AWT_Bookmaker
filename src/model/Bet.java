@@ -2,6 +2,7 @@ package model;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -26,13 +27,13 @@ public class Bet {
 	private Condition condition;
 
 	@Column(name = "amount")
-	private float amount;
+	private BigDecimal amount = new BigDecimal("0.00");
 
 	public Bet(){
 
 	}
 
-	public Bet(User user, Condition condition, float amount){
+	public Bet(User user, Condition condition, BigDecimal amount){
 		this.user = user;
 		this.condition = condition;
 		this.amount = amount;
@@ -62,11 +63,11 @@ public class Bet {
 		this.condition = condition;
 	}
 
-	public float getAmount() {
+	public BigDecimal getAmount() {
 		return amount;
 	}
 
-	public void setAmount(float amount) {
+	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
 	}
 }

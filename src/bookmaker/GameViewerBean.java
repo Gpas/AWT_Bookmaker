@@ -12,6 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.*;
 
 @ManagedBean
@@ -28,7 +29,7 @@ public class GameViewerBean implements Serializable {
     private Game activGame;
     private int activGameId = -1;
     private List<Condition> conditions;
-    private float betAmount;
+    private BigDecimal betAmount = new BigDecimal("0.00");
     private String message;
     private Map<String, Bet> bets;
     private User gameowner;
@@ -108,7 +109,7 @@ public class GameViewerBean implements Serializable {
      * @param win when true, the possible win, when false the possible loss
      * @return win or loss as int
      */
-    public int getPossibleResult(Condition condition, boolean win){
+    public BigDecimal getPossibleResult(Condition condition, boolean win){
         User user = session.getUser();
         if(user.getIsBookmaker()){
             List<Bet> bets = new ArrayList<>();
@@ -118,24 +119,24 @@ public class GameViewerBean implements Serializable {
             query.setParameter("condId", condition.getId());
             List result = query.list();
             bets.addAll(result);
-            int intResult = 0;
+            BigDecimal computationResult = new BigDecimal("0.00");
             if(win){
                 // Compute win
                 for(Bet bet : bets){
-                    intResult += bet.getAmount();
+                    computationResult = computationResult.add(bet.getAmount());
                 }
             }
             else{
                 // Compute loss
                 for(Bet bet : bets){
-                    intResult += bet.getAmount()*condition.getOdd();
+                    computationResult = computationResult.add(bet.getAmount().multiply(BigDecimal.valueOf(condition.getOdd())));
                 }
             }
             hibernateSession.close();
-            return intResult;
+            return computationResult;
         }
         else{
-            return 0;
+            return BigDecimal.ZERO;
         }
     }
 
@@ -179,19 +180,19 @@ public class GameViewerBean implements Serializable {
         }
     }
 
-    public float getSavedBetAmount(String condId){
+    public BigDecimal getSavedBetAmount(String condId){
         if(bets.containsKey(condId)){
             return bets.get(condId).getAmount();
         }
         else{
-            return 0;
+            return BigDecimal.ZERO;
         }
     }
 
     public void betOnCondition(Condition condition){
         Session hibernateSession = session.getSessionFactory().openSession();
         User user = hibernateSession.get(User.class, session.getUser().getId());
-        if(user.getBalance() >= betAmount){
+        if(user.getBalance().compareTo(betAmount) >= 0){
             // Create new bet
             Bet bet = new Bet(user, condition, betAmount);
             // Move the money from user to gameowner
@@ -268,11 +269,11 @@ public class GameViewerBean implements Serializable {
         this.conditions = conditions;
     }
 
-    public float getBetAmount() {
+    public BigDecimal getBetAmount() {
         return betAmount;
     }
 
-    public void setBetAmount(float betAmount) {
+    public void setBetAmount(BigDecimal betAmount) {
         this.betAmount = betAmount;
     }
 

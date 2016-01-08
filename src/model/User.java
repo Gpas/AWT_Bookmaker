@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public class User {
     private int id;
 
     @Column(name="balance")
-    private float balance = 0;
+    private BigDecimal balance = new BigDecimal("0.00");
     @Column(name="username")
     private String username;
     @Column(name="password",columnDefinition = "varchar(256)")
@@ -52,16 +53,16 @@ public class User {
         this.isBookmaker = isBookmaker;
     }
 
-    public boolean changeBalance(float amount, boolean addition){
+    public boolean changeBalance(BigDecimal amount, boolean addition){
             if(addition){
-                this.balance += amount;
+                this.balance = this.balance.add(amount);
                 return true;
             }
-            else if(((this.balance - amount) < 0)){
+            else if(((this.balance.subtract(amount)).intValue() < 0)){
                 return false;
             }
             else{
-                this.balance -= amount;
+                this.balance = this.balance.subtract(amount);
                 return true;
             }
     }
@@ -74,11 +75,11 @@ public class User {
         this.id = id;
     }
 
-    public float getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

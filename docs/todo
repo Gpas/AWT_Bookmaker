@@ -8,7 +8,8 @@ OK _ List games on start
 OK _ List games for bookmaker with betamount with loss
 OK _ List games for users, with gain/loss, closed/running
 OK _ Die Team und Condition Sets in eine ordered Collection ändern
-Balance in BigDecimal umändern
+OK _ Balance in BigDecimal umändern
+Close Game fertigstellen
 
 
 Check bundles, internationalization
