@@ -44,8 +44,8 @@ public class PropertiesUtil {
     private void bundleToMap(ResourceBundle bundle) {
         // get the keys
         Enumeration<String> enumeration = bundle.getKeys();
-        tempMap = new HashMap<>();
-        tempMapSwapped = new HashMap<>();
+        tempMap = new TreeMap<>();
+        tempMapSwapped = new TreeMap<>();
         String key = "";
         while (enumeration.hasMoreElements()) {
             key = enumeration.nextElement();

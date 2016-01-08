@@ -14,7 +14,7 @@
         </ui:define>
         <ui:define name="content">
 			 <h1>#{bundle.closeGame}</h1>
-			  
+			<h3>#{bundle.closeGameText}</h3>
 			<h:panelGroup rendered="#{gameCloseBean.closeGameId == -1}">
 			#{gameCloseBean.loadGamesToClose()}
 			#{gameCloseBean.msg}
