@@ -45,9 +45,9 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="Goto"/>
+                                <h:outputText value="#{bundle.gotoTitle}"/>
                             </f:facet>
-                            <h:button class="btn btn-primary" outcome="games?game=#{game.id}" value="Goto" />
+                            <h:button class="btn btn-primary" outcome="games?game=#{game.id}" value="#{bundle.gotoGame}" />
                         </h:column>
                     </h:dataTable>
                     <br/>

@@ -18,7 +18,7 @@ import java.util.*;
 @ManagedBean
 @SessionScoped
 public class GameViewerBean implements Serializable {
-    
+
     @ManagedProperty(value = "#{sessionBean}")
     private SessionBean session;
 

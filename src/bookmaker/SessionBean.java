@@ -20,6 +20,10 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+/**
+ * The SessionBean saves the language and sets the corresponding navigation for the user role.
+ * It handles the login process and keeps track of the active user.
+ */
 @ManagedBean
 @SessionScoped
 public class SessionBean implements Serializable {
@@ -32,6 +36,11 @@ public class SessionBean implements Serializable {
     private ResourceBundle bundle;
     private PropertiesUtil propertiesUtil;
 
+    /**
+     * We need to create the hibernate sessionfactory at the beginning.
+     * Init the user and load the language from the browser.
+     * Also sets the default navigation bar.
+     */
     public SessionBean(){
         // Create the SessionFactory
         final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
@@ -61,11 +70,15 @@ public class SessionBean implements Serializable {
         propertiesUtil.readProperties(locale);
     }
 
-    public User getUser() {
-        return this.user;
-    }
-
+    /**
+     * Method for login. Checks the two field in the login form.
+     * Uses the PasswordManager for hashing the password.
+     * @return the next view to render
+     */
     public String login(){
+        FacesContext faceContext = FacesContext.getCurrentInstance();
+        //Get the current page
+        String viewId = faceContext.getViewRoot().getViewId();
         if(user.getUsername() != ""){
             //Get the password input
             String password = user.getPassword();
@@ -90,23 +103,27 @@ public class SessionBean implements Serializable {
                     	
                     }
                     this.reloadNavlinks();
-                    return "home";
+                    return viewId+"?faces-redirect=true";
                 }
             }
             catch(Exception e){
                 //Error
                 errorLogin = e.getMessage();
                 user = new User();
-                return "home";
+                return viewId+"?faces-redirect=true";
             }
         }
         //Invalid Username or Password
         errorLogin = bundle.getString("loginError");
         user = new User();
-        return "home";
+        return viewId+"?faces-redirect=true";
 
     }
 
+    /**
+     * Logs the user out and handles the navigation bar.
+     * @return the next view to render
+     */
     public String logout(){
         user = new User();
         //remove navigation links that are no longer needed
@@ -121,6 +138,12 @@ public class SessionBean implements Serializable {
         return "home";
     }
 
+    /**
+     * Handles the loading of a user, throws a exception if the user doesnt exist.
+     * @param username User to load
+     * @return The loaded user
+     * @throws Exception
+     */
     public User loadUser(String username) throws Exception{
         Session hibernateSession = sessionFactory.openSession();
         String hql = "FROM User u WHERE u.username = :username";
@@ -137,14 +160,12 @@ public class SessionBean implements Serializable {
         }
     }
 
-    public void saveUser(User user){
-        Session hibernateSession = sessionFactory.openSession();
-        hibernateSession.beginTransaction();
-        hibernateSession.save(user);
-        hibernateSession.getTransaction().commit();
-        hibernateSession.close();
-    }
-
+    /**
+     * Changes the display language to the defined language.
+     * Reloads the page after change.
+     * @param langId the desired language (ex: en for english)
+     * @return the view to render
+     */
     public String changeLanguage(String langId){
         FacesContext faceContext = FacesContext.getCurrentInstance();
         locale = Locale.forLanguageTag(langId);
@@ -159,7 +180,9 @@ public class SessionBean implements Serializable {
         // Return the current page with reload
         return viewId+"?faces-redirect=true";
     }
-    
+
+    //region Helper functions
+    //***********************************
     private void removeNavLink(String linkstr){
     	for(int i=0;i<links.size();i++)
     		if(links.get(i).getOutcome().equals(linkstr))
@@ -176,6 +199,10 @@ public class SessionBean implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
     public String getMessage() {
@@ -282,6 +309,7 @@ public class SessionBean implements Serializable {
     public void setLinks(List<Navlink> links) {
         this.links = links;
     }
+    //endregion
     //endregion
 
 }
