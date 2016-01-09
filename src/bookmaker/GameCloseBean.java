@@ -98,7 +98,8 @@ public class GameCloseBean implements Serializable{
 			Session hibernateSession = session.getSessionFactory().openSession();
 			String hql = "FROM Game game "
 					+ "WHERE game.startTime < :time "
-					+ "AND game.closed = :state";
+					+ "AND game.closed = :state "
+					+ "AND game.owner.id = :userId";
 			
 			Date d= new Date(System.currentTimeMillis()-MIN90);
 			String timestring= d.toString();
@@ -107,6 +108,8 @@ public class GameCloseBean implements Serializable{
 			Query query = hibernateSession.createQuery(hql);
 			query.setParameter("time", d);
 			query.setParameter("state", false);
+            query.setParameter("userId", session.getUser().getId());
+
 			this.setGamesToClose(query.list());
 			hibernateSession.close();
 	}
