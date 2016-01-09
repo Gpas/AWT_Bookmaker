@@ -17,6 +17,9 @@ import model.User;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+/**
+ * This bean manages the game creation process and the game listing on the home page.
+ */
 @ManagedBean
 @SessionScoped
 public class GameManagerBean implements Serializable{
@@ -72,6 +75,10 @@ public class GameManagerBean implements Serializable{
 
 	public GameManagerBean(){}
 
+	/**
+	 * Lists all running games. (starttime bigger than actual time)
+	 * @return List of games
+	 */
 	public List<Game> listRunningGames(){
 		List<Game> games = new ArrayList<>();
 		Session hibernateSession = session.getSessionFactory().openSession();
@@ -84,23 +91,9 @@ public class GameManagerBean implements Serializable{
 		return games;
 	}
 
-	public void saveGame(Game game){
-		Session hibernateSession = session.getSessionFactory().openSession();
-		hibernateSession.beginTransaction();
-		hibernateSession.save(game);
-		hibernateSession.getTransaction().commit();
-		hibernateSession.close();
-	}
-
-	public Game loadGame(int id){
-		Session hibernateSession = session.getSessionFactory().openSession();
-		Game game = (Game) hibernateSession.get(Game.class, id);
-		hibernateSession.close();
-		return game;
-	}
-	
-	//-------------- 
-	
+	/**
+	 * Next State for game creation form
+	 */
 	public void nextState(){
 		//User goes to the condition form
 		if(state == 0){
@@ -111,7 +104,11 @@ public class GameManagerBean implements Serializable{
 	}
 	
 	//-------------- section for game creation
-	
+
+	/**
+	 * Creates a game and saves it in the DB
+	 * Takes the values from the bean variables.
+	 */
 	public void createGame(){
 		Session hibernateSession = session.getSessionFactory().openSession();
 		hibernateSession.beginTransaction();
@@ -126,6 +123,12 @@ public class GameManagerBean implements Serializable{
 		this.conditions = new ArrayList<>();
 	}
 
+	/**
+	 * Sets the amount of param fields to be rendered.
+	 * Based on the properties file.
+	 * Gets called with a ajax request.
+	 * @param e
+	 */
 	public void setParamFields(AjaxBehaviorEvent e){
 		// One parameter
 		if(chooseCond.equals("2") || chooseCond.equals("3")){
@@ -142,11 +145,20 @@ public class GameManagerBean implements Serializable{
 	}
 	
 	//-------------- manipulate condition list for game creation
+
+	/**
+	 * Remove a condition from the condition list
+	 * @param cond condition to remove
+	 */
 	public void removeCondition(Condition cond){
 		if(conditions.contains(cond))
 			conditions.remove(cond);
 	}
-	
+
+	/**
+	 * Add a condition to the condition list.
+	 * @param e
+	 */
 	public void addCondition(AjaxBehaviorEvent e){
 		int condId = Integer.parseInt(chooseCond);
 		if(condId >= 2){

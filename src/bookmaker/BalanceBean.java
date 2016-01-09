@@ -11,6 +11,9 @@ import org.hibernate.Session;
 
 import model.User;
 
+/**
+ * This bean manages the balance restock formular.
+ */
 @ManagedBean
 @SessionScoped
 public class BalanceBean implements Serializable{
@@ -58,7 +61,11 @@ public class BalanceBean implements Serializable{
 	 public void setSession(SessionBean session) {
 	        this.session = session;
 	 }
-	 
+
+	/**
+	 * loads the current balance
+	 * @return
+	 */
 	 public String getCurrentBalance(){
 		 User u = session.getUser();
 		 Session hibernateSession = session.getSessionFactory().openSession();
@@ -66,7 +73,10 @@ public class BalanceBean implements Serializable{
 		 String s = String.format("%.2f Fr",u.getBalance());
 		 return s;
 	 }
-	 
+
+	/**
+	 * Adds the amount from the formular to the users balance.
+	 */
 	 public void addToBalance(){
 		 
 		 if(clear && amount.intValue() > 0){
@@ -85,7 +95,11 @@ public class BalanceBean implements Serializable{
 			 msg="transactionFailed";
 		 }
 	 }
-	 
+
+	/**
+	 * Checks the entered creditcard informations.
+	 * Only accepts the number 1234-1234-1234-1234 with validation code 234
+	 */
 	 public void validateCreditCard(){
 		 
 		 if(CARD_NUM == cardinputA &&
@@ -106,12 +120,5 @@ public class BalanceBean implements Serializable{
 		   clear = false;
 	     }
 	 }
-	 
-	 public boolean numberValidation(){
-		 
-		 return false;
-	 }
-
-	 
 	 
 }
