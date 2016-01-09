@@ -3,7 +3,8 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:t="http://myfaces.apache.org/tomahawk"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
 <f:view contentType="text/html"/>
 <h:head>
 </h:head>
@@ -13,102 +14,108 @@
             #{bundle.creategame}
         </ui:define>
         <ui:define name="content">
-
-            <h1>#{bundle.creategame}</h1>
-
-
-            <h:form id="gameform" rendered="#{gameManagerBean.state == 0}" >
-                <div class="form-group">
-                    <label for="menuhome">#{bundle.choosteams}</label><br/>
-                    <t:selectOneMenu id="menuhome" value="#{gameManagerBean.homeTeam}">
-                        <t:selectItems
-                                value="#{sessionBean.propertiesUtil.teamList}"
-                                />
-                    </t:selectOneMenu>
-                    <t:selectOneMenu id="menuguest" value="#{gameManagerBean.guestTeam}">
-                        <t:selectItems
-                                value="#{sessionBean.propertiesUtil.teamList}"
-                                />
-                    </t:selectOneMenu>
-                </div>
-
-                <div class="form-group">
-                    <label for="starttime">#{bundle.starttime}</label><br/>
-                    <t:inputDate
-                            type="both"
-                            popupCalendar="true"
-                            id="starttime"
-                            value="#{gameManagerBean.startTime}"
-                            />
-                </div>
-                <h:commandButton class="btn btn-primary"
-                                 id="submit"
-                                 action="#{gameManagerBean.nextState}"
-                                 value="#{bundle.submit}"
-                        />
-            </h:form>
-            <!-- Condition Input -->
-
-            <h:form id="conditionform" rendered="#{gameManagerBean.state == 1}" >
-                <t:selectOneMenu id="menuwin" value="#{gameManagerBean.winteam}">
-                    <f:selectItem  itemLabel="#{sessionBean.propertiesUtil.getTeamPerId(gameManagerBean.homeTeam)}" itemValue="#{gameManagerBean.homeTeam}"/>
-                    <f:selectItem  itemLabel="#{sessionBean.propertiesUtil.getTeamPerId(gameManagerBean.guestTeam)}" itemValue="#{gameManagerBean.guestTeam}"/>
-                </t:selectOneMenu>
-
-                <t:selectOneMenu id="menucond" value="#{gameManagerBean.chooseCond}">
-                    <t:selectItems
-                            value="#{sessionBean.propertiesUtil.conditionList}"
-                            />
-                    <f:ajax
-                            execute="@this"
-                            listener="#{gameManagerBean.setParamFields}"
-                            render="conditionValues"
-                            />
-                </t:selectOneMenu>
-                <h:outputLabel value="Odds (X:1)" />
-                <h:inputText id="odd" value="#{gameManagerBean.odd}" />
-                <h:panelGroup id="conditionValues">
-                    <ui:repeat value="#{gameManagerBean.conditionValues}" var="param" varStatus="status">
-                        <h:outputLabel value="Param Nr. #{status.index + 1}" />
-                        <h:inputText id="conditionValues#{status.index}" value="#{gameManagerBean.conditionValues[status.index]}">
-                        </h:inputText>
-                    </ui:repeat>
-                </h:panelGroup>
+            <c:if test="#{sessionBean.user.isBookmaker}">
+                <h1>#{bundle.creategame}</h1>
                 <br/>
 
-                <h:commandButton value="#{bundle.addcond}">
-                    <f:ajax
-                            execute="@form"
-                            listener="#{gameManagerBean.addCondition}"
-                            render="condTable"
+                <h:form id="gameform" rendered="#{gameManagerBean.state == 0}" >
+                    <div class="form-group">
+                        <label for="menuhome">#{bundle.choosteams}</label><br/>
+                        <t:selectOneMenu id="menuhome" value="#{gameManagerBean.homeTeam}">
+                            <t:selectItems
+                                    value="#{sessionBean.propertiesUtil.teamList}"
+                                    />
+                        </t:selectOneMenu>
+                        <t:selectOneMenu id="menuguest" value="#{gameManagerBean.guestTeam}">
+                            <t:selectItems
+                                    value="#{sessionBean.propertiesUtil.teamList}"
+                                    />
+                        </t:selectOneMenu>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="starttime">#{bundle.starttime}</label><br/>
+                        <t:inputDate
+                                type="both"
+                                popupCalendar="true"
+                                id="starttime"
+                                value="#{gameManagerBean.startTime}"
+                                />
+                    </div>
+                    <h:commandButton class="btn btn-primary"
+                                     id="submit"
+                                     action="#{gameManagerBean.nextState}"
+                                     value="#{bundle.submit}"
                             />
-                </h:commandButton>
-                <br/>
-                <h:dataTable id="condTable" var="cond" value="#{gameManagerBean.conditions}" border="1">
-                    <h:column>
-                        <f:facet name="header">#{bundle.conditionTableDescription}</f:facet>
-                        #{sessionBean.propertiesUtil.getConditionPerId(cond.textId,sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), cond.params)}
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">#{bundle.conditionTableOdd}</f:facet>
-                        #{cond.odd}
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">#{bundle.conditionTableDelete}</f:facet>
-                        <h:commandButton
-                                value="#{bundle.conditionTableDelete}" >
-                            <f:ajax
-                                    listener="#{gameManagerBean.removeCondition(cond)}"
-                                    render="condTable"/>
-                        </h:commandButton>
-                    </h:column>
-                </h:dataTable>
+                </h:form>
+                <!-- Condition Input -->
 
-                <h:commandButton class="btn btn-primary" value="#{bundle.createGame}" action="#{gameManagerBean.createGame}" />
+                <h:form id="conditionform" rendered="#{gameManagerBean.state == 1}" >
+                    <t:selectOneMenu id="menuwin" value="#{gameManagerBean.winteam}">
+                        <f:selectItem  itemLabel="#{sessionBean.propertiesUtil.getTeamPerId(gameManagerBean.homeTeam)}" itemValue="#{gameManagerBean.homeTeam}"/>
+                        <f:selectItem  itemLabel="#{sessionBean.propertiesUtil.getTeamPerId(gameManagerBean.guestTeam)}" itemValue="#{gameManagerBean.guestTeam}"/>
+                    </t:selectOneMenu>
 
-            </h:form>
+                    <t:selectOneMenu id="menucond" value="#{gameManagerBean.chooseCond}">
+                        <t:selectItems
+                                value="#{sessionBean.propertiesUtil.conditionList}"
+                                />
+                        <f:ajax
+                                execute="@this"
+                                listener="#{gameManagerBean.setParamFields}"
+                                render="conditionValues"
+                                />
+                    </t:selectOneMenu>
+                    <br/><br/>
+                    <h:outputLabel value="Odds (X:1)" />
+                    <h:inputText id="odd" value="#{gameManagerBean.odd}" />
+                    <h:panelGroup id="conditionValues">
+                        <ui:repeat value="#{gameManagerBean.conditionValues}" var="param" varStatus="status">
+                            <h:outputLabel value="Param Nr. #{status.index + 1}" />
+                            <h:inputText id="conditionValues#{status.index}" value="#{gameManagerBean.conditionValues[status.index]}">
+                            </h:inputText>
+                        </ui:repeat>
+                    </h:panelGroup>
+                    <br/><br/>
 
+                    <h:commandButton value="#{bundle.addcond}" styleClass="btn btn-default">
+                        <f:ajax
+                                execute="@form"
+                                listener="#{gameManagerBean.addCondition}"
+                                render="condTable"
+
+                                />
+                    </h:commandButton>
+                    <br/><br/>
+                    <h:dataTable id="condTable" var="cond" value="#{gameManagerBean.conditions}" styleClass="table table-striped">
+                        <h:column>
+                            <f:facet name="header">#{bundle.conditionTableDescription}</f:facet>
+                            #{sessionBean.propertiesUtil.getConditionPerId(cond.textId,sessionBean.propertiesUtil.getTeamPerId(cond.leadingTeamId), cond.params)}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{bundle.conditionTableOdd}</f:facet>
+                            #{cond.odd}
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">#{bundle.conditionTableDelete}</f:facet>
+                            <h:commandButton
+                                    value="#{bundle.conditionTableDelete}"
+                                    styleClass="btn btn-default">
+                                <f:ajax
+                                        listener="#{gameManagerBean.removeCondition(cond)}"
+                                        render="condTable"/>
+                            </h:commandButton>
+                        </h:column>
+                    </h:dataTable>
+
+                    <br/>
+                    <h:commandButton class="btn btn-primary" value="#{bundle.createGame}" action="#{gameManagerBean.createGame}" />
+
+                </h:form>
+            </c:if>
+            <c:if test="#{!sessionBean.user.isBookmaker}">
+                <h1>#{bundle.noPermission}</h1>
+            </c:if>
         </ui:define>
     </ui:composition>
 </h:body>

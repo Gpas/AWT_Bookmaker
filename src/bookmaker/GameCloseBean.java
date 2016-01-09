@@ -107,37 +107,16 @@ public class GameCloseBean implements Serializable{
     
 	public void loadGameDetails(){
 		if(closeGameId != -1){
-			// Load Conditions
+			// Load Conditions and game
 			Session hibernateSession = session.getSessionFactory().openSession();
 			closeGame = hibernateSession.load(Game.class, closeGameId);
-			/*String hql = "FROM Condition cond left join fetch Bet WHERE cond.game.id = :gameId";
-			Query query = hibernateSession.createQuery(hql);
-			query.setParameter("gameId", closeGameId);
-			// Add conditions to list for displaying
-			this.conditions = query.list();
-			Set<Condition> conditions = new HashSet<>(this.conditions);
-			// Load Game and add Conditions
-			hql = "FROM Game game left join fetch game.owner user WHERE game.id = :gameId";
-			query = hibernateSession.createQuery(hql);
-			query.setParameter("gameId", closeGameId);
-			
-			 closeGame = (Game) query.list().get(0);
-			 closeGame.setConditions(conditions);*/
-			// this.gameowner = closeGame.getOwner();
 			this.conditions = new ArrayList<>(closeGame.getConditions());
-	
 			hibernateSession.close();
 		}
 	}
 	
 	public void closeGame(){
 		Session hibernateSession;
-		hibernateSession = session.getSessionFactory().openSession();
-		closeGame.setClosed(true);
-		hibernateSession.beginTransaction();
-		hibernateSession.saveOrUpdate(closeGame);
-		hibernateSession.getTransaction().commit();
-		hibernateSession.close();
 			for(Condition condition: this.conditions){
 				if(checked.get(condition.getId())){
 					hibernateSession = session.getSessionFactory().openSession();
@@ -160,14 +139,21 @@ public class GameCloseBean implements Serializable{
 						hibernateSession.close();
 					}
 					hibernateSession = session.getSessionFactory().openSession();
-					hql = "UPDATE Condition cond SET cond.occurred = 1 WHERE cond.id = :condID";
-					query = hibernateSession.createQuery(hql);
-					query.setParameter("condID", condition.getId());
+					String sql = "UPDATE `condition` SET occurred = 1 WHERE id = :condId";
+					query = hibernateSession.createSQLQuery(sql);
+					query.setParameter("condId", condition.getId());
+					hibernateSession.beginTransaction();
 					query.executeUpdate();
+					hibernateSession.getTransaction().commit();
 					hibernateSession.close();
-					msg += " ," +condition.getId();
 				}
 			}
+		hibernateSession = session.getSessionFactory().openSession();
+		hibernateSession.beginTransaction();
+		closeGame.setClosed(true);
+		hibernateSession.saveOrUpdate(closeGame);
+		hibernateSession.getTransaction().commit();
+		hibernateSession.close();
 		checked.clear();
 		closeGameId = -1;
 	}

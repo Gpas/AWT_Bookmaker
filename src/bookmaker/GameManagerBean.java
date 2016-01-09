@@ -123,6 +123,7 @@ public class GameManagerBean implements Serializable{
 		hibernateSession.close();
 		newGame = null;
 		this.state=0;
+		this.conditions = new ArrayList<>();
 	}
 
 	public void setParamFields(AjaxBehaviorEvent e){

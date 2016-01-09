@@ -108,7 +108,10 @@
 
                         <h:column>
                             <f:facet name="header">#{bundle.betTableAmount}</f:facet>
-                            <h:form id="betGroup">
+                            <!-- Just display the betamount when game is closed-->
+                            <h:outputText rendered="#{gameViewerBean.activGame.closed}">#{gameViewerBean.getSavedBetAmount(cond.id)}</h:outputText>
+                            <!-- When the user already placed a bet, display the bet and the undo button, else display the bet button-->
+                            <h:form id="betGroup" rendered="#{!gameViewerBean.activGame.closed}">
                                 <h:inputText id="amount" rendered="#{gameViewerBean.getSavedBetAmount(cond.id) == 0}"  value="#{gameViewerBean.betAmount}"></h:inputText>
                                 <h:commandButton rendered="#{gameViewerBean.getSavedBetAmount(cond.id) == 0}"
                                                  class="btn btn-success" value="#{bundle.betButton}"
@@ -130,9 +133,14 @@
                                 </h:commandButton>
                             </h:form>
                         </h:column>
-                        <h:column>
+                        <h:column rendered="#{!gameViewerBean.activGame.closed}">
                             <f:facet name="header">#{bundle.betTablePossibleWin}</f:facet>
                             #{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}
+                        </h:column>
+                        <h:column rendered="#{gameViewerBean.activGame.closed}">
+                            <f:facet name="header">#{bundle.betTableWinLoss}</f:facet>
+                            <h:outputText rendered="#{cond.occurred}"><p class="bg-success">#{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}</p></h:outputText>
+                            <h:outputText rendered="#{!cond.occurred}"><p class="bg-danger">#{gameViewerBean.getSavedBetAmount(cond.id)}</p></h:outputText>
                         </h:column>
 
                     </t:dataTable>
