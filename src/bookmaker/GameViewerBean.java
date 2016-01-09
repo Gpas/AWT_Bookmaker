@@ -19,6 +19,8 @@ import java.util.*;
 @SessionScoped
 public class GameViewerBean implements Serializable {
 
+    private static final long MIN90 = (long) 54E5;
+
     @ManagedProperty(value = "#{sessionBean}")
     private SessionBean session;
 
@@ -33,7 +35,6 @@ public class GameViewerBean implements Serializable {
     private String message;
     private Map<String, Bet> bets;
     private User gameowner;
-
 
     public GameViewerBean(){
 
@@ -143,6 +144,14 @@ public class GameViewerBean implements Serializable {
     public String resetGameId(){
         activGameId = -1;
         return "games";
+    }
+
+    /**
+     * Checks if the starttime has already passed
+     * @return boolean
+     */
+    public boolean checkTime(){
+        return activGame.getStartTime().before(new Date(System.currentTimeMillis()-MIN90));
     }
 
     public void loadGameDetails(){
@@ -284,4 +293,5 @@ public class GameViewerBean implements Serializable {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }
