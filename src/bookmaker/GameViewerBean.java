@@ -18,9 +18,7 @@ import java.util.*;
 @ManagedBean
 @SessionScoped
 public class GameViewerBean implements Serializable {
-
-    private static final long MIN90 = (long) 54E5;
-
+    
     @ManagedProperty(value = "#{sessionBean}")
     private SessionBean session;
 
@@ -151,7 +149,7 @@ public class GameViewerBean implements Serializable {
      * @return boolean
      */
     public boolean checkTime(){
-        return activGame.getStartTime().before(new Date(System.currentTimeMillis()-MIN90));
+        return activGame.getStartTime().before(new Date(System.currentTimeMillis()));
     }
 
     public void loadGameDetails(){

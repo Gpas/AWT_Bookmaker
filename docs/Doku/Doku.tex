@@ -69,6 +69,8 @@
 %\includegraphics[width=15cm]{images/titlepage.jpeg}
 
 \pagebreak
+\tableofcontents	% add table of contents (takes 2x typesetting to generate)
+\pagebreak
 
 \section{Einleitung}
 
@@ -84,30 +86,29 @@
 
 \section{Architektur}
 
-  Unsere Implementierung folgt dem Model, View, Controller pattern.
-  Die Views wurden wie üblich mit JSF in den xhtml files definiert.
+  Unsere Implementierung folgt dem Model, View, Controller Pattern.
+  Die Views wurden wie üblich mit JSF in den xhtml Files definiert.
   Diese Views werden jeweils von einem Java Bean gesteuert, das ist der
   Controller Teil. Die Buissneslogik befindet sich getrennt in eigenen Java
   Klassen die unser Domainmodel abbilden und auf welche die Controller zugreifen.
   
-  Die Daten bzw. die instanzen der Domainclasses werden mit Hilfe eines ORMappers
-  an eine Relationelle Datenbank angebunden und so persistiert.
+  Die Daten bzw. die Instanzen der Domainklassen werden mit Hilfe eines ORMappers
+  (Hibernate, JPA) an eine Relationelle Datenbank angebunden und so persistiert.
 
-  \subsection{Projektstrucktur}
+  \subsection{Projektstruktur}
 
-  Dieses Patten findet sich in der Strucktur des Projektes wider.
-  Im Sourceverzeichniss finden wir das bookmaker und das model packet und
-  ausserhalb den das Webverzeichniss, es enthält die Views und deren ressourcen
-  und die JSF konfiguration.
-  Das bookmakerpacket enthält sämtliche Controllers und einige Hilfsklassen und
-  Methoden die es erlauben properties und Objekte zu laden oder Objekte zu
+  Dieses Pattern findet sich in der Struktur des Projektes wider.
+  Im Sourceverzeichnis finden wir die "bookmaker" und die "model" Package und
+  ausserhalb das Webverzeichnis, es enthält die Views und deren Ressourcen
+  und die JSF Konfiguration.
+  Die Bookmakerpackage enthält sämtliche Controllers und einige Hilfsklassen und
+  Methoden die es erlauben Properties und Objekte zu laden oder Objekte zu
   manipulieren und zu speichern.
-  Dort werden die Ausgabe werte für die Views berechnet und das System bedient.
-  Das Modelpacket enthält die Domainmodel Klassen. Die Darin enthaltene
-  Buissneslogik erlaubt es benutzer und Wetten zu erstellen und Wetten
-  Abzuschliessen. Hier wird der Zustand des Systems abgebildet.
-  Des Weiteren befinden sich im Sourceverzeichniss die Mehrsprachigen properties
-  files und weiter konfiguretions files.
+  Dort werden die Ausgabewerte für die Views berechnet und das System bedient.
+  Die Modelpackage enthält die Domainmodel Klassen. Die darin enthaltene
+  Buissneslogik erlaubt es Benutzer und Wetten zu erstellen und Wetten
+  abzuschliessen. Hier wird der Zustand des Systems abgebildet.
+  Des Weiteren befinden sich im Sourceverzeichnis die mehrsprachigen Propertiesdateien und weitere Konfigurationsdateien wie die Konfiguration vom Hibernatecontroller.
   
 \pagebreak
 
@@ -115,49 +116,47 @@
  
   Unser Domainmodel
   (Siehe Abbildung \ref{fig:domain_model} auf Seite \pageref{fig:domain_model})
-  Beinnhaltet folgende Klassen.
+  beinnhaltet folgende Klassen.
   
   \subsection{User}
-    Der User enthält sämtliche eigenchaften eines Benutzers wie
-    den vollstaändigen Namen, Emailadresse, Logininformationen und den Betrag
-    Spielkredits. Der User hat eine Rolle, er ist entweder
+    Der User enthält sämtliche Eigenchaften eines Benutzers wie
+    den vollständigen Namen, Emailadresse, Logininformationen und den eine Variable für das Spielgeld. Der User hat eine Rolle, er ist entweder
     Bookmaker oder Gambler. Da es nur diese zwei Rollen gibt wurde dem User
     ein Boolean Attribut gegeben welches ihn als Bookmaker ausweist fall es
-    true ist. Der Bookmaker enthält eine liste von ihn erstelleter spiele.
+    true ist. Der Bookmaker sieht die von ihm erstellten Spiele.
     Als Bookmaker können neue Spiele erfasst werden und alte Spiele müssen
     geschlossen werden. Als Bookmaker kann aber nicht gewettet werden.
-    Der Gambler kann nun auf diese Spiele Wetten aber selber keine Spiele
-    erfassen. Der Gambler enthält eine Liste von ihm erstelter betts.
+    Der Gambler kann nun auf diese Spiele wetten aber selber keine Spiele
+    erfassen. Der Gambler sieht eine Liste der Spiele auf welcher er gewettet hat.
       
   \subsection{Game}
     Ein Spiel beinhaltet die id der Teams und eine Liste von Conditions.
-    Jedes Spiel hat ein datum und eine Zeit wann es beginnt.
-    Die Teamnamen sind als mehrsprachiger String in propertiesfiles mit einer
+    Jedes Spiel hat ein Datum und eine Zeit wann es beginnt.
+    Die Teamnamen sind als mehrsprachiger String in den Propertiesdateien mit einer
     id gespeichert.
     Wenn ein Spiel begonnen hat darf nicht mehr darauf gewettet werden.
     Das Spiel enthält einen boolean der true ist falls das spiel abgeschlossen
     wurde (closed). Ein Spiel ist abgeschlossen falls mindestens 90min nach
-    der Anfangszeit der Bookmaker der es erstellt hat die conditions
+    der Anfangszeit der Bookmaker der es erstellt hat die Conditions
     auswählt welche eingetroffen sind (occurred).
       
   \subsection{Condition}
     Conditions sind Ereignisse die während eines Games eintreffen können.
     Sie gehören immer zu einem Game.
-    Sie beinhalten einene Textid eines mehrsprachigen Textes und parameter
-    die in den Text eingefügtwerden sowie eine Wettquote (odd).  
+    Sie beinhalten eine Textid eines mehrsprachigen Textes und Parameter
+    die in den Text eingefügt werden, sowie eine Wettquote (odd).  
     Die Conditions enthalten des weiteren einen boolean der anzeigt ob
-    sie Eingetroffen (occurred) ist (true) oder nicht (false).
-    Dieses Attribut soll beim beenden eines Spieles vom Bookmaker gesetzt
-    werden anschliessend kann bestimmt werden wer gewonnen hat.
+    sie eingetroffen (occurred) ist (true) oder nicht (false).
+    Dieses Attribut soll beim Beenden eines Spieles vom Bookmaker gesetzt
+    werden. Anschliessend kann bestimmt werden wer gewonnen hat.
      
   \subsection{Bet}
     Bets können vom Gambler erstellt werden.
-    Betts enthalten eine Condition auf die gewettet wird und einen Betrag
+    Bets enthalten eine Condition auf die gewettet wird und einen Betrag
     der vom Gambler eingesetzt wird. Der Betrag wird beim erstellen vorläufig
     dem Gambler abgezogen. Wenn ein Spiel beendet wurde erhält der Gambler
     einen Gewinn der dem Einsatz multipliziert mit der Wettquote entspricht
-    vom bookmaker falls die Condition occurred true ist. Oder Der Bookmaker
-    erhält den Einsatz falls occurred false ist. 
+    vom Bookmaker falls die Condition eingetroffen ist. Oder sonst erhält der Bookmaker den Einsatz. 
 
   \begin{figure}[h!]
   \begin{center}
@@ -167,15 +166,19 @@
   \label{fig:domain_model}
 \end{figure}
 
+  \begin{figure}[h!]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{images/db_model.png}
+  \end{center}
+  \caption{Datenbank Model}
+  \label{fig:db_model}
+\end{figure}
+
 \section{Views und Controller}
 
 \section{Fazit}
 
-\begin{abstract}
-Zusammenfassung
-\end{abstract}
-\pagebreak
-\tableofcontents	% add table of contents (takes 2x typesetting to generate)
+
 \pagebreak
 \listoffigures		% add list of figures (takes 2x typesetting to generate)
 
