@@ -166,7 +166,9 @@
   \label{fig:domain_model}
 \end{figure}
 
-  \begin{figure}[h!]
+\subsection{Hibernate}
+
+\begin{figure}[h!]
   \begin{center}
     \includegraphics[width=0.7\textwidth]{images/db_model.png}
   \end{center}
@@ -175,6 +177,68 @@
 \end{figure}
 
 \section{Views und Controller}
+
+  Die Views sind so aufgebaut dass sie jeweils aus einer äusseren und einer
+  inneren View zusammen gesetz sind. Das wurde mit ui:insert und ui:composition
+  realisiert.
+  
+  Die äussere View, das basetemplate, bleibt für jede Seite gleich, sie beherbergt
+  die Navigation und das login/logout. Die Navigation wird abhängig davon ob ein User eingeloggt
+  ist und dessen Rolle im Sessionbean zusammen gestellt.
+  
+  Die inneren Views entsprechen dem Content der auf der jeweiligen Seite
+  angezeigt werden soll.
+  
+  Jede View entspricht einem Usecase und wird durch ein Bean gesteuert.
+
+
+\subsection{Sessionbean}
+  Das Sessionbean implementiert das login und speichert den aktuellen Benutzter.
+  Bevor sich ein Benutzter einloggt wird ein lehrer User erstellt damit ein Gast
+  einige Innhalte wie zum Beispiel eine liste mit Spielen sehen kann oder auf die
+  registrationform kommt.
+  Ausserdem wird hier die Sprache geladen.
+  
+  Das SessionBean enthält auch eine Methode zu erzeugung von Hibernate Sessions
+  damit Objekte gespeichert und aktuallisiert werden können.
+  
+  Des weiteren kann vom Sessionbean auch eine Instanz der Hilfsklasse PropertiesUtil
+  geladen werden. Diese Hilfsklasse erlaubt es die in Properties files gespeicherten
+  Texte der Conditions und Teamnamen in der jeweiligen Sprache als java Map 
+  oder einen Einzelnen Text per id zu laden.
+  Das wird beim erstellen eines Spieles benötigt wo der Benutzer aus einem Dropdown
+  Teams und Conditions auswählen soll.
+  
+\subsubsection{Navigation}
+  Die Navigation besteht aus Links zu den jeweiligen Seiten, einem Menu um die
+  Sprache zu ändern und einem Formular um sich einzuloggen bzw. auszuloggen.
+  
+  Die Navigation wird im Sessionbean zusammen gestellt. Dafür gibt es eine innere
+  Klasse NavLink weleche das Label und das Ziel eînes Links beinhaltet.
+  Diese NavLinks werden in einer Liste verwaltet. Für einen Besucher der nicht
+  eingelogt ist stehen nur einige Links zu verfügung. Beim einloggen und ausloggen
+  werden jenach Rolle des Nutzters Links hinzugefügt oder entfernt.
+  Danach wierden die Links neu geladen in der Methode reloadNavlinks, hier müssen
+  die labels aus den bundels geladen werden.
+  Die Links werden im baseTemplate mit hilfe eines ui:repeats aus der Liste auf
+  der Seite dargestellt.
+
+\subsection{balance}
+  
+
+\subsection{closeGame}
+  
+
+\subsection{games}
+  
+
+\subsection{home}
+  In der Home View werden alle laufenden Spiele aufgelistet.
+
+\subsection{newGame}
+  
+
+\subsection{registration}
 
 \section{Fazit}
 
