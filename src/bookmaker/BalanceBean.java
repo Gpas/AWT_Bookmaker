@@ -13,7 +13,7 @@ import org.hibernate.Session;
 import model.User;
 
 /**
- * Bean for adding a amount of money to a users game credit
+ * This bean manages the balance restock formular.
  */
 @ManagedBean
 @SessionScoped
@@ -80,12 +80,11 @@ public class BalanceBean implements Serializable{
 	 public void setSession(SessionBean session) {
 	        this.session = session;
 	 }
-	 
-	 
-	 /**
-	  * Querry the balance of the current users game credit with currency symbol (Fr) 
-	  * @return a formated String that represents the current balance of a user
-	  */
+
+	/**
+	 * loads the current balance
+	 * @return a formated String that represents the current balance of a user with curreny simbol (Fr)
+	 */
 	 public String getCurrentBalance(){
 		 User u = session.getUser();
 		 Session hibernateSession = session.getSessionFactory().openSession();
@@ -93,12 +92,11 @@ public class BalanceBean implements Serializable{
 		 String s = String.format("%.2f Fr",u.getBalance());
 		 return s;
 	 }
-	 
-	 /**
-	  * add a amount to a users game credit
-	  * amount must be positive and credit card must be validated
-	  * @return void
-	  */
+
+
+	/**
+	 * Adds the amount from the formular to the users balance.
+	 */
 	 public void addToBalance(){
 		 
 		 //card must be validated and amount must be positive
@@ -123,13 +121,11 @@ public class BalanceBean implements Serializable{
 			 msg="transactionFailed";
 		 }
 	 }
-	 
-	 /**
-	  * test if input for credit card matches the example
-	  * card number
-	  * if it matches set clear flag to true
-	  * @return void
-	  */
+
+	/**
+	 * Checks the entered creditcard informations.
+	 * Only accepts the number 1234-1234-1234-1234 with validation code 234
+	 */
 	 public void validateCreditCard(){
 		 
 		 //check if inputfields are 1234

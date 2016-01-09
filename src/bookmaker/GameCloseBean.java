@@ -16,6 +16,9 @@ import org.hibernate.Session;
 import model.Condition;
 import model.Game;
 
+/**
+ * This bean manages the process of closing a game and the distributing of wins and losses.
+ */
 @ManagedBean
 @SessionScoped
 public class GameCloseBean implements Serializable{
@@ -84,8 +87,11 @@ public class GameCloseBean implements Serializable{
     public void setSession(SessionBean session) {
         this.session = session;
     }
-	
 
+
+	/**
+	 * Loads all games which have a starttime less than (actual time - 90 minutes) and are not closed
+	 */
 	public void loadGamesToClose(){
 		
 			// Load a List of Games not jet closed
@@ -104,7 +110,10 @@ public class GameCloseBean implements Serializable{
 			this.setGamesToClose(query.list());
 			hibernateSession.close();
 	}
-    
+
+	/**
+	 * Method for loading a single game
+	 */
 	public void loadGameDetails(){
 		if(closeGameId != -1){
 			// Load Conditions and game
@@ -114,7 +123,11 @@ public class GameCloseBean implements Serializable{
 			hibernateSession.close();
 		}
 	}
-	
+
+	/**
+	 * Calculates for each condition the wins and losses for the players and gameowner.
+	 * And the sets the game.closed to true.
+	 */
 	public void closeGame(){
 		Session hibernateSession;
 			for(Condition condition: this.conditions){
