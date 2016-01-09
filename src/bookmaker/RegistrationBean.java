@@ -13,6 +13,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 
+/**
+ * Bean for registering a new user.
+ */
 @ManagedBean
 @SessionScoped
 public class RegistrationBean implements Serializable {
@@ -30,9 +33,6 @@ public class RegistrationBean implements Serializable {
 			FIELD_EMTY="fieldEmpty",
 			TOO_SHORT="tooShort",
 			PW_MISMATCH="pwMismatch";
-	
-	//FacesContext context = FacesContext.getCurrentInstance();
-   // ResourceBundle bundle = ResourceBundle.getBundle("lang", context.getViewRoot().getLocale());
 
     @ManagedProperty(value = "#{sessionBean}")
     private SessionBean session;
@@ -64,14 +64,14 @@ public class RegistrationBean implements Serializable {
     public void setParam1(String param){ this.param1 = param;}
     
     public RegistrationBean(){
-        init();
+
     }
-    
-    
-    private void init(){
-    	
-    }
-    
+
+    /**
+     * Registers a new user and the sets this user as active.
+     * Uses the PasswordManager for hashing.
+     * @return the next view to render
+     */
     public String register(){
         try{
             

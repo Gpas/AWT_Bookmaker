@@ -15,6 +15,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.*;
 
+/**
+ * Bean for fetching games lists according to the user role and displaying a single game according to the user role and the gamestatus.
+ */
 @ManagedBean
 @SessionScoped
 public class GameViewerBean implements Serializable {
@@ -38,6 +41,10 @@ public class GameViewerBean implements Serializable {
 
     }
 
+    /**
+     * Lists all games where the user is the owner if he isBookmaker, else lists all games where the user has placed a bet.
+     * @return List of games to render
+     */
     public List<Game> listUserGames(){
         User user = session.getUser();
         if(user.getIsBookmaker()){
@@ -69,6 +76,11 @@ public class GameViewerBean implements Serializable {
         }
     }
 
+    /**
+     * Lists all games where the user is the owner if he isBookmaker, else lists all games where the user has placed a bet.
+     * @param running If true, returns only the games which are running, if false only the games which are finished/closed
+     * @return List of games to render
+     */
     public List<Game> listUserGames(boolean running){
         User user = session.getUser();
         if(user.getIsBookmaker()){
@@ -152,6 +164,10 @@ public class GameViewerBean implements Serializable {
         return activGame.getStartTime().before(new Date(System.currentTimeMillis()));
     }
 
+    /**
+     * Loads the game details if the activGameId is set.
+     * The gameDetails are saved directly in the beanvariable "activGame"
+     */
     public void loadGameDetails(){
         message = "";
         if(activGameId != -1){
@@ -187,6 +203,11 @@ public class GameViewerBean implements Serializable {
         }
     }
 
+    /**
+     * Returns the saved betAmount for this condition from the saved betList of this bean.
+     * @param condId condition Id
+     * @return betamount in BigDecimal
+     */
     public BigDecimal getSavedBetAmount(String condId){
         if(bets.containsKey(condId)){
             return bets.get(condId).getAmount();
@@ -196,6 +217,11 @@ public class GameViewerBean implements Serializable {
         }
     }
 
+    /**
+     * Handles the process of betting on a condition, checks if the users have enough balance and changes the balance
+     * of the users accordingly. The betamount is taken from the bean variable.
+     * @param condition condition to bet on
+     */
     public void betOnCondition(Condition condition){
         Session hibernateSession = session.getSessionFactory().openSession();
         User user = hibernateSession.get(User.class, session.getUser().getId());
@@ -226,6 +252,10 @@ public class GameViewerBean implements Serializable {
         }
     }
 
+    /**
+     * Method for deleting a bet from the Database and changes the balance of the users accordingly.
+     * @param condition condition ID
+     */
     public void undoBet(Condition condition){
         Session hibernateSession = session.getSessionFactory().openSession();
         Bet bet = this.bets.get(Integer.toString(condition.getId()));
@@ -251,7 +281,7 @@ public class GameViewerBean implements Serializable {
         return;
     }
 
-
+    //region Helper functions
     public Game getActivGame() {
         return activGame;
     }
@@ -291,5 +321,6 @@ public class GameViewerBean implements Serializable {
     public void setMessage(String message) {
         this.message = message;
     }
+    //endregion
 
 }
