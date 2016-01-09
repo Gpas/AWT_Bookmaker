@@ -20,11 +20,16 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class RegistrationBean implements Serializable {
 	
-	
+	/**
+	 * form evaluation setting min length
+	 */
 	private final static int MIN_FIRSTNAME=3,
 			MIN_LASTNAME=3,
 			MIN_PW=6;
 	
+	/**
+	 * error messages and field labels
+	 */
 	private final static String FIRSTNAME ="firstname",
 			LASTNAME="lastname",
 			EMAIL="email",
@@ -74,15 +79,20 @@ public class RegistrationBean implements Serializable {
      */
     public String register(){
         try{
-            
+            //procide if input is valid
             if(validateFields()){
+            // hash the password
             String hashedPW = PasswordManager.hashPassword(this.getPw0());
             User user = new User(this.getEmail(), this.getFirstname(), this.getLastname(), hashedPW, false);
+            
+            //save the newly generated user
             Session hibernateSession = session.getSessionFactory().openSession();
             hibernateSession.beginTransaction();
             hibernateSession.save(user);
             hibernateSession.getTransaction().commit();
             hibernateSession.close();
+            
+            //log in the new user
             session.setUser(user);
             msg="regSuc";
             return "home";
@@ -100,6 +110,11 @@ public class RegistrationBean implements Serializable {
     	return "listGames";
     }
     
+    /**
+     * validate the input of registaration form
+     * and set error message in case of invalid inputs
+     * @return boolean if input was correct
+     */
     private boolean validateFields(){
 
     	if(firstname == null){
