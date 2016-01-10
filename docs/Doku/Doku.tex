@@ -169,12 +169,12 @@
 \subsection{Hibernate}
   Um die Objekte in einer Datenbank zu persistieren haben wir Hibernate und eine
   MySql Datenbank benutzt. Hibernate ist ein Object Relation Mapper (ORM) und
-  ermöglicht es Javaobjekte auf relativ einfache weise in ein relationeles
-  Model zu übersetzen. Pro Objekt wird eine Tabelle erstellt, diese Relation Beinhaltet
-  die Attribute des Objekts die primitive Datentypen sind oder Strings.
-  Attribute Die widerum selber Objekte sind weden über foreign keys gemappt.
-  Listen werden mit einer vielfach beziehung dargestellt.
-  Für die Datenbank wurde noch eine Objektid als primary key zu den Objekten
+  ermöglicht es Javaobjekte auf relativ einfache Weise in ein relationales
+  Model zu übersetzen. Pro Objekt wird eine Tabelle erstellt, welche
+  die Attribute des Objekts beinhaltet als primitive Datentypen oder Strings.
+  Attribute die selber Objekte sind, werden über Foreignkeys gemappt.
+  Listen werden mit einer vielfach Beziehung dargestellt.
+  Für die Datenbank wurde noch eine Objekt-ID als Primarykey zu den Objekten
   hinzugefügt.
   Das daraus resultierende Datenbankmodel ist in
   Abbildung \ref{fig:db_model} auf Seite \pageref{fig:db_model} zu sehen.
@@ -191,10 +191,10 @@
 \section{Views und Controller}
 
   Die Views sind so aufgebaut dass sie jeweils aus einer äusseren und einer
-  inneren View zusammen gesetz sind. Das wurde mit ui:insert und ui:composition
+  inneren View zusammengesetzt sind. Das wurde mit ui:insert und ui:composition
   realisiert.
   
-  Die äussere View, das basetemplate, bleibt für jede Seite gleich, sie beherbergt
+  Die äussere View, das basetemplate, bleibt für jede Seite gleich. Die beherbergt
   die Navigation und das login/logout. Die Navigation wird abhängig davon ob ein User eingeloggt
   ist und dessen Rolle im Sessionbean zusammen gestellt.
   
@@ -205,20 +205,20 @@
 
 
 \subsection{Sessionbean}
-  Das Sessionbean implementiert das login und speichert den aktuellen Benutzter.
-  Bevor sich ein Benutzter einloggt wird ein lehrer User erstellt damit ein Gast
-  einige Innhalte wie zum Beispiel eine liste mit Spielen sehen kann oder auf die
+  Das Sessionbean implementiert das login und speichert den aktuellen Benutzer.
+  Bevor sich ein Benutzer einloggt wird ein leerer User erstellt damit ein Gast
+  einige Inhalte wie zum Beispiel eine Liste mit Spielen sehen kann oder auf die
   registrationform kommt.
   Ausserdem wird hier die Sprache geladen.
   
-  Das SessionBean enthält auch eine Methode zu erzeugung von Hibernate Sessions
-  damit Objekte gespeichert und aktuallisiert werden können.
+  Das SessionBean enthält auch eine Methode zur Erzeugung von Hibernate-Sessions,
+  damit Objekte geladen, gespeichert und aktualisiert werden können.
   
-  Des weiteren kann vom Sessionbean auch eine Instanz der Hilfsklasse PropertiesUtil
-  geladen werden. Diese Hilfsklasse erlaubt es die in Properties files gespeicherten
+  Vom Sessionbean kann auch eine Instanz der Hilfsklasse PropertiesUtil
+  geladen werden. Diese Hilfsklasse erlaubt es die in Properties-Files gespeicherten
   Texte der Conditions und Teamnamen in der jeweiligen Sprache als java Map 
   oder einen Einzelnen Text per id zu laden.
-  Das wird beim erstellen eines Spieles benötigt wo der Benutzer aus einem Dropdown
+  Das wird beim Erstellen eines Spieles benötigt wo der Benutzer aus einem Dropdown
   Teams und Conditions auswählen soll.
   
 \subsubsection{Navigation}
@@ -226,93 +226,98 @@
   Sprache zu ändern und einem Formular um sich einzuloggen bzw. auszuloggen.
   
   Die Navigation wird im Sessionbean zusammen gestellt. Dafür gibt es eine innere
-  Klasse NavLink weleche das Label und das Ziel eînes Links beinhaltet.
+  Klasse NavLink welche das Label und das Ziel eines Links beinhaltet.
   Diese NavLinks werden in einer Liste verwaltet. Für einen Besucher der nicht
-  eingelogt ist stehen nur einige Links zu verfügung. Beim einloggen und ausloggen
-  werden jenach Rolle des Nutzters Links hinzugefügt oder entfernt.
-  Danach wierden die Links neu geladen in der Methode reloadNavlinks, hier müssen
-  die labels aus den bundels geladen werden.
-  Die Links werden im baseTemplate mit hilfe eines ui:repeats aus der Liste auf
+  eingeloggt ist stehen nur einige Links zu Verfügung. Beim einloggen und ausloggen
+  werden je nach Rolle des Nutzers Links hinzugefügt oder entfernt.
+  Danach werden die Links neu geladen in der Methode reloadNavlinks, hier müssen
+  die Labels aus den Bundles(Properties) geladen werden.
+  Die Links werden im baseTemplate mithilfe eines ui:repeats aus der Liste auf
   der Seite dargestellt.
 
 \subsection{balance}
-  Ein zweistuffiges Formular um auf den Spielkredit des Users eizuzahlen.
-  Die erste Form Dient dazu eine Kreditkarte zu Validieren.
-  Dazu wird eine 16 stellige kartennummer in vier viererblöken eingegeben
-  und ein dreistelliger validierungscode.
-  Dabei handelt es sich um ein Mockup, es wird lediglich die nummer
-  1234-1234-1234-1234 und der code 234 akzeptiert.
-  Danach erscheint eine Eingabe auf der der einzuzahlende Betrag angegeben wird. 
+  Ein zweistufiges Formular um auf den Spielkredit des Users einzuzahlen.
+  Die erste Form dient dazu eine Kreditkarte zu validieren.
+  Dazu wird eine 16 stellige Kartennummer in vier Viererblöcken eingegeben
+  und ein dreistelliger Validierungscode.
+  Dabei handelt es sich um ein Mockup, es wird lediglich die Nummer
+  1234-1234-1234-1234 und der Code 234 akzeptiert.
+  Danach erscheint eine Eingabe, um den einzuzahlenden Betrag anzugeben. 
 
 \subsection{closeGame}
-  Hier werden die vom Bookmaker erstellten Spiele bei welchen die Startzeit
-  90 min zurückliegen angezeit. Der Bookmaker sollt nun diese Spiele beenden.
-  Er wählt dazu ein Spiel aus und gelangt in eine detailierte Ansicht.
-  Über checkboxes kann er nun diejenigen Conditions ankreuzen die während dem
-  Spiel aufgetreten sind. Danach schliesser das Spiel indem er auf den dafür
+  Hier werden die vom Bookmaker erstellten Spiele, bei welchen die Startzeit
+  90 Minuten zurückliegt angezeigt. Der Bookmaker soll nun diese Spiele beenden.
+  Er wählt dazu ein Spiel aus und gelangt in eine detaillierte Ansicht.
+  Über Checkboxes kann er nun diejenigen Conditions ankreuzen die während dem
+  Spiel aufgetreten sind. Danach schliesst er das Spiel indem er auf den dafür
   vorgesehenen Button klickt.
-  Bei den Objekten Game und Condition werden nun die Attribute closed bzw occurred
+  Bei den Objekten Game und Condition werden nun die Attribute closed bzw. occurred
   gesetzt und in der Datenbank aktualisiert.
 
 \subsection{games}
   Auf dieser Seite werden Die Spiele des Users angezeigt.
-  Beim Gambler die Spiele auf die er gewettet hat einmal eine Liste laufender Spiele
+  Beim Gambler die Spiele auf die er gewettet hat. Einmal eine Liste laufender Spiele
   und eine Liste mit abgeschlossenen Spielen.
   Beim Bookmaker werden die von ihm erstellten Spiele angezeigt.
-  Aus einer Tabelle können einzelne Spiele ausgewählt werden und in einer Detail
-  Ansicht dargestellt werden. Es werden Die Teams angezeigt die Spielzeit und
-  eine Tabelle mit Conditions.
   
-  Für den Bookmaker sind hier die Beträge ersichtlich die er gewint bzw verliert,
+  Aus einer Tabelle können einzelne Spiele ausgewählt werden und in einer Detailansicht dargestellt werden. Es werden Die Teams angezeigt, die Spielzeit und
+  eine Tabelle mit den Conditions.
+  
+  Für den Bookmaker sind hier die Beträge ersichtlich die er gewinnt bzw. verliert,
   falls eine Condition eintritt oder nicht.
   
   Der Gambler sieht für noch laufende Spiele für jede Condition einen Input und
   einen Button. Er kann hier eine Summe eintippen und bestätigen das er auf diese
   Condition wettet. Der Gambler muss über den zu wettenden Einsatz verfügen.
-  Für Spiele die beendet wurden wird Angezeigt ob die Condition eingetroffen ist
-  und der Betrag der darauf von Gambler gewettet wurde.
+  Für Spiele die beendet wurden, wird angezeigt ob die Condition eingetroffen ist
+  und der Gewinn/Verlust welcher der Gambler gemacht hat.
 
 \subsection{home}
   In der Home View werden alle laufenden Spiele aufgelistet.
-  Bei jedem Spiel kann in eine Deail ansicht gewechselt werden.
+  Bei jedem Spiel kann in eine Detailansicht gewechselt werden.
 
 \subsection{newGame}
-  Hier kan der Bookmaker ein neues Spiel erstellen.
-  Diese Ansicht besteht aus zwei formularen. wir haben die rendered option der form
-  benutzt um eine Game erfassung in zwei Stuffen zu realisieren.
-  zuerst müssen die Teams und die Zeit angegeben werden. Die Teams werden aus den
-  properties viles geladen und können anschliessend in einem Dropdown für das Home-
-  und Guestteam selektiert werden. Die Zeit kann per Datepicker angegeben werden 
+  Hier kann der Bookmaker ein neues Spiel erstellen.
+  Diese Ansicht besteht aus zwei Formularen. Wir haben die rendered Option der Form
+  benutzt um eine Game-Erfassung in zwei Stufen zu realisieren.
+  Zuerst müssen die Teams und die Zeit angegeben werden. Die Teams werden aus den
+  Properties-Files geladen und können anschliessend in einem Dropdown für das Home-
+  und Guestteam selektiert werden. Die Zeit kann per Datepicker angegeben werden. 
 
   Danach wird auf die Ansicht zum erstellen von Conditions gewechselt.
-  Die Conditions werden Stückweise zusammengefügt aus Mehrsprachigen Texten und
-  Parametern. Der Vorteil liegt darin das die Mehrsprachigkeit gegeben Bleibt.
+  Die Conditions werden stückweise zusammengefügt aus mehrsprachigen Texten und
+  Parametern. Der Vorteil liegt darin das die Mehrsprachigkeit gegeben bleibt.
   Ausserdem kann kontrolliert werden welche Wetten erlaubt sind und einigermassen
   Sinn machen.
-  Über ein Dropdown kann nun das eines der vorher ausgewählten Teams selektiert
-  werden. Über das nächste dropdown kann nun der mehrspracige text ausgewählt werden.
-  Eine Hilfsmethode erlaubt es die Anzahl parameter im Text festzustellen,
-  Entsprechend viele Inputfelder werden generiert. Die Parameter werden als
+  Über ein Dropdown kann nun eines der vorher ausgewählten Teams selektiert
+  werden. Über das nächste Dropdown kann nun der mehrsprachige Text ausgewählt werden.
+  Eine Hilfsmethode erlaubt es die Anzahl Parameter im Text festzustellen.
+  Dadurch werden entsprechend viele Inputfelder generiert. Die Parameter werden als
   Kommaseparierter String gespeichert. Beim Darstellen der Condition werden diese
-  separiert und können die placeholder ersetzen generiert.
+  separiert und in die Placeholder aus dem Properties-Text eingefügt.
   Ebenfalls muss eine Wettquote angegeben werden.
-  Die Condition wird über ein Ajax event erstellt wenn der entsprechende Button
+  Die Condition wird über ein Ajax-Event erstellt wenn der entsprechende Button
   gedrückt wurde. In einer Tabelle werden die erstellten Conditions dargestellt
   und können noch gelöscht werden.
-  Der bookmaker kan nun das Speil erstellen, es kann danach nicht mehr geändert werden.
+  Der Bookmaker kann nun das Spiel erstellen. Danach kann es nicht mehr geändert werden.
   
 \subsection{registration}
-  Ein Simples registrierungsformular um einen User zu erfassen. Es werden alle nötigen
+  Ein simples Registrierungsformular um einen User zu erfassen. Es werden alle nötigen
   Angaben erfasst, Vor- und Nachname, Emailadresse sowie ein Passwort das noch
   einmal bestätigt wird.
-  Danach werden Serverseitig die Eingaben geprüft insbesondere die länge der Eingaben
-  und ob die Passworter übereinstimmen und ein paar Regex.
-  Das Passwort wird gehasht bevor es gespeichert wird.
-  Der User wird als Gambler erstellt, er kann sich mit der Email adresse einloggen.
-  Der Bookmaker wurde per Hand in der Datenbank erstellt bzw das isBookmaker
-  flag auf true gesetzt.
+  Danach werden serverseitig die Eingaben geprüft insbesondere die Länge der Eingaben
+  und ob die Passwörter übereinstimmen und ein paar Regex.
+  Das Passwort wird gehasht bevor es gespeichert wird. Dazu habe wir eine vordefinierte Klasse benutzt, welche nicht von uns geschrieben wurde.
+  Der User wird als Gambler erstellt, er kann sich mit der Emailadresse einloggen.
+  Der Bookmaker wurde per Hand in der Datenbank erstellt bzw. das isBookmaker-Flag auf true gesetzt.
 
 \section{Fazit}
+Wir haben alle Anforderungen der Aufgabe erfüllen können. Da es aber für uns das erste Mal war, dass wir ein Projekt mit JSF und Hibernate gemacht haben, sind sehr viele Sachen nicht optimal gelöst.
+Zum Beispiel sind alle Beans im Sessionscope, da sonst die Ajaxcalls nicht funktioniert haben, weil die View abgelaufen ist. Eine Lösung dazu konnten wir nicht finden.
+Auch bei der Verwendung von Hibernate mussten wir gewisse Abfragen direkt mit SQL durchführen. Das ist wahrscheinlich auf eine nicht optimale Definition der Modelklassen zurückzuführen. Oder wir haben die Hibernateabfragen falsch gebraucht.
+Trotz diesen Problemen konnten wir aber eine Anwendung machen, welche so funktioniert wie in den Anforderungen der Aufgabe.
+
+Durch diese Aufgabe haben wir beide viel gelernt über JSF und auch Hibernate/JPA. Mit JSF können sehr komplexe Webanwendungen realisiert werden. Unsere Meinung ist jedoch, das im Vergleich zu PHP das erlernen der Technologie sehr lange dauert und viel komplizierter ist. Für grosse Webanwendungen mit vielen Entwicklern ist aber JSF sicher besser geeignet als zum Beispiel PHP.
 
 
 \pagebreak
