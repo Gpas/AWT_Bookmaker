@@ -236,7 +236,13 @@
   der Seite dargestellt.
 
 \subsection{balance}
-  
+  Ein zweistuffiges Formular um auf den Spielkredit des Users eizuzahlen.
+  Die erste Form Dient dazu eine Kreditkarte zu Validieren.
+  Dazu wird eine 16 stellige kartennummer in vier viererblöken eingegeben
+  und ein dreistelliger validierungscode.
+  Dabei handelt es sich um ein Mockup, es wird lediglich die nummer
+  1234-1234-1234-1234 und der code 234 akzeptiert.
+  Danach erscheint eine Eingabe auf der der einzuzahlende Betrag angegeben wird. 
 
 \subsection{closeGame}
   Hier werden die vom Bookmaker erstellten Spiele bei welchen die Startzeit
@@ -295,8 +301,16 @@
   und können noch gelöscht werden.
   Der bookmaker kan nun das Speil erstellen, es kann danach nicht mehr geändert werden.
   
-
 \subsection{registration}
+  Ein Simples registrierungsformular um einen User zu erfassen. Es werden alle nötigen
+  Angaben erfasst, Vor- und Nachname, Emailadresse sowie ein Passwort das noch
+  einmal bestätigt wird.
+  Danach werden Serverseitig die Eingaben geprüft insbesondere die länge der Eingaben
+  und ob die Passworter übereinstimmen und ein paar Regex.
+  Das Passwort wird gehasht bevor es gespeichert wird.
+  Der User wird als Gambler erstellt, er kann sich mit der Email adresse einloggen.
+  Der Bookmaker wurde per Hand in der Datenbank erstellt bzw das isBookmaker
+  flag auf true gesetzt.
 
 \section{Fazit}
 
