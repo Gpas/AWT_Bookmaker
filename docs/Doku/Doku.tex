@@ -167,6 +167,18 @@
 \end{figure}
 
 \subsection{Hibernate}
+  Um die Objekte in einer Datenbank zu persistieren haben wir Hibernate und eine
+  MySql Datenbank benutzt. Hibernate ist ein Object Relation Mapper (ORM) und
+  ermöglicht es Javaobjekte auf relativ einfache weise in ein relationeles
+  Model zu übersetzen. Pro Objekt wird eine Tabelle erstellt, diese Relation Beinhaltet
+  die Attribute des Objekts die primitive Datentypen sind oder Strings.
+  Attribute Die widerum selber Objekte sind weden über foreign keys gemappt.
+  Listen werden mit einer vielfach beziehung dargestellt.
+  Für die Datenbank wurde noch eine Objektid als primary key zu den Objekten
+  hinzugefügt.
+  Das daraus resultierende Datenbankmodel ist in
+  Abbildung \ref{fig:db_model} auf Seite \pageref{fig:db_model} zu sehen.
+
 
 \begin{figure}[h!]
   \begin{center}
@@ -227,13 +239,36 @@
   
 
 \subsection{closeGame}
-  
+  Hier werden die vom Bookmaker erstellten Spiele bei welchen die Startzeit
+  90 min zurückliegen angezeit. Der Bookmaker sollt nun diese Spiele beenden.
+  Er wählt dazu ein Spiel aus und gelangt in eine detailierte Ansicht.
+  Über checkboxes kann er nun diejenigen Conditions ankreuzen die während dem
+  Spiel aufgetreten sind. Danach schliesser das Spiel indem er auf den dafür
+  vorgesehenen Button klickt.
+  Bei den Objekten Game und Condition werden nun die Attribute closed bzw occurred
+  gesetzt und in der Datenbank aktualisiert.
 
 \subsection{games}
+  Auf dieser Seite werden Die Spiele des Users angezeigt.
+  Beim Gambler die Spiele auf die er gewettet hat einmal eine Liste laufender Spiele
+  und eine Liste mit abgeschlossenen Spielen.
+  Beim Bookmaker werden die von ihm erstellten Spiele angezeigt.
+  Aus einer Tabelle können einzelne Spiele ausgewählt werden und in einer Detail
+  Ansicht dargestellt werden. Es werden Die Teams angezeigt die Spielzeit und
+  eine Tabelle mit Conditions.
   
+  Für den Bookmaker sind hier die Beträge ersichtlich die er gewint bzw verliert,
+  falls eine Condition eintritt oder nicht.
+  
+  Der Gambler sieht für noch laufende Spiele für jede Condition einen Input und
+  einen Button. Er kann hier eine Summe eintippen und bestätigen das er auf diese
+  Condition wettet. Der Gambler muss über den zu wettenden Einsatz verfügen.
+  Für Spiele die beendet wurden wird Angezeigt ob die Condition eingetroffen ist
+  und der Betrag der darauf von Gambler gewettet wurde.
 
 \subsection{home}
   In der Home View werden alle laufenden Spiele aufgelistet.
+  Bei jedem Spiel kann in eine Deail ansicht gewechselt werden.
 
 \subsection{newGame}
   
