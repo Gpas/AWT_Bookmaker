@@ -1,10 +1,13 @@
 package bookmaker;
 
 import model.User;
+
 import org.hibernate.Session;
 
 import java.io.Serializable;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -28,6 +31,13 @@ public class RegistrationBean implements Serializable {
 			MIN_PW=6;
 	
 	/**
+	 * Simple Email regex and regex to
+	 * check Names for unallowed characters name starts with alphabetical character
+	 */
+	private final Pattern EmailPattern = Pattern.compile("[a-zA-Z]{1}[a-zA-Z0-9-._]{1,15}@[a-zA-Z0-9]{1,15}.[a-zA-Z]{3}");
+	private final Pattern NamePattern = Pattern.compile("[a-zA-Z]{1}[a-zA-Z0-9-._]{2,15}");
+	
+	/**
 	 * error messages and field labels
 	 */
 	private final static String FIRSTNAME ="firstname",
@@ -37,7 +47,9 @@ public class RegistrationBean implements Serializable {
 			PW1="passwordrepeat",
 			FIELD_EMTY="fieldEmpty",
 			TOO_SHORT="tooShort",
-			PW_MISMATCH="pwMismatch";
+			PW_MISMATCH="pwMismatch",
+			NOT_NAME="notName",
+			NOT_MAIL="notEmail";
 
     @ManagedProperty(value = "#{sessionBean}")
     private SessionBean session;
@@ -117,6 +129,7 @@ public class RegistrationBean implements Serializable {
      */
     private boolean validateFields(){
 
+    	//test some length constraints
     	if(firstname == null){
     		msg=FIELD_EMTY;
     		param0=FIRSTNAME;
@@ -160,8 +173,30 @@ public class RegistrationBean implements Serializable {
         	param1=""+MIN_PW;
         	return false;
         }
+        //both pw must match
         if(!pw0.equals(pw1)){
             msg=PW_MISMATCH;
+            return false;
+        }
+        
+        //test with regex
+        Matcher matchMail = EmailPattern.matcher(email);
+        if(!matchMail.matches() ){
+        	msg=NOT_MAIL;
+        	param0=EMAIL;
+        	return false;
+        }
+        Matcher matchFirstname = NamePattern.matcher(firstname);
+        if(!matchFirstname.matches() ){
+        	msg=NOT_NAME;
+        	param0=FIRSTNAME;
+        	return false;
+        }
+        Matcher matchLastme = NamePattern.matcher(lastname);
+        if(!matchLastme.matches() ){
+        	msg=NOT_NAME;
+        	param0=LASTNAME;
+        	return false;
         }
         
     	return true;
