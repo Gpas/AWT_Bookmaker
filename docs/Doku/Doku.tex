@@ -271,6 +271,29 @@
   Bei jedem Spiel kann in eine Deail ansicht gewechselt werden.
 
 \subsection{newGame}
+  Hier kan der Bookmaker ein neues Spiel erstellen.
+  Diese Ansicht besteht aus zwei formularen. wir haben die rendered option der form
+  benutzt um eine Game erfassung in zwei Stuffen zu realisieren.
+  zuerst müssen die Teams und die Zeit angegeben werden. Die Teams werden aus den
+  properties viles geladen und können anschliessend in einem Dropdown für das Home-
+  und Guestteam selektiert werden. Die Zeit kann per Datepicker angegeben werden 
+
+  Danach wird auf die Ansicht zum erstellen von Conditions gewechselt.
+  Die Conditions werden Stückweise zusammengefügt aus Mehrsprachigen Texten und
+  Parametern. Der Vorteil liegt darin das die Mehrsprachigkeit gegeben Bleibt.
+  Ausserdem kann kontrolliert werden welche Wetten erlaubt sind und einigermassen
+  Sinn machen.
+  Über ein Dropdown kann nun das eines der vorher ausgewählten Teams selektiert
+  werden. Über das nächste dropdown kann nun der mehrspracige text ausgewählt werden.
+  Eine Hilfsmethode erlaubt es die Anzahl parameter im Text festzustellen,
+  Entsprechend viele Inputfelder werden generiert. Die Parameter werden als
+  Kommaseparierter String gespeichert. Beim Darstellen der Condition werden diese
+  separiert und können die placeholder ersetzen generiert.
+  Ebenfalls muss eine Wettquote angegeben werden.
+  Die Condition wird über ein Ajax event erstellt wenn der entsprechende Button
+  gedrückt wurde. In einer Tabelle werden die erstellten Conditions dargestellt
+  und können noch gelöscht werden.
+  Der bookmaker kan nun das Speil erstellen, es kann danach nicht mehr geändert werden.
   
 
 \subsection{registration}
