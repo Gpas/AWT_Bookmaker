@@ -105,7 +105,7 @@ public class RegistrationBean implements Serializable {
             hibernateSession.close();
             
             //log in the new user
-            session.setUser(user);
+            session.loginNewUser(user);
             msg="regSuc";
             return "home";
             }else{return "registration";}

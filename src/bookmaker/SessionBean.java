@@ -61,7 +61,7 @@ public class SessionBean implements Serializable {
         locale = FacesContext.getCurrentInstance().getViewRoot().getLocale();
         bundle = ResourceBundle.getBundle("lang", locale);
         //Init navigation
-        links.add(new Navlink("games", "navbarGames"));
+        //links.add(new Navlink("games", "navbarGames"));
         links.add(new Navlink("registration","navbarRegister"));
         
         this.reloadNavlinks();
@@ -95,6 +95,7 @@ public class SessionBean implements Serializable {
                     
                     //set up navigation according to role
                     links.add(new Navlink("balance", "navbarBalance"));
+                    links.add(new Navlink("games", "navbarGames"));
                     
                     if(user.getIsBookmaker()){
                     	links.add(new Navlink("newGame", "navbarCreateGame"));
@@ -119,6 +120,22 @@ public class SessionBean implements Serializable {
         return viewId+"?faces-redirect=true";
 
     }
+    
+    /**
+     * Autologin a new user
+     * and set up links
+     * package scope only permitted to use from our own classes 
+     * @param u the newly created user
+     */
+   void loginNewUser(User u){
+    	this.setUser(u);
+    	
+    	links.add(new Navlink("balance", "navbarBalance"));
+        links.add(new Navlink("games", "navbarGames"));
+        removeNavLink("registration");
+        
+        this.reloadNavlinks();
+    }
 
     /**
      * Logs the user out and handles the navigation bar.
@@ -130,6 +147,7 @@ public class SessionBean implements Serializable {
         removeNavLink("balance");
         removeNavLink("newGame");
         removeNavLink("closeGame");
+        removeNavLink("games");
         
         //add registration link
         links.add(new Navlink("registration","navbarRegister"));
