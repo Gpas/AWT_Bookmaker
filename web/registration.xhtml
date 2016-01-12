@@ -17,19 +17,19 @@
                 <h:form id="regForm" >
                     <div class="form-group">
                         <label for="firstname">#{bundle.firstname}</label>
-                        <h:inputText class="form-control" id="firstname" value="#{registrationBean.firstname}"/>
+                        <h:inputText class="form-control" id="firstname" value="#{registrationBean.firstname}" required="true"/>
                     </div><div class="form-group">
                     <label for="lastname">#{bundle.lastname}</label>
-                    <h:inputText class="form-control" id="lastname" value="#{registrationBean.lastname}"/>
+                    <h:inputText class="form-control" id="lastname" value="#{registrationBean.lastname}" required="true"/>
                 </div><div class="form-group">
                     <label for="email">#{bundle.email}</label>
-                    <h:inputText class="form-control" id="email" value="#{registrationBean.email}"/>
+                    <h:inputText class="form-control" id="email" value="#{registrationBean.email}" required="true"/>
                 </div><div class="form-group">
                     <label for="pw0">#{bundle.password}</label>
-                    <h:inputText class="form-control" id="pw0" value="#{registrationBean.pw0}"/>
+                    <h:inputSecret class="form-control" id="pw0" value="#{registrationBean.pw0}" required="true"/>
                 </div><div class="form-group">
                     <label for="pw1">#{bundle.passwordrepeat}</label>
-                    <h:inputText class="form-control" id="pw1" value="#{registrationBean.pw1}"/>
+                    <h:inputSecret class="form-control" id="pw1" value="#{registrationBean.pw1}" required="true"/>
                 </div><div class="form-group">
                     <h:commandButton class="btn btn-default" id="submit" action="#{registrationBean.register}" value="#{bundle.submit}"/>
                 </div>
