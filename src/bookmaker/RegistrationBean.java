@@ -106,7 +106,15 @@ public class RegistrationBean implements Serializable {
             
             //log in the new user
             session.loginNewUser(user);
-            msg="regSuc";
+            
+            //reset form
+            msg="nan";
+            firstname="";
+            lastname="";
+            email="";
+            pw0="";
+            pw1="";
+            
             return "home";
             }else{return "registration";}
         }
