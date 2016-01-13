@@ -143,14 +143,14 @@
                             <h:outputText rendered="#{cond.occurred}">
                                 <p class="bg-success">
                                     <h:outputText value="#{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}">
-                                        <f:convertNumber maxFractionDigits="2"/>
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
                                     </h:outputText>
                                 </p>
                             </h:outputText>
                             <h:outputText rendered="#{!cond.occurred}">
                                 <p class="bg-danger">
                                     <h:outputText value="#{gameViewerBean.getSavedBetAmount(cond.id)}">
-                                        <f:convertNumber maxFractionDigits="2"/>
+                                        <f:convertNumber maxFractionDigits="2" minFractionDigits="2"/>
                                     </h:outputText>
                                 </p>
                             </h:outputText>
