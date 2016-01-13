@@ -86,10 +86,11 @@
                         <h2 class="col-md-4">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.homeTeam)}</h2>
                         <h2 class="col-md-2" style="text-align: center"><b>vs</b></h2>
                         <h2 class="col-md-4" style="text-align: right">#{sessionBean.propertiesUtil.getTeamPerId(gameViewerBean.activGame.guestTeam)}</h2>
-                        <h:form>
-                            <h:commandButton class="btn btn-default" value="Back to List" action="#{gameViewerBean.resetGameId}">
+                        <h:form class="col-md-2" rendered="#{sessionBean.user.username != null}">
+                            <h:commandButton class="btn btn-default" value="#{bundle.backToGames}" action="#{gameViewerBean.resetGameId}">
                             </h:commandButton>
                         </h:form>
+                        <h:link rendered="#{sessionBean.user.username == null}" outcome="home" styleClass="btn btn-default" value="#{bundle.backToHome}"></h:link>
                     </div>
                     <h3>Betpossibilities</h3>
                     <t:dataTable id="betTable" value="#{gameViewerBean.conditions}" var="cond"
