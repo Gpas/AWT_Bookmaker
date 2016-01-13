@@ -140,7 +140,7 @@ public class GameViewerBean implements Serializable {
             else{
                 // Compute loss
                 for(Bet bet : bets){
-                    computationResult = computationResult.add(bet.getAmount().multiply(BigDecimal.valueOf(condition.getOdd())));
+                    computationResult = computationResult.add(bet.getAmount().multiply(condition.getOdd()));
                 }
             }
             hibernateSession.close();

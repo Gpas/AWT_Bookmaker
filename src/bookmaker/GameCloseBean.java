@@ -142,7 +142,7 @@ public class GameCloseBean implements Serializable{
 					query.setParameter("condId", condition.getId());
 					List<Bet> bets = query.list();
 					for(Bet bet : bets){
-						BigDecimal amount = bet.getAmount().multiply(BigDecimal.valueOf(condition.getOdd()));
+						BigDecimal amount = bet.getAmount().multiply(condition.getOdd());
 						if(!closeGame.getOwner().changeBalance(amount, false)){
 							// When the gameowner has not enough balance
 							msg = "Gameowner has not enough balance";

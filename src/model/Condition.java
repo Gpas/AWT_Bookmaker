@@ -3,6 +3,7 @@ package model;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class Condition {
 	@Column(name = "[params]")
 	private String params;
 	@Column(name = "odd")
-	private int odd;
+	private BigDecimal odd;
 	
 	@Column(name = "occurred")
 	private boolean occurred = false;
@@ -38,7 +39,7 @@ public class Condition {
 
 	}
 
-	public Condition(Game game, int textId, int leadingTeamId, int odd){
+	public Condition(Game game, int textId, int leadingTeamId, BigDecimal odd){
 		this.game = game;
 		this.textId = textId;
 		this.leadingTeamId = leadingTeamId;
@@ -46,7 +47,7 @@ public class Condition {
 		this.odd = odd;
 	}
 
-	public Condition(Game game, int textId, int leadingTeamId, int odd, String params){
+	public Condition(Game game, int textId, int leadingTeamId, BigDecimal odd, String params){
 		this.game = game;
 		this.textId = textId;
 		this.leadingTeamId = leadingTeamId;
@@ -78,11 +79,11 @@ public class Condition {
 		this.textId = textId;
 	}
 
-	public int getOdd() {
+	public BigDecimal getOdd() {
 		return odd;
 	}
 
-	public void setOdd(int odd) {
+	public void setOdd(BigDecimal odd) {
 		this.odd = odd;
 	}
 

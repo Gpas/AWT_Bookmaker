@@ -172,10 +172,10 @@ public class GameManagerBean implements Serializable{
 				//Delete first char
 				values = values.substring(1, values.length());
 			}
-			conditions.add(new Condition(newGame, condId, Integer.parseInt(winteam) , odd.intValue(), values));
+			conditions.add(new Condition(newGame, condId, Integer.parseInt(winteam) , odd, values));
 		}
 		else{
-			conditions.add(new Condition(newGame, condId, Integer.parseInt(winteam) , odd.intValue()));
+			conditions.add(new Condition(newGame, condId, Integer.parseInt(winteam) , odd));
 		}
 	}
 	

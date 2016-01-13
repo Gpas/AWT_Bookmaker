@@ -118,7 +118,7 @@
                                     <f:ajax
                                             listener="#{gameViewerBean.betOnCondition(cond)}"
                                             execute="@this amount"
-                                            render="@form message"
+                                            render="@form message betTable"
                                             />
                                 </h:commandButton>
                                 <h:outputText rendered="#{gameViewerBean.getSavedBetAmount(cond.id) != 0}">#{gameViewerBean.getSavedBetAmount(cond.id)}</h:outputText>
@@ -127,19 +127,33 @@
                                     <f:ajax
                                             listener="#{gameViewerBean.undoBet(cond)}"
                                             execute="@this"
-                                            render="@form message"
+                                            render="@form message betTable"
                                             />
                                 </h:commandButton>
                             </h:form>
                         </h:column>
                         <h:column rendered="#{!gameViewerBean.activGame.closed}">
                             <f:facet name="header">#{bundle.betTablePossibleWin}</f:facet>
-                            #{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}
+                            <h:outputText value="#{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}">
+                                <f:convertNumber pattern="#0.00" />
+                            </h:outputText>
                         </h:column>
                         <h:column rendered="#{gameViewerBean.activGame.closed}">
                             <f:facet name="header">#{bundle.betTableWinLoss}</f:facet>
-                            <h:outputText rendered="#{cond.occurred}"><p class="bg-success">#{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}</p></h:outputText>
-                            <h:outputText rendered="#{!cond.occurred}"><p class="bg-danger">#{gameViewerBean.getSavedBetAmount(cond.id)}</p></h:outputText>
+                            <h:outputText rendered="#{cond.occurred}">
+                                <p class="bg-success">
+                                    <h:outputText value="#{gameViewerBean.getSavedBetAmount(cond.id) * cond.odd}">
+                                        <f:convertNumber maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </p>
+                            </h:outputText>
+                            <h:outputText rendered="#{!cond.occurred}">
+                                <p class="bg-danger">
+                                    <h:outputText value="#{gameViewerBean.getSavedBetAmount(cond.id)}">
+                                        <f:convertNumber maxFractionDigits="2"/>
+                                    </h:outputText>
+                                </p>
+                            </h:outputText>
                         </h:column>
 
                     </t:dataTable>

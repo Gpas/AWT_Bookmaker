@@ -1,0 +1,2 @@
+ALTER TABLE `bookmaker`.`condition`
+CHANGE COLUMN `odd` `odd` DECIMAL(12,2) NULL DEFAULT NULL COMMENT '' ;
